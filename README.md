@@ -17,7 +17,7 @@ LGM-Geocoding is a python library which implements a full Machine Learning workf
 * argparse
 
 ## Instructions
-In order for the library to function the user must provide it with a .csv file containing a collection of coordinate pairs. More specifically, the .csv file must at least contain two coordinate pairs (i.e. four columns, each for each coordinate) that correspond to each point in the dataset and a column that refers to the label that corresponds to its annotated best geocoding source.
+In order for the library to function the user must provide it with a .csv file containing a collection of coordinate pairs. More specifically, in this iteration of the library the .csv file must at least contain exactly three coordinate pairs (i.e. six columns, each for each coordinate) that correspond to each point in the dataset and a column that refers to the label that corresponds to its annotated best geocoding source. The first six columns must have the names "X2", "Y2", "X3", "Y3" and "X4", "Y4". The label column must be named "dset".
 
 **Algorithm evaluation/selection**: consists of an exhaustive comparison between several classification algorithms that are available in the scikit-learn library. Its purpose is to
 compare the performance of every algorithm-hyperparameter configuration in a nested cross-validation scheme and produce the best candidate-algorithm for further usage. More specifically this step outputs three files:
