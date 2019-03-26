@@ -1,8 +1,8 @@
-# Geocoding
+# LGM-Geocoding
 A python library for accurate classification of best geocoding sources per coordinate pair.
 
-## About Geocoding
-Geocoding is a python library which implements a full Machine Learning workflow for training classification algorithms on annotated datasets that contain mappings between coordinate pairs and the ideal geocoding source for them and producing models for providing accurate predictions about ideal geocoding sources for previously unseen geocoding pairs. Geocoding implements a series of training features, regarding the different coordinate pairs that are available for each geocoder and the interaction between them and neighboring geospacial data (namely road data). Further, it encapsulates grid-search and cross-validation functionality, based on the [scikit](https://scikit-learn.org/) toolkit, assessing as series of classification models and parameterizations, in order to find the most fitting model for the data at hand.
+## About LGM-Geocoding
+LGM-Geocoding is a python library which implements a full Machine Learning workflow for training classification algorithms on annotated datasets that contain mappings between coordinate pairs and the ideal geocoding source for them and producing models for providing accurate predictions about ideal geocoding sources for previously unseen geocoding pairs. Geocoding implements a series of training features, regarding the different coordinate pairs that are available for each geocoder and the interaction between them and neighboring geospacial data (namely road data). Further, it encapsulates grid-search and cross-validation functionality, based on the [scikit](https://scikit-learn.org/) toolkit, assessing as series of classification models and parameterizations, in order to find the most fitting model for the data at hand.
 
 ## Dependencies
 * python 3
