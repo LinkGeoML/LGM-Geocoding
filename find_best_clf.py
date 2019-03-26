@@ -5,15 +5,9 @@ import geopandas as gpd
 import psycopg2
 import argparse
 import numpy as np
-from preprocessing import *
-from pois_feature_extraction import *
-from textual_feature_extraction import *
-from feml import *
-import nltk
 import itertools
 import random
 
-import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import KFold
 from sklearn.model_selection import StratifiedKFold
@@ -34,6 +28,8 @@ from sklearn.metrics import f1_score
 import datetime
 
 import config
+
+from  geocoding_feature_extraction import *
 
 np.random.seed(1234)
 
@@ -105,8 +101,13 @@ def fine_tune_parameters_given_clf(clf_name, X_train, y_train, X_test, y_test):
 def tuned_parameters_5_fold(args):
 	
 	# Get X, Y data
-	X, y = get_X_Y_data()
+	#X, y = get_X_Y_data()
+	#np.savetxt("X", X, delimiter=",")
+	#np.savetxt("y", y, delimiter=",")
 	
+	X = np.loadtxt('X.csv', delimiter=",")
+	y = np.loadtxt('y.csv', delimiter=",")
+	print(X.shape, y.shape)
 	skf = StratifiedKFold(n_splits = config.initialConfig.k_fold_parameter)
 	
 	count = 1
@@ -183,9 +184,9 @@ def tuned_parameters_5_fold(args):
 		
 	df = pd.DataFrame.from_dict(report_data)
 	if args['results_file_name'] is not None:
-		filename = args['results_file_name'] + '_' + str(args['level']) + '_' + str(datetime.datetime.now()) + '.csv'
+		filename = args['results_file_name'] + '_' + str(datetime.datetime.now()) + '.csv'
 	else:
-		filename = 'classification_report_' + str(args['level']) + '_' + str(datetime.datetime.now()) + '.csv'
+		filename = 'classification_report_' + str(datetime.datetime.now()) + '.csv'
 	df.to_csv(filename, index = False)
 	
 	best_clf_row = {}
@@ -197,14 +198,14 @@ def tuned_parameters_5_fold(args):
 				best_clf_row['best_clf_score']  = row['Accuracy']
 				best_clf_row['best_clf_name'] = row['Classifier']
 	df2 = pd.DataFrame.from_dict([best_clf_row])
-	filename = 'best_clf_' + str(args['level']) + '_' + str(datetime.datetime.now()) + '.csv'
+	filename = 'best_clf_' + '_' + str(datetime.datetime.now()) + '.csv'
 	df2.to_csv(filename, index = False)
 	
 	df3 = pd.DataFrame.from_dict(hyperparams_data)
 	if args['hyperparameter_file_name'] is not None:
-		filename = args['hyperparameter_file_name'] + '_' + str(args['level']) + '_' + str(datetime.datetime.now()) + '.csv'
+		filename = args['hyperparameter_file_name'] + '_' + str(datetime.datetime.now()) + '.csv'
 	else:
-		filename = 'hyperparameters_per_fold_' + str(args['level']) + '_' + str(datetime.datetime.now()) + '.csv'
+		filename = 'hyperparameters_per_fold_' + str(datetime.datetime.now()) + '.csv'
 	df3.to_csv(filename, index = False)
 	
 def main():
