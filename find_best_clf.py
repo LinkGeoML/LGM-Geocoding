@@ -101,12 +101,12 @@ def fine_tune_parameters_given_clf(clf_name, X_train, y_train, X_test, y_test):
 def tuned_parameters_5_fold(args):
 	
 	# Get X, Y data
-	#X, y = get_X_Y_data()
+	X, y = get_X_Y_data()
 	#np.savetxt("X", X, delimiter=",")
 	#np.savetxt("y", y, delimiter=",")
 	
-	X = np.loadtxt('X.csv', delimiter=",")
-	y = np.loadtxt('y.csv', delimiter=",")
+	#X = np.loadtxt('X.csv', delimiter=",")
+	#y = np.loadtxt('y.csv', delimiter=",")
 	print(X.shape, y.shape)
 	skf = StratifiedKFold(n_splits = config.initialConfig.k_fold_parameter)
 	

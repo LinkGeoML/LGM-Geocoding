@@ -22,8 +22,8 @@ def get_X_Y_data():
 	X4 = in_df['X4']
 	Y4 = in_df['Y4']
 
-	offset1 = 874
-	offset2 = 996
+	offset1 = 0
+	offset2 = Y4.shape[0]
 	pairwise_distances = [[] for _ in range(offset1, offset2)]
 	pairwise_distances_single_coordinate = [[] for _ in range(offset1, offset2)]
 	average_distances_from_centroid = [[] for _ in range(offset1, offset2)]
@@ -58,7 +58,8 @@ def get_X_Y_data():
 	#print(X2_mean, X2_var)
 
 	for i in range(offset1, offset2):
-		#print(i)
+		#print(ids[i])
+		#print("id before skasimo")
 		point1 = np.asarray([X2[i], Y2[i]])
 		point2 = np.asarray([X3[i], Y3[i]])
 		point3 = np.asarray([X4[i], Y4[i]])
@@ -70,12 +71,12 @@ def get_X_Y_data():
 		normalized_features[i-offset1].append(np.abs(X4[i] - X4_mean) / X4_var)
 		normalized_features[i-offset1].append(np.abs(Y4[i] - Y4_mean) / Y4_var)
 		
-		print("ok1")
+		#print("ok1")
 		pairwise_distances[i-offset1].append(np.linalg.norm(point1 - point2))
 		pairwise_distances[i-offset1].append(np.linalg.norm(point1 - point3))
 		pairwise_distances[i-offset1].append(np.linalg.norm(point2 - point3))
 		
-		print("ok2")
+		#print("ok2")
 		pairwise_distances_single_coordinate[i-offset1].append(np.abs(X2[i] - X3[i]))
 		pairwise_distances_single_coordinate[i-offset1].append(np.abs(Y2[i] - Y3[i]))
 		pairwise_distances_single_coordinate[i-offset1].append(np.abs(X2[i] - X4[i]))
@@ -83,7 +84,7 @@ def get_X_Y_data():
 		pairwise_distances_single_coordinate[i-offset1].append(np.abs(X3[i] - X4[i]))
 		pairwise_distances_single_coordinate[i-offset1].append(np.abs(Y3[i] - Y4[i]))
 		
-		print("ok3")
+		#print("ok3")
 		centroid_X = (X2[i] + X3[i] + X4[i]) / 3.0
 		centroid_Y = (Y2[i] + Y3[i] + Y4[i]) / 3.0
 		
@@ -110,7 +111,7 @@ def get_X_Y_data():
 		average_distances_from_centroid[i-offset1].append(average_X_distance)
 		average_distances_from_centroid[i-offset1].append(average_Y_distance)
 		
-		print("ok5")
+		#print("ok5")
 		
 		#if i != 170:
 		#	continue
@@ -140,7 +141,7 @@ def get_X_Y_data():
 				#print(min_distance)
 		distances_from_closest_street[i-offset1].append(min_distance)
 		
-		print("ok6")	
+		#print("ok6")	
 		min_distance = 1000000000.0
 		point2 = (X3[i], Y3[i])
 		poi_geom2 = Point(point2)
@@ -163,7 +164,7 @@ def get_X_Y_data():
 				#print(min_distance)
 		distances_from_closest_street[i-offset1].append(min_distance)
 		
-		print("ok7")
+		#print("ok7")
 		print(ids[i])
 		#print(pairwise_distances[i])
 		#print(pairwise_distances_single_coordinate[i])
@@ -181,13 +182,13 @@ def get_X_Y_data():
 		#if i == 1:
 		#	break
 	#print(total_features_u)
-	print("ok8")
+	#print("ok8")
 	total_features = np.vstack(total_features_u)
-	print(total_features)
+	#print(total_features)
 	print(total_features.shape)
 	#print(total_features)]
 	#return
-	np.savetxt("geocoding.csv", total_features, delimiter=",")
+	#np.savetxt("geocoding.csv", total_features, delimiter=",")
 	
 	return total_features, labels
 		
