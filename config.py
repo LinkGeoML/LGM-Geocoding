@@ -14,7 +14,7 @@ class initialConfig:
 	# This parameter contains a list of the various classifiers
 	# the results of which will be compared in the experiments.
 	classifiers = ['Nearest Neighbors', 'SVM', 'Decision Tree', 'Random Forest', 'AdaBoost', 
-	'Naive Bayes', 'MLP', 'Gaussian Process']
+	'Naive Bayes', 'MLP', 'Gaussian Process', 'Extra Trees']
 	#classifiers = ['AdaBoost']
 	
 	# These are the parameters that constitute the search space
