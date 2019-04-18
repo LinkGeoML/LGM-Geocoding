@@ -3,6 +3,16 @@ import numpy as np
 
 class initialConfig:
 	
+	feature_list = ['normalized_features', 'pairwise_distances', 'pairwise_distances_single_coordinate'
+	,'distances_from_centroid', 'average_distances_from_centroid', 'distances_from_closest_street']
+	
+	included_features = ['normalized_features', 'pairwise_distances', 'pairwise_distances_single_coordinate'
+	,'distances_from_centroid', 'average_distances_from_centroid', 'distances_from_closest_street']
+	
+	root_path = "/home/nikos/Desktop/Geocoding/Geocoding/"
+	#experiment_folder = "experiment_folder_2019-04-08 16-07-31.806855"
+	experiment_folder = None
+	
 	# The following parameters correspond to the machine learning
 	# part of the framework.
 	
@@ -13,9 +23,9 @@ class initialConfig:
 	
 	# This parameter contains a list of the various classifiers
 	# the results of which will be compared in the experiments.
-	classifiers = ['Nearest Neighbors', 'SVM', 'Decision Tree', 'Random Forest', 'AdaBoost', 
-	'Naive Bayes', 'MLP', 'Gaussian Process', 'Extra Trees']
-	#classifiers = ['AdaBoost']
+	#classifiers = ['Nearest Neighbors', 'SVM', 'Decision Tree', 'Random Forest', 'AdaBoost', 
+	#'Naive Bayes', 'MLP', 'Gaussian Process', 'Extra Trees']
+	classifiers = ['Nearest Neighbors']
 	
 	# These are the parameters that constitute the search space
 	# in our experiments.
@@ -37,6 +47,10 @@ class initialConfig:
  'min_samples_leaf': [1, 2, 4],
  'min_samples_split': [2, 5, 10],
  "n_estimators": [250, 500, 1000]}
+ 
+	MLP_hyperparameters = {'learning_rate_init': [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1],
+							'max_iter': [100, 200, 500, 1000],
+							'solver': ['sgd', 'adam']}
  
 	# The following parameters refer to the names of the csv columns
 	# that correspond to the following: poi_id (the unique id of each 
