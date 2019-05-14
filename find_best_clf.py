@@ -115,6 +115,23 @@ def tuned_parameters_5_fold(args):
 	X = np.loadtxt('X.csv', delimiter=",")
 	y = np.loadtxt('y.csv', delimiter=",")
 	print(X.shape, y.shape)
+	features = {}
+	features['normalized_features'] = X[:, 0:6]
+	features['pairwise_distances'] = X[:, 6:9]
+	features['pairwise_distances_single_coordinate'] = X[:, 9:15]
+	features['distances_from_centroid'] = X[:, 15:21]
+	features['average_distances_from_centroid'] = X[:, 21:23]
+	features['distances_from_closest_street'] = X[:, 23:27]
+	
+	for key in features:
+		temp_array = features[key]
+		print("Pre Normalization - Feature Name: {0}, Mean Value: {1}, Std Value: {2}, Max Value: {3}, Min Value: {4}, Shape: {5}".format(key, np.mean(temp_array), np.std(temp_array), np.amax(temp_array), np.amin(temp_array), temp_array.shape))
+		temp_array, _ = standardize_data_train(temp_array)
+		#filepath = config.initialConfig.root_path + key + '.csv'
+		#np.savetxt(filepath, total_features, delimiter=",")
+		print("Feature Name: {0}, Mean Value: {1}, Std Value: {2}, Max Value: {3}, Min Value: {4}, Shape: {5}".format(key, np.mean(temp_array), np.std(temp_array), np.amax(temp_array), np.amin(temp_array), temp_array.shape))
+	
+	return
 	skf = StratifiedKFold(n_splits = config.initialConfig.k_fold_parameter)
 	
 	count = 1

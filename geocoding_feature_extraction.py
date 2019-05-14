@@ -208,6 +208,7 @@ def get_X_Y_data():
 			if feature_dict[key] is not None:
 				if sentinel == 0:
 					total_features = np.asarray(feature_dict[key])
+					print("Pre Normalization - Feature Name: {0}, Mean Value: {1}, Std Value: {2}, Max Value: {3}, Min Value: {4}, Shape: {5}".format(key, np.mean(total_features), np.std(total_features), np.amax(total_features), np.amin(total_features), total_features.shape))
 					total_features, _ = standardize_data_train(total_features)
 					filepath = config.initialConfig.root_path + key + '.csv'
 					np.savetxt(filepath, total_features, delimiter=",")
@@ -215,6 +216,7 @@ def get_X_Y_data():
 					sentinel = 1
 				else:
 					temp_array = np.asarray(feature_dict[key])
+					print("Pre Normalization - Feature Name: {0}, Mean Value: {1}, Std Value: {2}, Max Value: {3}, Min Value: {4}, Shape: {5}".format(key, np.mean(temp_array), np.std(temp_array), np.amax(temp_array), np.amin(temp_array), temp_array.shape))
 					temp_array, _ = standardize_data_train(temp_array)
 					filepath = config.initialConfig.root_path + key + '.csv'
 					np.savetxt(filepath, temp_array, delimiter=",")
