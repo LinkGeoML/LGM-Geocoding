@@ -1,0 +1,281 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Welcome to LGM-Geocoding’s documentation! &mdash; LGM-Geocoding 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="export_best_model" href="export_best_model.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> LGM-Geocoding
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="export_best_model.html">export_best_model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="find_best_clf.html">find_best_clf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="finetune_best_clf.html">finetune_best_clf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geocoding_feature_extraction.html">geocoding_feature_extraction</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">LGM-Geocoding</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Welcome to LGM-Geocoding’s documentation!</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="welcome-to-lgm-geocoding-s-documentation">
+<h1>Welcome to LGM-Geocoding’s documentation!<a class="headerlink" href="#welcome-to-lgm-geocoding-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="lgm-geocoding">
+<h2>LGM-Geocoding<a class="headerlink" href="#lgm-geocoding" title="Permalink to this headline">¶</a></h2>
+<p>A python library for accurate classification of best geocoding sources per coordinate pair.</p>
+</div>
+</div>
+<div class="section" id="about-lgm-geocoding">
+<h1>About LGM-Geocoding<a class="headerlink" href="#about-lgm-geocoding" title="Permalink to this headline">¶</a></h1>
+<p>LGM-Geocoding is a python library which implements a full Machine Learning workflow for training classification algorithms on annotated datasets that contain mappings between coordinate pairs and the ideal geocoding source for them and producing models for providing accurate predictions about ideal geocoding sources for previously unseen geocoding pairs. Geocoding implements a series of training features, regarding the different coordinate pairs that are available for each geocoder and the interaction between them and neighboring geospacial data (namely road data). Further, it encapsulates grid-search and cross-validation functionality, based on the [scikit](<a class="reference external" href="https://scikit-learn.org/">https://scikit-learn.org/</a>) toolkit, assessing as series of classification models and parameterizations, in order to find the most fitting model for the data at hand.</p>
+<ul class="simple">
+<li><p>python 3</p></li>
+<li><p>numpy</p></li>
+<li><p>pandas</p></li>
+<li><p>sklearn</p></li>
+<li><p>geopandas</p></li>
+<li><p>matplotlib</p></li>
+<li><p>psycopg2</p></li>
+<li><p>osmnx</p></li>
+<li><p>shapely</p></li>
+<li><p>argparse</p></li>
+</ul>
+<p>In order for the library to function the user must provide it with a .csv file containing a collection of coordinate pairs. More specifically, in this iteration of the library the .csv file must at least contain exactly three coordinate pairs (i.e. six columns, each for each coordinate) that correspond to each point in the dataset and a column that refers to the label that corresponds to its annotated best geocoding source. The first six columns must have the names “X2”, “Y2”, “X3”, “Y3” and “X4”, “Y4”. The label column must be named “dset”.</p>
+<p><strong>Algorithm evaluation/selection</strong>: consists of an exhaustive comparison between several classification algorithms that are available in the scikit-learn library. Its purpose is to
+compare the performance of every algorithm-hyperparameter configuration in a nested cross-validation scheme and produce the best candidate-algorithm for further usage. More specifically this step outputs three files:</p>
+<ul class="simple">
+<li><p>a file consisting of the algorithm and parameters space that was searched,</p></li>
+<li><p>a file containing the results per cross-validation fold and their averages and</p></li>
+<li><p>a file containing the name of the best model.</p></li>
+</ul>
+<p>You can execute this step as follows: <code class="docutils literal notranslate"><span class="pre">`python</span> <span class="pre">find_best_clf.py</span> <span class="pre">-geocoding_file_name</span> <span class="pre">&lt;csv</span> <span class="pre">containing</span> <span class="pre">geocoding</span> <span class="pre">information&gt;</span> <span class="pre">-results_file_name</span> <span class="pre">&lt;desired</span> <span class="pre">name</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">csv</span> <span class="pre">to</span> <span class="pre">contain</span> <span class="pre">the</span> <span class="pre">metric</span> <span class="pre">results</span> <span class="pre">per</span> <span class="pre">fold&gt;</span> <span class="pre">-hyperparameter_file_name</span> <span class="pre">&lt;desired</span> <span class="pre">name</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">file</span> <span class="pre">to</span> <span class="pre">contain</span> <span class="pre">the</span> <span class="pre">hyperparameter</span> <span class="pre">space</span> <span class="pre">that</span> <span class="pre">was</span> <span class="pre">searched&gt;`</span></code>.</p>
+<p>The last two arguments are optional and their values are defaulted to:
+* classification_report_*timestamp*, and
+* hyperparameters_per_fold_*timestamp*</p>
+<p>correspondingly</p>
+<p><strong>Algorithm tuning</strong>: The purpose of this step is to further tune the specific algorithm that was chosen in step 1 by comparing its performance while altering the hyperparameters with which it is being configured. This step outputs the hyperparameter selection corresponding to the best model.</p>
+<p>You can execute this step as follows: <code class="docutils literal notranslate"><span class="pre">`python</span> <span class="pre">finetune_best_clf.py</span> <span class="pre">-geocoding_file_name</span> <span class="pre">&lt;csv</span> <span class="pre">containing</span> <span class="pre">geocoding</span> <span class="pre">information&gt;</span> <span class="pre">-best_hyperparameter_file_name</span> <span class="pre">&lt;desired</span> <span class="pre">name</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">file</span> <span class="pre">to</span> <span class="pre">contain</span> <span class="pre">the</span> <span class="pre">best</span> <span class="pre">hyperparameters</span> <span class="pre">that</span> <span class="pre">were</span> <span class="pre">selected</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">best</span> <span class="pre">algorithm</span> <span class="pre">of</span> <span class="pre">step</span> <span class="pre">1&gt;</span> <span class="pre">-best_clf_file_name</span> <span class="pre">&lt;file</span> <span class="pre">containing</span> <span class="pre">the</span> <span class="pre">name</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">best</span> <span class="pre">classifier&gt;`</span></code>.</p>
+<p>All arguments except pois_csv_name are optional and their values are defaulted to:</p>
+<ul class="simple">
+<li><p>best_hyperparameters_*category level*_*timestamp*.csv</p></li>
+<li><p>the latest file with the <em>best_clf_</em> prefix</p></li>
+</ul>
+<p><strong>Model training on a specific training set</strong>: This step handles the training of the final model on an entire dataset, so that it can be used in future cases. It outputs a pickle file in which the model is stored.</p>
+<p>You can execute this step as follows: <code class="docutils literal notranslate"><span class="pre">`python</span> <span class="pre">export_best_model.py</span> <span class="pre">-geocoding_file_name</span> <span class="pre">&lt;csv</span> <span class="pre">containing</span> <span class="pre">geocoding</span> <span class="pre">information&gt;</span> <span class="pre">-best_hyperparameter_file_name</span> <span class="pre">&lt;csv</span> <span class="pre">containing</span> <span class="pre">best</span> <span class="pre">hyperparameter</span> <span class="pre">configuration</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">classifier</span> <span class="pre">-best_clf_file_name</span> <span class="pre">&lt;file</span> <span class="pre">containing</span> <span class="pre">the</span> <span class="pre">name</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">best</span> <span class="pre">classifier&gt;</span> <span class="pre">-trained_model_file_name</span> <span class="pre">&lt;name</span> <span class="pre">of</span> <span class="pre">file</span> <span class="pre">where</span> <span class="pre">model</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">exported&gt;`</span></code>.</p>
+<p>All arguments except pois_csv_name are optional and their values are defaulted to:</p>
+<ul class="simple">
+<li><p>the latest file with the <em>best_hyperparameters_</em> prefix</p></li>
+<li><p>the latest file with the best_clf_* prefix</p></li>
+<li><p>trained_model_*level*_*timestamp*.pkl</p></li>
+</ul>
+<p>correspondingly.</p>
+<p><strong>Predictions on novel data</strong>: This step can be executed as: <code class="docutils literal notranslate"><span class="pre">`python</span> <span class="pre">export_predictions.py</span> <span class="pre">-geocoding_file_name</span> <span class="pre">&lt;csv</span> <span class="pre">containing</span> <span class="pre">geocoding</span> <span class="pre">information&gt;</span> <span class="pre">-results_file_name</span> <span class="pre">&lt;desired</span> <span class="pre">name</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">output</span> <span class="pre">csv&gt;</span> <span class="pre">-trained_model_file_name</span> <span class="pre">&lt;pickle</span> <span class="pre">file</span> <span class="pre">containing</span> <span class="pre">an</span> <span class="pre">already</span> <span class="pre">trained</span> <span class="pre">model&gt;`</span></code></p>
+<p>The output .csv file will contain the k most probable predictions regarding the category of each POI. If no arguments for output_csv are given, their values are defaulted to:
+* output_csv = predictions_*timestamp*.csv and
+* trained_model_file_name = <em>name of the latest produced pickle file in the working directory</em>.</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="export_best_model.html">export_best_model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="find_best_clf.html">find_best_clf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="finetune_best_clf.html">finetune_best_clf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geocoding_feature_extraction.html">geocoding_feature_extraction</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="export_best_model.html" class="btn btn-neutral float-right" title="export_best_model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, nikos
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

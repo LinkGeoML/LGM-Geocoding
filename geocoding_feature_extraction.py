@@ -10,6 +10,21 @@ import os
 
 
 def get_X_Y_data():
+	"""
+	This function is responsible for creating the dataset for running
+	our experiments.
+	
+	Arguments
+	---------
+	None
+	
+	Returns
+	-------
+	total_features: :obj:`numpy array`
+		the dataset feature vectors
+	labels: :obj:`numpy array`
+		the dataset labels
+	"""
 
 	#in_df = pd.read_excel("geocoding_test.xlsx")
 	in_df = pd.read_excel("Geocoding.xlsx")
@@ -229,6 +244,25 @@ def get_X_Y_data():
 	return total_features, labels
 	
 def standardize_data_train(X):
+	
+	"""
+	This function is responsible for standarizing a set of train data.
+	It achieves this by using MinMaxScaler so that all features are
+	within [0.0, 1.0]
+	
+	Arguments
+	---------
+	X: :obj:`numpy array`
+		the train data we want to standardize
+	
+	Returns
+	-------
+	X: :obj:`numpy array`
+		the standardized train data
+	standard_scaler: :obj:`sklearn.preprocessing.MinMaxScaler object`
+		the MinMaxScaler object that was used so that it can be used in the future
+	"""
+	
 	from sklearn.preprocessing import MinMaxScaler
 	
 	standard_scaler = MinMaxScaler()
@@ -237,6 +271,26 @@ def standardize_data_train(X):
 	return X, standard_scaler
 
 def standardize_data_test(X, scaler):
+	
+	"""
+	This function is responsible for standarizing a set of test data.
+	It achieves this by using a MinMaxScaler object that was used previously
+	for standardizing relevant train data. Ultimately, all features are
+	within [0.0, 1.0]
+	
+	Arguments
+	---------
+	X: :obj:`numpy array`
+		the test data we want to standardize
+	scaler: :obj:`sklearn.preprocessing.MinMaxScaler object`
+		the MinMaxScaler object to be used for standardization
+	
+	Returns
+	-------
+	X: :obj:`numpy array`
+		the standardized test data
+	"""
+	
 	from sklearn.preprocessing import MinMaxScaler
 	
 	X = standard_scaler.transform(X)
