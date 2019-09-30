@@ -14,15 +14,15 @@ Description
 The module consists of the following steps:
 
 1. **Features extraction**
-   This step takes into account the features configuration given in `config.py <https://github.com/LinkGeoML/LGM-Geocoding/blob/master/src/config.py>`_ and creates X_train and X_test feature pairs grouped by folds and ready to be utilized by machine learning algorithms in the next steps.
+	This step takes into account the features configuration given in `config.py <https://github.com/LinkGeoML/LGM-Geocoding/blob/master/src/config.py>`_ and creates X_train and X_test feature pairs grouped by folds and ready to be utilized by machine learning algorithms in the next steps.
 2. **Algorithm selection**
-   A list of given classifiers given in `config.py <https://github.com/LinkGeoML/LGM-Geocoding/blob/master/src/config.py>`_ are evaluated in a nested cross-validation scheme in order to find which performs the best on the features sets created in the previous step.
+	A list of given classifiers given in `config.py <https://github.com/LinkGeoML/LGM-Geocoding/blob/master/src/config.py>`_ are evaluated in a nested cross-validation scheme in order to find which performs the best on the features sets created in the previous step.
 3. **Model selection**
-   Given a selected classifier, this step tries to find its best configuration.
+	Given a selected classifier, this step tries to find its best configuration.
 4. **Model training**
-   Utilizing the knowledge from the previous step, a model is trained on the whole available data using the optimal configuration. This model is then saved to disk for later usage.
+	Utilizing the knowledge from the previous step, a model is trained on the whole available data using the optimal configuration. This model is then saved to disk for later usage.
 5. **Model deployment**
-   This step loads the optimal model from disk and uses it in order to classify a set of unseen, unlabeled, test data. Classification results come in a form of (predicted-label, score) pairs, suggesting the model's confidence about each prediction.
+	This step loads the optimal model from disk and uses it in order to classify a set of unseen, unlabeled, test data. Classification results come in a form of (predicted-label, score) pairs, suggesting the model's confidence about each prediction.
 
 Setup procedure
 ---------------

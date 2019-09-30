@@ -162,16 +162,31 @@
 <h3>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h3>
 <p>The module consists of the following steps:</p>
 <ol class="arabic simple">
-<li><p><strong>Features extraction</strong>
-This step takes into account the features configuration given in <a class="reference external" href="https://github.com/LinkGeoML/LGM-Geocoding/blob/master/src/config.py">config.py</a> and creates X_train and X_test feature pairs grouped by folds and ready to be utilized by machine learning algorithms in the next steps.</p></li>
-<li><p><strong>Algorithm selection</strong>
-A list of given classifiers given in <a class="reference external" href="https://github.com/LinkGeoML/LGM-Geocoding/blob/master/src/config.py">config.py</a> are evaluated in a nested cross-validation scheme in order to find which performs the best on the features sets created in the previous step.</p></li>
-<li><p><strong>Model selection</strong>
-Given a selected classifier, this step tries to find its best configuration.</p></li>
-<li><p><strong>Model training</strong>
-Utilizing the knowledge from the previous step, a model is trained on the whole available data using the optimal configuration. This model is then saved to disk for later usage.</p></li>
-<li><p><strong>Model deployment</strong>
-This step loads the optimal model from disk and uses it in order to classify a set of unseen, unlabeled, test data. Classification results come in a form of (predicted-label, score) pairs, suggesting the model’s confidence about each prediction.</p></li>
+<li><dl class="simple">
+<dt><strong>Features extraction</strong></dt><dd><p>This step takes into account the features configuration given in <a class="reference external" href="https://github.com/LinkGeoML/LGM-Geocoding/blob/master/src/config.py">config.py</a> and creates X_train and X_test feature pairs grouped by folds and ready to be utilized by machine learning algorithms in the next steps.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Algorithm selection</strong></dt><dd><p>A list of given classifiers given in <a class="reference external" href="https://github.com/LinkGeoML/LGM-Geocoding/blob/master/src/config.py">config.py</a> are evaluated in a nested cross-validation scheme in order to find which performs the best on the features sets created in the previous step.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Model selection</strong></dt><dd><p>Given a selected classifier, this step tries to find its best configuration.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Model training</strong></dt><dd><p>Utilizing the knowledge from the previous step, a model is trained on the whole available data using the optimal configuration. This model is then saved to disk for later usage.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Model deployment</strong></dt><dd><p>This step loads the optimal model from disk and uses it in order to classify a set of unseen, unlabeled, test data. Classification results come in a form of (predicted-label, score) pairs, suggesting the model’s confidence about each prediction.</p>
+</dd>
+</dl>
+</li>
 </ol>
 </div>
 <div class="section" id="setup-procedure">
