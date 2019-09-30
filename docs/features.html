@@ -1,0 +1,384 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Features &mdash; LGM-Geocoding  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Features utilities" href="features_utilities.html" />
+    <link rel="prev" title="Welcome to LGM-Geocoding’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> LGM-Geocoding
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features_utilities.html">Features utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clf_utilities.html">Classifiers utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="osm_utilities.html">OSM utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="writers.html">Writers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Config</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LGM-Geocoding</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Features</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/features.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-features">
+<span id="features"></span><h1>Features<a class="headerlink" href="#module-features" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="features.get_centroid_coords_distances">
+<code class="sig-prename descclassname">features.</code><code class="sig-name descname">get_centroid_coords_distances</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/features.html#get_centroid_coords_distances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.get_centroid_coords_distances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a features array. For each address (each row), calculates the     distances between the corresponding centroid coords and the coords     suggested from different services.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Contains data points for which the features             will be created</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The features array of shape (n_samples, n_features),             here (len(df), number_of_services * 2)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="features.get_centroid_points_distances">
+<code class="sig-prename descclassname">features.</code><code class="sig-name descname">get_centroid_points_distances</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/features.html#get_centroid_points_distances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.get_centroid_points_distances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a features array. For each address (each row), calculates the     distances between the corresponding centroid and the points suggested     from different services.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Contains data points for which the features             will be created</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The features array of shape (n_samples, n_features),             here (len(df), number_of_services)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="features.get_mean_centroids_coords_distances">
+<code class="sig-prename descclassname">features.</code><code class="sig-name descname">get_mean_centroids_coords_distances</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/features.html#get_mean_centroids_coords_distances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.get_mean_centroids_coords_distances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a features array. For each address (each row), calculates the     mean distances between the corresponding centroid coords and the coords     suggested from different services.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Contains data points for which the features             will be created</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The features array of shape (n_samples, n_features),             here (len(df), 2)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="features.get_mean_centroids_points_distances">
+<code class="sig-prename descclassname">features.</code><code class="sig-name descname">get_mean_centroids_points_distances</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/features.html#get_mean_centroids_points_distances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.get_mean_centroids_points_distances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a features array. For each address (each row), calculates the     mean distance between the corresponding centroid and the points     suggested from different services.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Contains data points for which the features             will be created</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The features array of shape (n_samples, n_features),             here (len(df), 1)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="features.get_nearest_street_distance_by_centroid">
+<code class="sig-prename descclassname">features.</code><code class="sig-name descname">get_nearest_street_distance_by_centroid</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">street_gdf</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/features.html#get_nearest_street_distance_by_centroid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.get_nearest_street_distance_by_centroid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a features array. For each address (each row), the nearest street     to the corresponding centroid is identified at first. Then, distances     between this street and points suggested from different services are     calculated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Contains data points for which the features             will be created</p></li>
+<li><p><strong>street_gdf</strong> (<em>geopandas.GeoDataFrame</em>) – Contains all streets extracted             from OSM, along with their geometries</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The features array of shape (n_samples, n_features),             here (len(df), number_of_services)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="features.get_nearest_street_distance_per_service">
+<code class="sig-prename descclassname">features.</code><code class="sig-name descname">get_nearest_street_distance_per_service</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">street_gdf</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/features.html#get_nearest_street_distance_per_service"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.get_nearest_street_distance_per_service" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a features array. For each address (each row) and for each     service, calculates the distance to the nearest street.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Contains data points for which the features             will be created</p></li>
+<li><p><strong>street_gdf</strong> (<em>geopandas.GeoDataFrame</em>) – Contains all streets extracted             from OSM, along with their geometries</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The features array of shape (n_samples, n_features),             here (len(df), number_of_services)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="features.get_normalized_coords">
+<code class="sig-prename descclassname">features.</code><code class="sig-name descname">get_normalized_coords</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/features.html#get_normalized_coords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.get_normalized_coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a features array. Normalizes each longitude or latitude column,     by subtracting the corresponding column’s mean value from it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Contains data points for which the features             will be created</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The features array of shape (n_samples, n_features),             here (len(df), number_of_services * 2)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="features.get_pairwise_coords_distances">
+<code class="sig-prename descclassname">features.</code><code class="sig-name descname">get_pairwise_coords_distances</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/features.html#get_pairwise_coords_distances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.get_pairwise_coords_distances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a features array. For each address (each row), calculates the     pairwise distances among coordinates suggested from different services.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Contains data points for which the features             will be created</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The features array of shape (n_samples, n_features),             here (len(df), number_of_services * (number_of_services-1))</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="features.get_pairwise_points_distances">
+<code class="sig-prename descclassname">features.</code><code class="sig-name descname">get_pairwise_points_distances</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/features.html#get_pairwise_points_distances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.get_pairwise_points_distances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a features array. For each address (each row), calculates the     pairwise distances among points suggested from different services.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Contains data points for which the features             will be created</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The features array of shape (n_samples, n_features),             here (len(df), (number_of_services * (number_of_services-1)) / 2)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="features.get_zip_codes">
+<code class="sig-prename descclassname">features.</code><code class="sig-name descname">get_zip_codes</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/features.html#get_zip_codes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#features.get_zip_codes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a features array. For each address (each row), the first 2 digits     of its zip code are extracted. Then for each row <em>r</em>, the array will     contain 1 (True) in column <em>c</em>, if <em>c</em> represents the 2 digits that <em>r</em>’s     zip code starts with.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Contains data points for which the features             will be created</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The features array of shape (n_samples, n_features),             here (len(df), 76). This is due to the fact that there are 76             such valid combinations in Greece</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="features_utilities.html" class="btn btn-neutral float-right" title="Features utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to LGM-Geocoding’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, kgalexis, giann
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

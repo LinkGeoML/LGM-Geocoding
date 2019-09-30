@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to LGM-Geocoding’s documentation! &mdash; LGM-Geocoding  documentation</title>
+  <title>LGM-Geocoding &mdash; LGM-Geocoding  documentation</title>
   
 
   
@@ -34,8 +34,7 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Features" href="features.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -49,7 +48,7 @@
           
 
           
-            <a href="#" class="icon icon-home"> LGM-Geocoding
+            <a href="index.html" class="icon icon-home"> LGM-Geocoding
           
 
           
@@ -101,7 +100,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">LGM-Geocoding</a>
+          <a href="index.html">LGM-Geocoding</a>
         
       </nav>
 
@@ -130,15 +129,15 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="#">Docs</a> &raquo;</li>
+      <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Welcome to LGM-Geocoding’s documentation!</li>
+      <li>LGM-Geocoding</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/README.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -151,15 +150,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="welcome-to-lgm-geocoding-s-documentation">
-<h1>Welcome to LGM-Geocoding’s documentation!<a class="headerlink" href="#welcome-to-lgm-geocoding-s-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="lgm-geocoding">
-<h2>LGM-Geocoding<a class="headerlink" href="#lgm-geocoding" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="lgm-geocoding">
+<h1>LGM-Geocoding<a class="headerlink" href="#lgm-geocoding" title="Permalink to this headline">¶</a></h1>
 <p>A python library for accurate classification of best geocoding sources per coordinate pair.</p>
 <p>LGM-Geocoding is a python library which implements a full Machine Learning workflow for training classification algorithms on annotated datasets that contain mappings between coordinate pairs and the ideal geocoding source for them and producing models for providing accurate predictions about ideal geocoding sources for previously unseen geocoding pairs. Geocoding implements a series of training features, regarding the different coordinate pairs that are available for each geocoder and the interaction between them and neighboring geospacial data (namely road data). Further, it encapsulates grid-search and cross-validation functionality, based on the [scikit](<a class="reference external" href="https://scikit-learn.org/">https://scikit-learn.org/</a>) toolkit, assessing as series of classification models and parameterizations, in order to find the most fitting model for the data at hand.</p>
 <p>The source code was tested using Python 3.6 and Scikit-Learn 0.21.2 on a Linux server.</p>
 <div class="section" id="description">
-<h3>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h3>
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
 <p>The module consists of the following steps:</p>
 <ol class="arabic simple">
 <li><p><strong>Features extraction</strong>
@@ -175,7 +172,7 @@ This step loads the optimal model from disk and uses it in order to classify a s
 </ol>
 </div>
 <div class="section" id="setup-procedure">
-<h3>Setup procedure<a class="headerlink" href="#setup-procedure" title="Permalink to this headline">¶</a></h3>
+<h2>Setup procedure<a class="headerlink" href="#setup-procedure" title="Permalink to this headline">¶</a></h2>
 <p>Download the latest version from the <a class="reference external" href="https://github.com/LinkGeoML/LGM-Geocoding.git">GitHub repository</a>, change to
 the main directory and run:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -r pip_requirements.txt
@@ -184,7 +181,7 @@ the main directory and run:</p>
 <p>It should install all the required libraries automatically (<em>scikit-learn, numpy, pandas etc.</em>).</p>
 </div>
 <div class="section" id="usage">
-<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>The execution of the project starts with the <strong>Features extraction</strong> step initializing the pipeline’s root folder which the following steps will refer to in order to output their results. Each step can be executed as follows:</p>
 <ol class="arabic">
 <li><dl>
@@ -228,27 +225,7 @@ the main directory and run:</p>
 </dl>
 </li>
 </ol>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="features.html">Features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="features_utilities.html">Features utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="clf_utilities.html">Classifiers utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="osm_utilities.html">OSM utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="writers.html">Writers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html">Config</a></li>
-</ul>
 </div>
-</div>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
 </div>
 
 
@@ -256,13 +233,6 @@ the main directory and run:</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="features.html" class="btn btn-neutral float-right" title="Features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-    </div>
   
 
   <hr/>
