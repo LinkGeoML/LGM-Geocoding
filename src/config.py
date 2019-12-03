@@ -48,7 +48,7 @@ class config:
     target_crs = 3857
     clusters_pct = 0.015
     osm_buffer = 0.001
-    osm_timeout = 90
+    osm_timeout = 120
     distance_thr = 5000.0
     baseline_service = 'original'
 
