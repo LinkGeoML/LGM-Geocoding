@@ -4,7 +4,7 @@ import os
 import shutil
 import pickle
 import time
-
+from ast import literal_eval
 import features_utilities as feat_ut
 import clf_utilities as clf_ut
 import writers as wrtrs
@@ -49,7 +49,14 @@ def main():
 
     feat_ut.get_required_external_files(df, results_path, features)
 
+    model_selection_path = args['experiment_path'] + 'model_selection_results'
+    path = model_selection_path + '/results_by_clf_params.csv'
+    features_selected = literal_eval(pd.read_csv(path, nrows=1).iloc[0, 5])
+
     X_test = feat_ut.create_test_features(df, results_path, model_training_path + '/pickled_objects', results_path, features)
+    if features_selected:
+        X_test = X_test[:, features_selected]
+
     model = pickle.load(open(model_training_path + '/model.pkl', 'rb'))
     preds = clf_ut.get_predictions(model, X_test)
 

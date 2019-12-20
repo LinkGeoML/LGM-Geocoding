@@ -3,6 +3,9 @@ import csv
 
 import clf_utilities as clf_ut
 from config import config
+import itertools as it
+from collections import Counter
+from operator import itemgetter
 
 
 def write_feats_space(fpath):
@@ -65,14 +68,18 @@ def write_results(results_path, results, step):
     all_results_df = pd.DataFrame(results)
     all_results_df.to_csv(
         results_path + '/all_results.csv',
-        columns=['fold', col, 'accuracy',
+        columns=['fold', col, 'feature_col', 'accuracy',
                  'f1_macro', 'f1_micro', 'f1_weighted'],
         index=False)
 
-    avg_results_df = all_results_df.groupby(col).mean()
+    avg_results_df = pd.DataFrame(results)
+    avg_results_df = avg_results_df.groupby(col).mean()
+    if step == 'model_selection':
+        avg_results_df = write_best_features_params(results, avg_results_df, step)
     avg_results_df.drop('fold', axis=1, inplace=True)
-    avg_results_df.sort_values(by=['accuracy'], ascending=False, inplace=True)
-    avg_results_df.to_csv(results_path + f'/results_by_{col}.csv')
+    avg_results_df.sort_values(by=['f1_weighted'], ascending=False, inplace=True)
+
+    avg_results_df.to_csv(results_path + f'/results_by_{col}.csv', index=False)
     return
 
 
@@ -103,3 +110,20 @@ def write_predictions(fpath, df, preds):
                 ]
             ])
     return
+
+
+def write_best_features_params(results, avg_df, step):
+
+    results_df = pd.DataFrame(results)
+    grouped = results_df.groupby('clf_params')['feature_col'].apply(lambda x: list(it.chain(*x))).reset_index()
+    min_features = results_df.groupby('clf_params')['feature_col'].apply(
+        lambda x: min(map(len, x))).reset_index()
+    min_features = dict(zip(min_features.clf_params, min_features.feature_col))
+    grouped['feature_count'] = grouped['feature_col'].apply(lambda x: Counter(x))
+    feat_fold = dict(zip(grouped.clf_params, grouped.feature_count))
+    best_feat = {k: [i[0] for i in v.most_common(min_features[k])] for k, v in feat_fold.items()}
+    best_feat_df = pd.DataFrame(data=list(best_feat.items()), columns=['clf_params', 'feature_col'])
+    avg_df = avg_df.reset_index()
+    avg_df = pd.merge(avg_df, best_feat_df, on='clf_params')
+
+    return avg_df

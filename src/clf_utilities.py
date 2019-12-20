@@ -1,4 +1,5 @@
 import numpy as np
+import feature_selection as fs
 from itertools import product
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
@@ -8,6 +9,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
 from sklearn.model_selection import GridSearchCV
+from sklearn.feature_selection import SelectKBest, chi2, VarianceThreshold
 from sklearn.metrics import accuracy_score, f1_score
 
 from config import config
@@ -20,7 +22,7 @@ clf_callable_map = {
     'SVM': SVC(probability=True),
     'MLP': MLPClassifier(),
     'DecisionTree': DecisionTreeClassifier(),
-    'RandomForest': RandomForestClassifier(),
+    'RandomForest': RandomForestClassifier(random_state=1),
     'ExtraTrees': ExtraTreesClassifier()
 }
 
@@ -33,6 +35,25 @@ clf_hparams_map = {
     'DecisionTree': config.DT_hparams,
     'RandomForest': config.RF_hparams,
     'ExtraTrees': config.ET_hparams
+}
+"""
+Feature selection mapping
+"""
+
+fs_callable_map = {
+    'SelectKBest': [SelectKBest(chi2), config.SelectKbest_hyperparameters],
+    'VarianceThreshold': [VarianceThreshold(1), config.VT_hyperparameters],
+    'RFE': ['RFE', {}],
+    'SelectFromModel': ['SelectFromModel', config.SFM_hyperparameters],
+    'PCA': ['PCA']
+}
+
+feature_selection_getter_map = {
+    'SelectKBest': ['get_stats_features', ('fs_name', 'fsm', 'clf', 'params', 'X_train', 'y_train', 'X_test')],
+    'VarianceThreshold': ['get_stats_features', ('fs_name', 'fsm', 'clf', 'params', 'X_train', 'y_train', 'X_test')],
+    'RFE': ['get_RFE_features', ('clf', 'clf_name', 'X_train', 'y_train', 'X_test')],
+    'SelectFromModel': ['get_SFM_features', ('clf', 'clf_name', 'params', 'X_train', 'y_train', 'X_test')],
+    'PCA': ['get_PCA_features', ('clf', 'params', 'X_train', 'y_train', 'X_test')],
 }
 
 
@@ -169,3 +190,19 @@ def create_clf_params_product_generator(params_grid):
     vals = params_grid.values()
     for instance in product(*vals):
         yield dict(zip(keys, instance))
+
+
+def ft_selection(clf_name, fs_method, X_train, y_train, X_test):
+    clf = clf_callable_map[clf_name]
+    fsm = fs_callable_map[fs_method][0]
+    params = fs_callable_map[fs_method][1]
+    args = create_ft_select_args_dict(fs_method, fsm, clf, clf_name, params, X_train, y_train, X_test)
+    X_train, y_train, X_test, feature_indices = getattr(fs, feature_selection_getter_map[fs_method][0])(
+        *[args[arg] for arg in feature_selection_getter_map[fs_method][1]]
+    )
+    return X_train, y_train, X_test, feature_indices
+
+
+def create_ft_select_args_dict(fs_name, fsm, clf, clf_name, params, X_train, y_train, X_test):
+
+    return locals()

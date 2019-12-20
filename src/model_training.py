@@ -47,9 +47,12 @@ def main():
     clf_name = pd.read_csv(path, nrows=1).iloc[0, 0]
     path = model_selection_path + '/results_by_clf_params.csv'
     params = literal_eval(pd.read_csv(path, nrows=1).iloc[0, 0])
+    features_selected = literal_eval(pd.read_csv(path, nrows=1).iloc[0,5])
 
     features = list(pd.read_csv(features_path + '/included_features.csv')['feature'])
     X_train = feat_ut.create_train_features(df, features_path, results_path, features)
+    if features_selected:
+        X_train = X_train[:, features_selected]
     y_train = df['target']
 
     model = clf_ut.clf_callable_map[clf_name].set_params(**params)

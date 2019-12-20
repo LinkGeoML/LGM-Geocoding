@@ -48,11 +48,13 @@ class config:
     target_crs = 3857
     clusters_pct = 0.015
     osm_buffer = 0.001
-    osm_timeout = 90
+    osm_timeout = 150
     distance_thr = 5000.0
     baseline_service = 'original'
-
-    experiments_path = '/media/disk/LGM-Geocoding-utils/experiments'
+    total_features = 0
+    experiments_path = 'media/disk/LGM-Geocoding-utils/experiments'
+    fs_method = ''
+    feature_selection = False
 
     services = [
         'original',
@@ -110,15 +112,15 @@ class config:
     ]
 
     included_classifiers = [
-        'Baseline',
-        'NaiveBayes',
-        'NearestNeighbors',
-        'LogisticRegression',
+        #'Baseline',
+        #'NaiveBayes',
+        #'NearestNeighbors',
+        #'LogisticRegression',
         # 'SVM',
-        'MLP',
-        'DecisionTree',
+        #'MLP',
+        #'DecisionTree',
         'RandomForest',
-        'ExtraTrees'
+        #'ExtraTrees'
     ]
 
     NB_hparams = {}
@@ -157,3 +159,29 @@ class config:
         'max_depth': [5, 10, 100, 250],
         'n_estimators': [100, 250, 1000]
     }
+
+    """
+       Feature selection hyperparameters
+    """
+
+    SelectKbest_hyperparameters = {
+        'selection__k': [.9, .8, .7]
+    }
+
+    VT_hyperparameters = [
+        {
+            'selection__threshold': [0.001, 0.0008, 0.002]
+        }
+    ]
+
+    SFM_hyperparameters = [
+        {
+            'selection__threshold': ['0.3*median', '0.5*median', '0.7*mean']
+        }
+    ]
+
+    PCA_hyperparameters = [
+        {
+            'selection__n_components': [.9, .8, .7]
+        }
+    ]
