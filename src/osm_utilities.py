@@ -5,8 +5,9 @@ import requests
 from shapely.geometry import LineString
 from sklearn.cluster import KMeans
 import time
+import os
 
-from config import config
+from src.config import config
 
 
 def query_api(query, fpath):
@@ -20,15 +21,16 @@ def query_api(query, fpath):
     Returns:
         None
     """
+    status = 0
     overpass_url = 'http://overpass-api.de/api/interpreter'
     try:
         response = requests.get(overpass_url, params={'data': query}).json()
         with open(fpath, 'w') as f:
             json.dump(response, f)
     except ValueError:
-        print('Overpass api error: Try again with a greater timeout.')
-        exit()
-    return
+        print('Overpass api error: Trying again with a greater timeout.')
+        status = 1
+    return status
 
 
 def parse_streets(fpath):
@@ -74,25 +76,23 @@ def extract_streets(points, path):
     Returns:
         None
     """
-    fpath = path + '/osm_streets.json'
     labels = cluster_points(points)
     clusters_bboxes = get_clusters_bboxes(points, labels)
     street_dfs = []
     for cluster, bbox in clusters_bboxes.items():
         print('Getting bbox', cluster + 1, 'out of', len(clusters_bboxes))
-        cell_street_df = download_cell(bbox, fpath)
+        cell_street_df = download_cell(bbox, os.path.join(path, "osm_streets.json"))
         if cell_street_df is not None:
             print('Number of streets:', len(cell_street_df))
             street_dfs.append(cell_street_df)
         else:
             print('Number of streets:', 0)
-        if (cluster + 1) % 5 == 0:
-            time.sleep(config.osm_timeout)
+        # if (cluster + 1) % 5 == 0:
+        #     print(f'Suspended for {config.osm_timeout} secs...')
+        #     time.sleep(config.osm_timeout)
     street_df = pd.concat(street_dfs, ignore_index=True)
     street_df.drop_duplicates(subset='id', inplace=True)
-    fpath = path + '/osm_streets.csv'
-    street_df.to_csv(f'{fpath}', columns=['id', 'geometry'], index=False)
-    return
+    street_df.to_csv(f'{os.path.join(path, "osm_streets.csv")}', columns=['id', 'geometry'], index=False)
 
 
 def download_cell(cell, fpath):
@@ -109,12 +109,20 @@ def download_cell(cell, fpath):
         pandas.DataFrame: Contains all street elements included in *cell*
     """
     west, south, east, north = cell
-    query = (
-        '[out:json]'
-        f'[bbox:{south},{west},{north},{east}];'
-        'way["highway"];'
-        'out geom;')
-    query_api(query, fpath)
+    counter = 0
+    status = 1
+    while status and (counter < config.max_overpass_tries):
+        counter += 1
+        query = (
+            f'[out:json][timeout:{config.osm_timeout * counter}]'
+            f'[bbox:{south},{west},{north},{east}];'        
+            'way[highway~"."][highway!~"path|cycleway|footway"];'
+            'out geom;')
+        status = query_api(query, fpath)
+
+    if status:
+        print('Overpass api error: Exiting...')
+        exit()
     return parse_streets(fpath)
 
 

@@ -2,14 +2,13 @@ import numpy as np
 import pandas as pd
 import geopandas as gpd
 from shapely.wkt import loads
-from shapely.geometry import Point
 import pickle
+import os
 
-from sklearn.preprocessing import LabelEncoder, MinMaxScaler
+from sklearn.preprocessing import LabelEncoder, MinMaxScaler, RobustScaler
 
-import features as feats
-import osm_utilities as osm_ut
-from config import config
+from src import features as feats, osm_utilities as osm_ut
+from src.config import config
 
 
 features_getter_map = {
@@ -22,7 +21,8 @@ features_getter_map = {
     'mean_centroids_points_distances': 'get_mean_centroids_points_distances',
     'nearest_street_distance_per_service': 'get_nearest_street_distance_per_service',
     'nearest_street_distance_by_centroid': 'get_nearest_street_distance_by_centroid',
-    'zip_codes': 'get_zip_codes'
+    'zip_codes': 'get_zip_codes',
+    'common_nearest_street_distance': 'get_common_nearest_street_distance',
 }
 
 features_getter_args_map = {
@@ -35,7 +35,8 @@ features_getter_args_map = {
     'mean_centroids_points_distances': ['df'],
     'nearest_street_distance_per_service': ['df', 'street_gdf'],
     'nearest_street_distance_by_centroid': ['df', 'street_gdf'],
-    'zip_codes': ['df']
+    'zip_codes': ['df'],
+    'common_nearest_street_distance': ['df', 'street_gdf'],
 }
 
 
@@ -52,11 +53,14 @@ def load_points_df(points_fpath):
     """
     df = pd.read_csv(points_fpath)
     for service in config.services:
-        service_df = df[[f'x_{service}', f'y_{service}']]
-        service_df['geometry'] = service_df.apply(lambda x: Point(x[f'x_{service}'], x[f'y_{service}']), axis=1)
-        service_gdf = gpd.GeoDataFrame(service_df, geometry='geometry')
-        service_gdf.crs = {'init': f'epsg:{config.source_crs}'}
-        service_gdf = service_gdf.to_crs({'init': f'epsg:{config.target_crs}'})
+        # service_df = df[[f'x_{service}', f'y_{service}']]
+        # service_df['geometry'] = service_df.apply(lambda x: Point(x[f'x_{service}'], x[f'y_{service}']), axis=1)
+        service_df = gpd.GeoDataFrame(
+            df[[f'x_{service}', f'y_{service}']], geometry=gpd.points_from_xy(df[f'x_{service}'], df[f'y_{service}']))
+        service_gdf = gpd.GeoDataFrame(service_df, geometry='geometry', crs=f'epsg:{config.source_crs}')
+        # print(service_df.geometry.crs, f'epsg:{config.source_crs}')
+        # service_gdf.crs = f'epsg:{config.source_crs}'
+        # service_gdf = service_gdf.to_crs(f'epsg:{config.target_crs}')
         df[f'lon_{service}'] = service_gdf.apply(lambda x: x.geometry.x, axis=1)
         df[f'lat_{service}'] = service_gdf.apply(lambda x: x.geometry.y, axis=1)
     return df
@@ -99,9 +103,9 @@ def load_street_gdf(street_fpath):
     """
     street_df = pd.read_csv(street_fpath)
     street_df['geometry'] = street_df['geometry'].apply(lambda x: loads(x))
-    street_gdf = gpd.GeoDataFrame(street_df, geometry='geometry')
-    street_gdf.crs = {'init': f'epsg:{config.source_crs}'}
-    street_gdf = street_gdf.to_crs({'init': f'epsg:{config.target_crs}'})
+    street_gdf = gpd.GeoDataFrame(street_df, geometry='geometry', crs=f'epsg:{config.source_crs}')
+    # street_gdf.crs = f'epsg:{config.source_crs}'
+    # street_gdf = street_gdf.to_crs(f'epsg:{config.target_crs}')
     return street_gdf
 
 
@@ -121,8 +125,7 @@ def prepare_feats_args(df, required_args, path):
     """
     args = {'df': df}
     if 'street_gdf' in required_args:
-        street_csv_path = path + '/osm_streets.csv'
-        args['street_gdf'] = load_street_gdf(street_csv_path)
+        args['street_gdf'] = load_street_gdf(os.path.join(path, 'osm_streets.csv'))
     return args
 
 
@@ -150,11 +153,10 @@ def create_train_features(df, in_path, out_path, features=None):
     args = prepare_feats_args(df, required_args, in_path)
     Xs = []
     for f in included_features:
-        X = getattr(feats, features_getter_map[f])(
-            *[args[arg] for arg in features_getter_args_map[f]])
+        X = getattr(feats, features_getter_map[f])(*[args[arg] for arg in features_getter_args_map[f]])
         if f in config.normalized_features:
             X, scaler = normalize_features(X)
-            pickle.dump(scaler, open(out_path + '/pickled_objects' + f'/{f}_scaler.pkl', 'wb'))
+            pickle.dump(scaler, open(os.path.join(out_path, 'pickled_objects', f'{f}_scaler.pkl'), 'wb'))
         np.save(out_path + f'/features/{f}_train.npy', X)
         Xs.append(X)
     X = np.hstack(Xs)
@@ -189,9 +191,9 @@ def create_test_features(df, in_path, scalers_path, out_path, features=None):
         X = getattr(feats, features_getter_map[f])(
             *[args[arg] for arg in features_getter_args_map[f]])
         if f in config.normalized_features:
-            scaler = pickle.load(open(scalers_path + f'/{f}_scaler.pkl', 'rb'))
+            scaler = pickle.load(open(os.path.join(scalers_path, f'{f}_scaler.pkl'), 'rb'))
             X, _ = normalize_features(X, scaler)
-        np.save(out_path + f'/features/{f}_test.npy', X)
+        np.save(os.path.join(out_path, f'features/{f}_test.npy'), X)
         Xs.append(X)
     X = np.hstack(Xs)
     return X
@@ -213,7 +215,8 @@ def normalize_features(X, scaler=None):
             sklearn.preprocessing.MinMaxScaler: The scaler utilized
     """
     if scaler is None:
-        scaler = MinMaxScaler()
+        # scaler = MinMaxScaler()
+        scaler = RobustScaler()
         X_ = scaler.fit_transform(X)
     else:
         X_ = scaler.transform(X)
@@ -264,10 +267,9 @@ def get_points(df):
     Returns:
         numpy.ndarray
     """
-    points = np.array(
-        [[df.loc[i.Index, f'x_{service}'], df.loc[i.Index, f'y_{service}']]
-         for i in df.itertuples()
-         for service in config.services])
+    points = [df[[f'x_{service}', f'y_{service}']].to_numpy() for service in config.services]
+    points = np.vstack(points)
+
     return points
 
 
@@ -293,4 +295,3 @@ def get_required_external_files(df, path, features=None):
     if 'street_gdf' in required_args:
         # osm_ut.extract_streets(get_centroids(df), path)
         osm_ut.extract_streets(get_points(df), path)
-    return

@@ -1,3 +1,7 @@
+import numpy as np
+from scipy.stats import randint as sp_randint, expon, truncnorm, uniform
+
+
 class config:
 
     """
@@ -44,15 +48,24 @@ class config:
     """
 
     n_folds = 5
+    n_jobs = 4  #: int: Number of parallel jobs to be initiated. -1 means to utilize all available processors.
+    # accepted values: randomized, grid, hyperband - not yet implemented!!!
+    hyperparams_search_method = 'grid'
+    """str: Search Method to use for finding best hyperparameters. (*randomized* | *grid*).
+    """
+    max_iter = 50
+    verbose = True
+
     source_crs = 4326
     target_crs = 3857
     clusters_pct = 0.015
     osm_buffer = 0.001
-    osm_timeout = 120
+    osm_timeout = 30
+    max_overpass_tries = 3
     distance_thr = 5000.0
     baseline_service = 'original'
 
-    experiments_path = '/media/disk/LGM-Geocoding-utils/experiments'
+    base_dir = '/media/disk/LGM-Geocoding-utils/experiments'
 
     services = [
         'original',
@@ -70,7 +83,9 @@ class config:
         'mean_centroids_points_distances',
         'nearest_street_distance_per_service',
         'nearest_street_distance_by_centroid',
-        'zip_codes'
+        'zip_codes',
+        'common_nearest_street_distance',
+
     ]
 
     included_features = [
@@ -84,6 +99,7 @@ class config:
         'nearest_street_distance_per_service',
         'nearest_street_distance_by_centroid',
         'zip_codes'
+        'common_nearest_street_distance',
     ]
 
     normalized_features = [
@@ -106,7 +122,8 @@ class config:
         'MLP',
         'DecisionTree',
         'RandomForest',
-        'ExtraTrees'
+        'ExtraTrees',
+        'XGBoost'
     ]
 
     included_classifiers = [
@@ -118,7 +135,8 @@ class config:
         'MLP',
         'DecisionTree',
         'RandomForest',
-        'ExtraTrees'
+        'ExtraTrees',
+        'XGBoost'
     ]
 
     NB_hparams = {}
@@ -140,7 +158,8 @@ class config:
     MLP_hparams = {
         'hidden_layer_sizes': [(100, ), (50, 50, )],
         'learning_rate_init': [0.0001, 0.01, 0.1],
-        'max_iter': [100, 200, 500]
+        'max_iter': [100, 200, 500],
+        'solver': ['sgd', 'adam']
     }
 
     DT_hparams = {
@@ -156,4 +175,70 @@ class config:
     ET_hparams = {
         'max_depth': [5, 10, 100, 250],
         'n_estimators': [100, 250, 1000]
+    }
+
+    XGB_hparams = {
+        "n_estimators": [500, 1000, 3000],
+        'max_depth': [3, 10, 20, 50, 70, 100, 250],
+        # # hyperparameters to avoid overfitting
+        # 'eta': list(np.linspace(0.01, 0.2, 10)),  # 'learning_rate'
+        # 'gamma': [0, 1, 5],
+        # 'subsample': [0.8, 0.9, 1],
+        # 'colsample_bytree': list(np.linspace(0.3, 1, 8)),
+        # 'min_child_weight': [1, 5, 10],
+    }
+
+    # These parameters constitute the search space for RandomizedSearchCV in our experiments.
+    NB_hparams_dist = {}
+
+    NN_hparams_dist = {
+        'n_neighbors': sp_randint(1, 20)
+    }
+
+    LR_hparams_dist = {
+        'max_iter': sp_randint(100, 1000),
+        'C': expon(scale=200)
+    }
+
+    SVM_hparams_dist = {
+        'C': expon(loc=0.01, scale=20),
+        # "C": uniform(2, 10),
+        "gamma": uniform(0.1, 1),
+        'kernel': ['rbf', 'poly', 'sigmoid'],
+        'degree': sp_randint(1, 10),
+        'class_weight': ['balanced', None],
+        'tol': [1e-3, 1e-4],
+        'max_iter': [3000],
+        'probability': [True],
+        # 'dual': [True, False]
+    }
+    DT_hparams_dist = {
+        'max_depth': sp_randint(10, 100),
+        'min_samples_split': list(np.linspace(0.1, 1, 50)),
+        'min_samples_leaf': list(np.linspace(0.1, 0.5, 25)),
+        'max_features': sp_randint(1, 11),
+    }
+    RF_hparams_dist = {
+        'bootstrap': [True, False],
+        'max_depth': [10, 20, 30, 40, 50, 60, 100, None],
+        'criterion': ['gini', 'entropy'],
+        'max_features': ['sqrt', 'log2'],  # sp_randint(1, 11)
+        'min_samples_leaf': sp_randint(1, 5),
+        'min_samples_split': sp_randint(2, 11),
+        "n_estimators": sp_randint(250, 1000),
+    }
+    XGB_hparams_dist = {
+        "n_estimators": sp_randint(500, 4000),
+        'max_depth': sp_randint(3, 100),
+        # 'eta': expon(loc=0.01, scale=0.1),  # 'learning_rate'
+        # hyperparameters to avoid overfitting
+        'gamma': uniform(0, 3),
+        'subsample': truncnorm(0.7, 1),
+        'colsample_bytree': truncnorm(0, 1),
+        'min_child_weight': sp_randint(1, 10),
+    }
+    MLP_hparams_dist = {
+        'learning_rate_init': expon(loc=0.0001, scale=0.1),
+        'max_iter': sp_randint(500, 2000),
+        'solver': ['sgd', 'adam']
     }

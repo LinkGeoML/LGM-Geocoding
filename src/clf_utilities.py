@@ -7,32 +7,35 @@ from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.metrics import accuracy_score, f1_score
+from xgboost import XGBClassifier
 
-from config import config
+from src.config import config
 
 
 clf_callable_map = {
     'NaiveBayes': GaussianNB(),
     'NearestNeighbors': KNeighborsClassifier(),
     'LogisticRegression': LogisticRegression(solver='liblinear', multi_class='auto'),
-    'SVM': SVC(probability=True),
+    'SVM': SVC(),
     'MLP': MLPClassifier(),
     'DecisionTree': DecisionTreeClassifier(),
     'RandomForest': RandomForestClassifier(),
-    'ExtraTrees': ExtraTreesClassifier()
+    'ExtraTrees': ExtraTreesClassifier(),
+    'XGBoost': XGBClassifier()
 }
 
 clf_hparams_map = {
-    'NaiveBayes': config.NB_hparams,
-    'NearestNeighbors': config.NN_hparams,
-    'LogisticRegression': config.LR_hparams,
-    'SVM': config.SVM_hparams,
-    'MLP': config.MLP_hparams,
-    'DecisionTree': config.DT_hparams,
-    'RandomForest': config.RF_hparams,
-    'ExtraTrees': config.ET_hparams
+    'NaiveBayes': [config.NB_hparams, config.NB_hparams_dist],
+    'NearestNeighbors': [config.NN_hparams, config.NN_hparams_dist],
+    'LogisticRegression': [config.LR_hparams, config.LR_hparams_dist],
+    'SVM': [config.SVM_hparams, config.SVM_hparams_dist],
+    'MLP': [config.MLP_hparams, config.MLP_hparams_dist],
+    'DecisionTree': [config.DT_hparams, config.DT_hparams_dist],
+    'RandomForest': [config.RF_hparams, config.RF_hparams_dist],
+    'ExtraTrees': [config.ET_hparams, config.RF_hparams_dist],
+    'XGBoost': [config.XGB_hparams, config.XGB_hparams_dist],
 }
 
 
@@ -49,8 +52,22 @@ def train_classifier(clf_name, X_train, y_train):
         object: The trained classifier
     """
     clf = clf_callable_map[clf_name]
-    params = clf_hparams_map[clf_name]
-    clf = GridSearchCV(clf, params, cv=5, n_jobs=-1)
+    if config.hyperparams_search_method.lower() == 'grid':
+        params = clf_hparams_map[clf_name][0]
+        clf = GridSearchCV(clf, params, cv=config.n_folds, n_jobs=config.n_jobs, verbose=config.verbose)
+        # elif self.search_method.lower() == 'hyperband' and clf_key in ['XGBoost', 'Extra-Trees', 'Random Forest']:
+        #     HyperbandSearchCV(
+        #         clf_val[0](probability=True) if clf_key == 'SVM' else clf_val[0](), clf_val[2].copy().pop('n_estimators'),
+        #         resource_param='n_estimators',
+        #         min_iter=500 if clf_key == 'XGBoost' else 200,
+        #         max_iter=3000 if clf_key == 'XGBoost' else 1000,
+        #         cv=self.inner_cv, random_state=seed_no, scoring=score
+        #     )
+    else:  # randomized is used as default
+        params = clf_hparams_map[clf_name][1]
+        clf = RandomizedSearchCV(
+            clf, params, cv=config.n_folds, n_jobs=config.n_jobs, verbose=config.verbose, n_iter=config.max_iter
+        )
     clf.fit(X_train, y_train)
     return clf
 

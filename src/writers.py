@@ -1,8 +1,9 @@
 import pandas as pd
 import csv
+import os
 
-import clf_utilities as clf_ut
-from config import config
+from src import clf_utilities as clf_ut
+from src.config import config
 
 
 def write_feats_space(fpath):
@@ -20,7 +21,6 @@ def write_feats_space(fpath):
         writer.writerow(['feature', 'normalized'])
         for f in config.included_features:
             writer.writerow([f, True if f in config.normalized_features else False])
-    return
 
 
 def write_clf_space(fpath, clf_name, best_params=None):
@@ -41,10 +41,9 @@ def write_clf_space(fpath, clf_name, best_params=None):
         writer = csv.writer(file)
         writer.writerow(['classifier', 'parameters'])
         if best_params is None:
-            writer.writerow([clf_name, clf_ut.clf_hparams_map[clf_name]])
+            writer.writerow([clf_name, clf_ut.clf_hparams_map[clf_name][0]])
         else:
             writer.writerow([clf_name, best_params])
-    return
 
 
 def write_results(results_path, results, step):
@@ -64,16 +63,15 @@ def write_results(results_path, results, step):
 
     all_results_df = pd.DataFrame(results)
     all_results_df.to_csv(
-        results_path + '/all_results.csv',
-        columns=['fold', col, 'accuracy',
-                 'f1_macro', 'f1_micro', 'f1_weighted'],
-        index=False)
+        os.path.join(results_path, 'all_results.csv'),
+        columns=['fold', col, 'accuracy', 'f1_macro', 'f1_micro', 'f1_weighted'],
+        index=False
+    )
 
     avg_results_df = all_results_df.groupby(col).mean()
     avg_results_df.drop('fold', axis=1, inplace=True)
     avg_results_df.sort_values(by=['accuracy'], ascending=False, inplace=True)
-    avg_results_df.to_csv(results_path + f'/results_by_{col}.csv')
-    return
+    avg_results_df.to_csv(os.path.join(results_path, f'results_by_{col}.csv'))
 
 
 def write_predictions(fpath, df, preds):
@@ -102,4 +100,3 @@ def write_predictions(fpath, df, preds):
                     for pred in preds[i.Index * n_services:i.Index * n_services + n_services]
                 ]
             ])
-    return

@@ -1,10 +1,10 @@
 import numpy as np
 from itertools import combinations
-from shapely.geometry import Point
+from shapely.geometry import Point, asLineString
 import re
 
-import features_utilities as feat_ut
-from config import config
+from src import features_utilities as feat_ut
+from src.config import config
 
 
 def get_normalized_coords(df):
@@ -225,6 +225,75 @@ def get_nearest_street_distance_per_service(df, street_gdf):
                 for c in list(street_index.nearest(p))
             ]) for p in points
         ]
+        # print(distances, points)
+        # print([
+        #     Point(p).distance(street_gdf.iloc[c]['geometry'])
+        #     for p in points
+        #     for c in list(street_index.nearest(p))
+        # ])
+        # print([
+        #     street_gdf.iloc[c]['geometry'].wkt for p in points for c in list(street_index.nearest(p))
+        # ])
+        X[i.Index] = feat_ut.filter(distances)
+    return X
+
+
+def get_common_nearest_street_distance(df, street_gdf, k=3):
+    """
+    Creates a features array. For each address (each row) and for each \
+    service, calculates the distance to the nearest street.
+
+    Args:
+        df (pandas.DataFrame): Contains data points for which the features \
+            will be created
+        street_gdf (geopandas.GeoDataFrame): Contains all streets extracted \
+            from OSM, along with their geometries
+
+    Returns:
+        numpy.ndarray: The features array of shape (n_samples, n_features), \
+            here (len(df), number_of_services)
+    """
+    street_index = street_gdf.sindex
+    n_services = len(config.services)
+    X = np.zeros((len(df), n_services))
+    for i in df.itertuples():
+        points = [
+            (df.loc[i.Index, f'lon_{service}'], df.loc[i.Index, f'lat_{service}']) for service in config.services
+        ]
+        lines = [
+            [street_gdf.iloc[c]['geometry'] for c in list(street_index.nearest(p, k))] for p in points
+        ]
+
+        common_lines = []
+        for li in range(1, len(lines)):
+            for l1, l2 in ((x, y) for x in lines[0] for y in lines[li]):
+                if l1.intersects(l2):
+                    common_lines.append(list(l1.coords))
+
+        if len(common_lines):
+            mask = np.ones(len(common_lines))
+            combs = combinations(enumerate(common_lines), 2)
+            for c in combs:
+                if asLineString(c[0][1]).intersects(asLineString(c[1][1])): mask[c[0][0]] = 0
+
+            masked_clines = np.ma.masked_array(np.arange(len(common_lines)), mask=mask)
+            if len(masked_clines.compressed()):
+                distances = [
+                    np.mean([Point(p).distance(asLineString(common_lines[c])) for c in masked_clines.compressed()]) for p in points
+                ]
+            else:
+                closer_geom = min(
+                    [(idx, Point(points[0]).distance(asLineString(c))) for idx, c in enumerate(common_lines)],
+                    key=lambda x: x[1]
+                )
+                distances = [Point(p).distance(asLineString(common_lines[closer_geom[0]])) for p in points]
+        else:
+            closer_geom = min(
+                [(idx, Point(points[0]).distance(c)) for idx, c in enumerate(lines[0])],
+                key=lambda x: x[1]
+            )
+            distances = [Point(p).distance(lines[0][closer_geom[0]]) for p in points]
+
         X[i.Index] = feat_ut.filter(distances)
     return X
 
