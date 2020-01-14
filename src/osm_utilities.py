@@ -90,9 +90,14 @@ def extract_streets(points, path):
         # if (cluster + 1) % 5 == 0:
         #     print(f'Suspended for {config.osm_timeout} secs...')
         #     time.sleep(config.osm_timeout)
+    # delete file
+    if os.path.exists(os.path.join(path, "osm_streets.json")):
+        os.remove(os.path.join(path, "osm_streets.json"))
+
     street_df = pd.concat(street_dfs, ignore_index=True)
     street_df.drop_duplicates(subset='id', inplace=True)
     street_df.to_csv(f'{os.path.join(path, "osm_streets.csv")}', columns=['id', 'geometry'], index=False)
+    print(f'Extracted {len(street_df.index)} unique streets')
 
 
 def download_cell(cell, fpath):
@@ -116,7 +121,9 @@ def download_cell(cell, fpath):
         query = (
             f'[out:json][timeout:{config.osm_timeout * counter}]'
             f'[bbox:{south},{west},{north},{east}];'        
-            'way[highway~"."][highway!~"path|cycleway|footway"];'
+            f'way[highway][highway!~"^(path|cycleway|footway)$"];'
+            # 'way["highway"~"^(motorway|trunk|primary)$"];'
+            # 'way["highway"];'
             'out geom;')
         status = query_api(query, fpath)
 
@@ -137,7 +144,7 @@ def cluster_points(X):
         numpy.ndarray: The predicted clusters labels
     """
     n_clusters = int(config.clusters_pct * X.shape[0])
-    kmeans = KMeans(n_clusters=n_clusters).fit(X)
+    kmeans = KMeans(n_clusters=n_clusters, random_state=config.seed_no).fit(X)
     labels = kmeans.predict(X)
     return labels
 

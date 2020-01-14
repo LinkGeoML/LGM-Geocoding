@@ -41,6 +41,9 @@ def main():
         y_test = np.load(os.path.join(fold_path, 'y_test.npy'))
         for params_grid in params_grids:
             for params in clf_ut.create_clf_params_product_generator(params_grid):
+                if args['classifier'] == 'XGBoost':
+                    params.update(seed=config.seed_no)
+                else: params.update(random_state=config.seed_no)
                 clf = clf_ut.clf_callable_map[args['classifier']].set_params(**params)
                 clf.fit(X_train, y_train)
                 pred = clf.predict_proba(X_test)

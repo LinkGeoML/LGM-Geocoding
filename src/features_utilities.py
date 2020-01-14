@@ -23,6 +23,9 @@ features_getter_map = {
     'nearest_street_distance_by_centroid': 'get_nearest_street_distance_by_centroid',
     'zip_codes': 'get_zip_codes',
     'common_nearest_street_distance': 'get_common_nearest_street_distance',
+    'intersects_on_common_nearest_street': 'get_intersects_on_common_nearest_street',
+    'points_area': 'get_points_area',
+    'polar_coords': 'get_polar_coords',
 }
 
 features_getter_args_map = {
@@ -37,6 +40,9 @@ features_getter_args_map = {
     'nearest_street_distance_by_centroid': ['df', 'street_gdf'],
     'zip_codes': ['df'],
     'common_nearest_street_distance': ['df', 'street_gdf'],
+    'intersects_on_common_nearest_street': ['df', 'street_gdf'],
+    'points_area': ['df'],
+    'polar_coords': ['df'],
 }
 
 
@@ -60,7 +66,7 @@ def load_points_df(points_fpath):
         service_gdf = gpd.GeoDataFrame(service_df, geometry='geometry', crs=f'epsg:{config.source_crs}')
         # print(service_df.geometry.crs, f'epsg:{config.source_crs}')
         # service_gdf.crs = f'epsg:{config.source_crs}'
-        # service_gdf = service_gdf.to_crs(f'epsg:{config.target_crs}')
+        service_gdf = service_gdf.to_crs(f'epsg:{config.target_crs}')
         df[f'lon_{service}'] = service_gdf.apply(lambda x: x.geometry.x, axis=1)
         df[f'lat_{service}'] = service_gdf.apply(lambda x: x.geometry.y, axis=1)
     return df
@@ -105,7 +111,7 @@ def load_street_gdf(street_fpath):
     street_df['geometry'] = street_df['geometry'].apply(lambda x: loads(x))
     street_gdf = gpd.GeoDataFrame(street_df, geometry='geometry', crs=f'epsg:{config.source_crs}')
     # street_gdf.crs = f'epsg:{config.source_crs}'
-    # street_gdf = street_gdf.to_crs(f'epsg:{config.target_crs}')
+    street_gdf = street_gdf.to_crs(f'epsg:{config.target_crs}')
     return street_gdf
 
 
@@ -215,8 +221,8 @@ def normalize_features(X, scaler=None):
             sklearn.preprocessing.MinMaxScaler: The scaler utilized
     """
     if scaler is None:
-        # scaler = MinMaxScaler()
-        scaler = RobustScaler()
+        scaler = MinMaxScaler()
+        # scaler = RobustScaler()
         X_ = scaler.fit_transform(X)
     else:
         X_ = scaler.transform(X)
