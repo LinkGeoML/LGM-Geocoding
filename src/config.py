@@ -60,10 +60,12 @@ class config:
     target_crs = 3857
     clusters_pct = 0.015
     osm_buffer = 0.001
-    osm_timeout = 30
+    osm_timeout = 90
     max_overpass_tries = 3
     distance_thr = 5000.0
     baseline_service = 'original'
+    #: int: Seed used by each of the random number generators.
+    seed_no = 13
 
     base_dir = '/media/disk/LGM-Geocoding-utils/experiments'
 
@@ -85,11 +87,14 @@ class config:
         'nearest_street_distance_by_centroid',
         'zip_codes',
         'common_nearest_street_distance',
+        'intersects_on_common_nearest_street',
+        'points_area',
+        'polar_coords',
 
     ]
 
     included_features = [
-        'normalized_coords',
+        # 'normalized_coords',
         'pairwise_coords_distances',
         'pairwise_points_distances',
         'centroid_coords_distances',
@@ -98,8 +103,11 @@ class config:
         'mean_centroids_points_distances',
         'nearest_street_distance_per_service',
         'nearest_street_distance_by_centroid',
-        'zip_codes'
+        'zip_codes',
         'common_nearest_street_distance',
+        'intersects_on_common_nearest_street',
+        'points_area',
+        'polar_coords',
     ]
 
     normalized_features = [
@@ -110,7 +118,10 @@ class config:
         'centroid_points_distances',
         'mean_centroids_coords_distances',
         'mean_centroids_points_distances',
-        'nearest_street_distance_per_service'
+        'nearest_street_distance_per_service',
+        'common_nearest_street_distance',
+        'points_area',
+        'polar_coords',
     ]
 
     supported_classifiers = [
@@ -132,7 +143,7 @@ class config:
         'NearestNeighbors',
         'LogisticRegression',
         # 'SVM',
-        'MLP',
+        # 'MLP',
         'DecisionTree',
         'RandomForest',
         'ExtraTrees',
@@ -159,12 +170,12 @@ class config:
         'hidden_layer_sizes': [(100, ), (50, 50, )],
         'learning_rate_init': [0.0001, 0.01, 0.1],
         'max_iter': [100, 200, 500],
-        'solver': ['sgd', 'adam']
+        'solver': ['sgd', 'adam'],
     }
 
     DT_hparams = {
         'max_depth': [1, 4, 16, 32],
-        'min_samples_split': [0.1, 0.2, 0.5, 1.0]
+        'min_samples_split': [1, 2, 5, 10],
     }
 
     RF_hparams = {
@@ -213,19 +224,20 @@ class config:
         # 'dual': [True, False]
     }
     DT_hparams_dist = {
-        'max_depth': sp_randint(10, 100),
-        'min_samples_split': list(np.linspace(0.1, 1, 50)),
-        'min_samples_leaf': list(np.linspace(0.1, 0.5, 25)),
-        'max_features': sp_randint(1, 11),
+        'max_depth': sp_randint(10, 200),
+        'min_samples_split': list(np.linspace(1, 50, 50)),
+        'min_samples_leaf': list(np.linspace(1, 5, 5)),
+        # 'max_features': sp_randint(1, 11),
     }
     RF_hparams_dist = {
         'bootstrap': [True, False],
-        'max_depth': [10, 20, 30, 40, 50, 60, 100, None],
-        'criterion': ['gini', 'entropy'],
-        'max_features': ['sqrt', 'log2'],  # sp_randint(1, 11)
-        'min_samples_leaf': sp_randint(1, 5),
-        'min_samples_split': sp_randint(2, 11),
-        "n_estimators": sp_randint(250, 1000),
+        # 'max_depth': [10, 20, 30, 40, 50, 60, 100, None],
+        'max_depth': sp_randint(10, 200),
+        "n_estimators": sp_randint(250, 2000),
+        # 'criterion': ['gini', 'entropy'],
+        # 'max_features': ['sqrt', 'log2'],  # sp_randint(1, 11)
+        # 'min_samples_leaf': sp_randint(1, 5),
+        # 'min_samples_split': sp_randint(2, 11),
     }
     XGB_hparams_dist = {
         "n_estimators": sp_randint(500, 4000),
@@ -233,9 +245,9 @@ class config:
         # 'eta': expon(loc=0.01, scale=0.1),  # 'learning_rate'
         # hyperparameters to avoid overfitting
         'gamma': uniform(0, 3),
-        'subsample': truncnorm(0.7, 1),
-        'colsample_bytree': truncnorm(0, 1),
-        'min_child_weight': sp_randint(1, 10),
+        # 'subsample': truncnorm(0.7, 1),
+        # 'colsample_bytree': truncnorm(0, 1),
+        # 'min_child_weight': sp_randint(1, 10),
     }
     MLP_hparams_dist = {
         'learning_rate_init': expon(loc=0.0001, scale=0.1),
