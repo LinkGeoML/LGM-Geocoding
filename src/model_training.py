@@ -34,7 +34,7 @@ def main():
 
     t1 = time.time()
 
-    results_path = os.path.join(config.base_dir, args['experiment_path'], 'model_training_results')
+    results_path = os.path.join(config.base_dir, 'experiments', args['experiment_path'], 'model_training_results')
     if os.path.exists(results_path):
         shutil.rmtree(results_path)
     os.makedirs(results_path)

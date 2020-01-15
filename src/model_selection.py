@@ -34,7 +34,7 @@ def main():
     t1 = time.time()
     results = []
     for i in range(1, config.n_folds + 1):
-        fold_path = os.path.join(config.base_dir, args['experiment_path'], f'features_extraction_results/fold_{i}')
+        fold_path = os.path.join(config.base_dir, 'experiments', args['experiment_path'], f'features_extraction_results/fold_{i}')
         X_train = np.load(os.path.join(fold_path, 'X_train.npy'))
         X_test = np.load(os.path.join(fold_path, 'X_test.npy'))
         y_train = np.load(os.path.join(fold_path, 'y_train.npy'))
@@ -52,7 +52,7 @@ def main():
                 scores = clf_ut.evaluate(y_test, y_pred)
                 results.append(dict(info, **scores))
 
-    results_path = os.path.join(config.base_dir, args['experiment_path'], 'model_selection_results')
+    results_path = os.path.join(config.base_dir, 'experiments', args['experiment_path'], 'model_selection_results')
     if os.path.exists(results_path):
         shutil.rmtree(results_path)
     os.makedirs(results_path)

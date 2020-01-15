@@ -29,13 +29,13 @@ def main():
 
     # Create folder to store experiment
     date_time = datetime.datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
-    exp_path = os.path.join(config.base_dir, 'exp_' + date_time)
+    exp_path = os.path.join(config.base_dir, 'experiments', f'exp_{date_time}')
     os.makedirs(exp_path)
 
     # Create folder to store feature extraction results
-    results_path = os.path.join(exp_path, 'features_extraction_results')
+    results_path = os.path.join(exp_path, 'experiments', 'features_extraction_results')
     os.makedirs(results_path)
-    copyfile('./config.py', os.path.join(exp_path, 'config.py'))
+    copyfile('./config.py', os.path.join(exp_path, 'experiments', 'config.py'))
 
     # Load dataset into dataframe
     df = feat_ut.load_points_df(os.path.join(config.base_dir, args['fpath']))

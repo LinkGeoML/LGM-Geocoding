@@ -27,7 +27,7 @@ def main():
     ap.add_argument('-experiment_path', required=True)
     args = vars(ap.parse_args())
 
-    features_path = os.path.join(config.base_dir, args['experiment_path'], 'features_extraction_results')
+    features_path = os.path.join(config.base_dir, 'experiments', args['experiment_path'], 'features_extraction_results')
 
     t1 = time.time()
     results = []
@@ -55,7 +55,7 @@ def main():
             # results.append(dict(info, **scores, **params))
             results.append(dict(info, **scores))
 
-    results_path = os.path.join(config.base_dir, args['experiment_path'], 'algorithm_selection_results')
+    results_path = os.path.join(config.base_dir, 'experiments', args['experiment_path'], 'algorithm_selection_results')
     if os.path.exists(results_path):
         shutil.rmtree(results_path)
     os.makedirs(results_path)

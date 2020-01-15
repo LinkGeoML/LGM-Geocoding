@@ -119,11 +119,11 @@ def download_cell(cell, fpath):
     while status and (counter < config.max_overpass_tries):
         counter += 1
         query = (
-            f'[out:json][timeout:{config.osm_timeout * counter}]'
-            f'[bbox:{south},{west},{north},{east}];'        
-            f'way[highway][highway!~"^(path|cycleway|footway)$"];'
+            f'[out:json][timeout:{config.osm_timeout * counter}];'        
+            # f'way[highway][highway!~"^(path|cycleway|footway)$"]'
             # 'way["highway"~"^(motorway|trunk|primary)$"];'
-            # 'way["highway"];'
+            'way["highway"]'
+            f'({south},{west},{north},{east});'
             'out geom;')
         status = query_api(query, fpath)
 
