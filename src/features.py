@@ -260,7 +260,7 @@ def get_nearest_street_distance_per_service(df, street_gdf):
     return X
 
 
-def get_common_nearest_street_distance(df, street_gdf, k=5):
+def get_common_nearest_street_distance(df, street_gdf, k=3):
     """
     Creates a features array. For each address (each row) and for each \
     service, calculates the distance to the nearest street.
@@ -331,7 +331,7 @@ def get_common_nearest_street_distance(df, street_gdf, k=5):
     return X
 
 
-def get_intersects_on_common_nearest_street(df, street_gdf, k=5):
+def get_intersects_on_common_nearest_street(df, street_gdf, k=3):
     """
     Creates a features array. For each address (each row) and for each \
     service, calculates the distance to the nearest street.

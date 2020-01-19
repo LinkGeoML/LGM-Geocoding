@@ -28,7 +28,8 @@ def query_api(query, fpath):
         with open(fpath, 'w') as f:
             json.dump(response, f)
     except ValueError:
-        print('Overpass api error: Trying again with a greater timeout.')
+        print('Overpass api error: Trying again with a greater timeout...')
+        time.sleep(3)
         status = 1
     return status
 
@@ -120,15 +121,16 @@ def download_cell(cell, fpath):
         counter += 1
         query = (
             f'[out:json][timeout:{config.osm_timeout * counter}];'        
-            # f'way[highway][highway!~"^(path|cycleway|footway)$"]'
+            # f'way["highway"]["highway"!~"^(cycleway|footway)$"]'
+            f'way["highway"]["highway"!~"^(cycleway)$"]'
             # 'way["highway"~"^(motorway|trunk|primary)$"];'
-            'way["highway"]'
+            # 'way["highway"]'
             f'({south},{west},{north},{east});'
             'out geom;')
         status = query_api(query, fpath)
 
     if status:
-        print('Overpass api error: Exiting...')
+        print('Overpass api error: Exiting.')
         exit()
     return parse_streets(fpath)
 
@@ -144,7 +146,9 @@ def cluster_points(X):
         numpy.ndarray: The predicted clusters labels
     """
     n_clusters = int(config.clusters_pct * X.shape[0])
-    kmeans = KMeans(n_clusters=n_clusters, random_state=config.seed_no).fit(X)
+    kmeans = KMeans(
+        n_clusters=n_clusters, random_state=config.seed_no, n_init=20, max_iter=500, n_jobs=config.n_jobs
+    ).fit(X)
     labels = kmeans.predict(X)
     return labels
 
@@ -167,4 +171,5 @@ def get_clusters_bboxes(X, labels):
         xmin, ymin = cluster_points.min(axis=0) - config.osm_buffer
         xmax, ymax = cluster_points.max(axis=0) + config.osm_buffer
         bboxes[i] = [xmin, ymin, xmax, ymax]
+    # print({k: v for k, v in sorted(bboxes.items(), key=lambda item: item[1][0])})
     return bboxes

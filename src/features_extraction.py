@@ -33,9 +33,9 @@ def main():
     os.makedirs(exp_path)
 
     # Create folder to store feature extraction results
-    results_path = os.path.join(exp_path, 'experiments', 'features_extraction_results')
+    results_path = os.path.join(exp_path, 'features_extraction_results')
     os.makedirs(results_path)
-    copyfile('./config.py', os.path.join(exp_path, 'experiments', 'config.py'))
+    copyfile('./config.py', os.path.join(exp_path, 'config.py'))
 
     # Load dataset into dataframe
     df = feat_ut.load_points_df(os.path.join(config.base_dir, args['fpath']))

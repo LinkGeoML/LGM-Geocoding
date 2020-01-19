@@ -61,9 +61,12 @@ def load_points_df(points_fpath):
     for service in config.services:
         # service_df = df[[f'x_{service}', f'y_{service}']]
         # service_df['geometry'] = service_df.apply(lambda x: Point(x[f'x_{service}'], x[f'y_{service}']), axis=1)
-        service_df = gpd.GeoDataFrame(
-            df[[f'x_{service}', f'y_{service}']], geometry=gpd.points_from_xy(df[f'x_{service}'], df[f'y_{service}']))
-        service_gdf = gpd.GeoDataFrame(service_df, geometry='geometry', crs=f'epsg:{config.source_crs}')
+        service_gdf = gpd.GeoDataFrame(
+            df[[f'x_{service}', f'y_{service}']],
+            geometry=gpd.points_from_xy(df[f'x_{service}'], df[f'y_{service}']),
+            crs=f'epsg:{config.source_crs}'
+        )
+        # service_gdf = gpd.GeoDataFrame(service_df, geometry='geometry', crs=f'epsg:{config.source_crs}')
         # print(service_df.geometry.crs, f'epsg:{config.source_crs}')
         # service_gdf.crs = f'epsg:{config.source_crs}'
         service_gdf = service_gdf.to_crs(f'epsg:{config.target_crs}')
