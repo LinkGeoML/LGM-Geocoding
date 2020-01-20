@@ -60,7 +60,7 @@ class config:
     target_crs = 3857
     clusters_pct = 0.015
     osm_buffer = 0.001
-    osm_timeout = 90
+    osm_timeout = 50
     max_overpass_tries = 3
     distance_thr = 5000.0
     baseline_service = 'original'
@@ -103,7 +103,7 @@ class config:
         'mean_centroids_points_distances',
         'nearest_street_distance_per_service',
         'nearest_street_distance_by_centroid',
-        'zip_codes',
+        # 'zip_codes',
         'common_nearest_street_distance',
         'intersects_on_common_nearest_street',
         'points_area',
