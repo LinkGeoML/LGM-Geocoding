@@ -161,15 +161,29 @@ def create_train_features(df, in_path, out_path, features=None):
     ])
     args = prepare_feats_args(df, required_args, in_path)
     Xs = []
+    cols = []
+    nonScaledXmin = []
+    nonScaledXmax = []
     for f in included_features:
         X = getattr(feats, features_getter_map[f])(*[args[arg] for arg in features_getter_args_map[f]])
+        cols.extend(get_feature_col_names(f, X.shape[-1]))
+        nonScaledXmin.append(np.amin(X, axis=0))
+        nonScaledXmax.append(np.amax(X, axis=0))
         if f in config.normalized_features:
             X, scaler = normalize_features(X)
             pickle.dump(scaler, open(os.path.join(out_path, 'pickled_objects', f'{f}_scaler.pkl'), 'wb'))
         np.save(out_path + f'/features/{f}_train.npy', X)
         Xs.append(X)
     X = np.hstack(Xs)
+    print('Before normalization: ', list(zip(cols, np.hstack(nonScaledXmin), np.hstack(nonScaledXmax))))
     return X
+
+
+def get_feature_col_names(f, arr_size):
+    col_names = []
+    for i in range(arr_size):
+        col_names.append(f'{f}_{i+1}')
+    return col_names
 
 
 def create_test_features(df, in_path, scalers_path, out_path, features=None):
@@ -248,6 +262,52 @@ def filter(values):
         for v in values
     ]
     return values_
+
+
+def filter2(values):
+    """
+    Filters *values* by replacing values greater than *config.distance_thr* \
+    with *config.distance_thr*.
+
+    Args:
+        values (list): Contains distances created by various features
+
+    Returns:
+        list: Contains the filtered distances
+    """
+    values_ = [
+        config.distance_thr if v > config.square_thr else round(v, 2)
+        for v in values
+    ]
+    return values_
+
+
+def cart2pol(x, y):
+    theta = np.arctan2(y, x)
+    rho = np.hypot(x, y)
+    return rho, theta
+
+
+def pol2cart(theta, rho):
+    x = rho * np.cos(theta)
+    y = rho * np.sin(theta)
+    return x, y
+
+
+def cart2sph(x, y, z):
+    hxy = np.hypot(x, y)
+    r = np.hypot(hxy, z)
+    el = np.arctan2(z, hxy)
+    az = np.arctan2(y, x)
+    return az, el, r
+
+
+def sph2cart(az, el, r):
+    rcos_theta = r * np.cos(el)
+    x = rcos_theta * np.cos(az)
+    y = rcos_theta * np.sin(az)
+    z = r * np.sin(el)
+    return x, y, z
 
 
 # def get_bbox_coords(df):

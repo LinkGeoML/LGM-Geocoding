@@ -63,6 +63,13 @@ def main():
         X_test = feat_ut.create_test_features(
             df.iloc[test_idxs].reset_index(), results_path, os.path.join(fold_path, 'pickled_objects'), fold_path
         )
+        print(
+            'After normalization: ',
+            list(zip(
+                np.amin(np.vstack((X_train, X_test)), axis=0),
+                np.amax(np.vstack((X_train, X_test)), axis=0)
+            )),
+        )
         y_train, y_test = df['target'][train_idxs], df['target'][test_idxs]
         np.save(os.path.join(fold_path, f'X_train.npy'), X_train)
         np.save(os.path.join(fold_path, f'X_test.npy'), X_test)

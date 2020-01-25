@@ -35,7 +35,7 @@ def get_polar_coords(df):
     ]
     X = np.zeros((len(df), len(cols)*2))
     for i, col in enumerate(cols):
-        X[:, i * 2] = np.sqrt(df[col[0]]**2 + df[col[1]]**2)
+        X[:, i * 2] = np.hypot(df[col[0]], df[col[1]])
         X[:, i * 2 + 1] = np.arctan2(df[col[1]], df[col[0]])
     return X
 
@@ -435,7 +435,7 @@ def get_points_area(df):
             (df.loc[i.Index, f'lon_{service}'], df.loc[i.Index, f'lat_{service}']) for service in config.services
         ])
 
-        X[i.Index] = poly.area
+        X[i.Index] = feat_ut.filter2([poly.area])
     return X
 
 

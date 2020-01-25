@@ -61,8 +61,9 @@ class config:
     clusters_pct = 0.015
     osm_buffer = 0.001
     osm_timeout = 50
-    max_overpass_tries = 3
+    max_overpass_tries = 5
     distance_thr = 5000.0
+    square_thr = 500000.0
     baseline_service = 'original'
     #: int: Seed used by each of the random number generators.
     seed_no = 13
@@ -90,7 +91,6 @@ class config:
         'intersects_on_common_nearest_street',
         'points_area',
         'polar_coords',
-
     ]
 
     included_features = [
@@ -111,7 +111,7 @@ class config:
     ]
 
     normalized_features = [
-        'normalized_coords',
+        # 'normalized_coords',
         'pairwise_coords_distances',
         'pairwise_points_distances',
         'centroid_coords_distances',
@@ -142,8 +142,8 @@ class config:
         'NaiveBayes',
         'NearestNeighbors',
         'LogisticRegression',
-        # 'SVM',
-        # 'MLP',
+        'SVM',
+        'MLP',
         'DecisionTree',
         'RandomForest',
         'ExtraTrees',
@@ -162,35 +162,37 @@ class config:
     }
 
     SVM_hparams = [
-        {'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [0.01, 0.1, 1, 10, 100]},
-        {'kernel': ['poly'], 'degree': [1, 2, 3], 'C': [0.01, 0.1, 1, 10, 100]},
+        {'kernel': ['rbf'], 'gamma': [1e-3, 1e-4, 'scale', 'auto'], 'C': [0.1, 1, 10, 100], 'probability': [True]},
+        {'kernel': ['poly'], 'degree': [1, 2, 3], 'C': [0.1, 1, 10], 'max_iter': [100000], 'probability': [True]},
     ]
 
     MLP_hparams = {
         'hidden_layer_sizes': [(100, ), (50, 50, )],
-        'learning_rate_init': [0.0001, 0.01, 0.1],
-        'max_iter': [100, 200, 500],
+        # 'learning_rate_init': [0.0001, 0.01, 0.1],
+        'max_iter': [500, 1000],
         'solver': ['sgd', 'adam'],
     }
 
     DT_hparams = {
-        'max_depth': [1, 4, 16, 32],
-        'min_samples_split': [1, 2, 5, 10],
+        'max_depth': [1, 4, 16, 32, 64],
+        'min_samples_split': [2, 5, 10, 20, 50, 100, 200],
+        'min_samples_leaf': [1, 2, 5, 10],
+        'max_features': [i for i in range(1, 10, 2)] + ["sqrt", "log2"]
     }
 
     RF_hparams = {
-        'max_depth': [5, 10, 100, 250, None],
+        'max_depth': [5, 10, 50, 100, 250, None],
         'n_estimators': [100, 250, 1000]
     }
 
     ET_hparams = {
-        'max_depth': [5, 10, 100, 250],
+        'max_depth': [5, 10, 50, 100, 250, None],
         'n_estimators': [100, 250, 1000]
     }
 
     XGB_hparams = {
         "n_estimators": [500, 1000, 3000],
-        'max_depth': [3, 10, 20, 50, 70, 100, 250],
+        'max_depth': [5, 10, 50, 100, 250, 300],
         # # hyperparameters to avoid overfitting
         # 'eta': list(np.linspace(0.01, 0.2, 10)),  # 'learning_rate'
         # 'gamma': [0, 1, 5],
@@ -225,29 +227,29 @@ class config:
     }
     DT_hparams_dist = {
         'max_depth': sp_randint(10, 200),
-        'min_samples_split': list(np.linspace(1, 50, 50)),
-        'min_samples_leaf': list(np.linspace(1, 5, 5)),
+        'min_samples_split': list(np.linspace(2, 51, 50)),
+        'min_samples_leaf': list(np.linspace(1, 15, 15)),
         # 'max_features': sp_randint(1, 11),
     }
     RF_hparams_dist = {
         'bootstrap': [True, False],
         # 'max_depth': [10, 20, 30, 40, 50, 60, 100, None],
-        'max_depth': sp_randint(10, 200),
+        'max_depth': sp_randint(10, 300),
         "n_estimators": sp_randint(250, 2000),
         # 'criterion': ['gini', 'entropy'],
         # 'max_features': ['sqrt', 'log2'],  # sp_randint(1, 11)
-        # 'min_samples_leaf': sp_randint(1, 5),
-        # 'min_samples_split': sp_randint(2, 11),
+        'min_samples_leaf': sp_randint(1, 5),
+        'min_samples_split': sp_randint(2, 11),
     }
     XGB_hparams_dist = {
         "n_estimators": sp_randint(500, 4000),
-        'max_depth': sp_randint(3, 100),
+        'max_depth': sp_randint(3, 300),
         # 'eta': expon(loc=0.01, scale=0.1),  # 'learning_rate'
         # hyperparameters to avoid overfitting
         'gamma': uniform(0, 3),
-        # 'subsample': truncnorm(0.7, 1),
-        # 'colsample_bytree': truncnorm(0, 1),
-        # 'min_child_weight': sp_randint(1, 10),
+        'subsample': truncnorm(0.7, 1),
+        'colsample_bytree': truncnorm(0, 1),
+        'min_child_weight': sp_randint(1, 10),
     }
     MLP_hparams_dist = {
         'learning_rate_init': expon(loc=0.0001, scale=0.1),
