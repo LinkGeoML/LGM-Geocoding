@@ -177,7 +177,7 @@ class config:
         'max_depth': [1, 4, 16, 32, 64],
         'min_samples_split': [2, 5, 10, 20, 50, 100, 200],
         'min_samples_leaf': [1, 2, 5, 10],
-        'max_features': [i for i in range(1, 10, 2)] + ["sqrt", "log2"]
+        'max_features': [i for i in range(1, 10, 2)] + ["sqrt", "log2", None]
     }
 
     RF_hparams = {
