@@ -53,7 +53,7 @@ class config:
     hyperparams_search_method = 'grid'
     """str: Search Method to use for finding best hyperparameters. (*randomized* | *grid*).
     """
-    max_iter = 50
+    max_iter = 30
     verbose = True
 
     source_crs = 4326
@@ -162,8 +162,10 @@ class config:
     }
 
     SVM_hparams = [
-        {'kernel': ['rbf'], 'gamma': [1e-3, 1e-4, 'scale', 'auto'], 'C': [0.1, 1, 10, 100], 'probability': [True]},
-        {'kernel': ['poly'], 'degree': [1, 2, 3], 'C': [0.1, 1, 10], 'max_iter': [100000], 'probability': [True]},
+        {'kernel': ['rbf', 'sigmoid'], 'gamma': [1e-2, 1e-3, 1e-4, 1e-5],
+         'C': [0.001, 0.01, 0.1, 1, 10, 25, 50, 100, 1000], 'probability': [True]},
+        {'kernel': ['poly'], 'degree': [1, 2, 3], 'gamma': ['scale', 'auto'],
+         'C': [0.1, 1, 10, 25, 50, 100, 1000], 'max_iter': [10000], 'probability': [True]},
     ]
 
     MLP_hparams = {
@@ -177,27 +179,33 @@ class config:
         'max_depth': [1, 4, 16, 32, 64],
         'min_samples_split': [2, 5, 10, 20, 50, 100, 200],
         'min_samples_leaf': [1, 2, 5, 10],
-        'max_features': [i for i in range(1, 10, 2)] + ["sqrt", "log2", None]
+        'max_features': list(np.arange(2, 11, 2)) + ["sqrt", "log2", None]
     }
 
     RF_hparams = {
-        'max_depth': [5, 10, 50, 100, 250, None],
-        'n_estimators': [100, 250, 1000]
+        'max_depth': [5, 10, 50, 100, 250, 300],
+        'n_estimators': [100, 250, 500, 1000],
+        # 'min_samples_leaf': [1, 5, 10],
+        'min_samples_split': [2, 10],
     }
 
     ET_hparams = {
-        'max_depth': [5, 10, 50, 100, 250, None],
-        'n_estimators': [100, 250, 1000]
+        'max_depth': [5, 10, 50, 100, 250, 300],
+        'n_estimators': [100, 250, 500, 1000],
+        # 'min_samples_leaf': [1, 5, 10],
+        'min_samples_split': [2, 10, 50],
     }
 
     XGB_hparams = {
         "n_estimators": [500, 1000, 3000],
         'max_depth': [5, 10, 50, 100, 250, 300],
         # # hyperparameters to avoid overfitting
-        # 'eta': list(np.linspace(0.01, 0.2, 10)),  # 'learning_rate'
+        # 'eta': list(np.linspace(0.01, 0.3, 10)),  # 'learning_rate'
         # 'gamma': [0, 1, 5],
         # 'subsample': [0.8, 0.9, 1],
-        # 'colsample_bytree': list(np.linspace(0.3, 1, 8)),
+        # # Values from 0.3 to 0.8 if you have many columns (especially if you did one-hot encoding),
+        # # or 0.8 to 1 if you only have a few columns
+        # 'colsample_bytree': list(np.linspace(0.8, 1, 3)),
         # 'min_child_weight': [1, 5, 10],
     }
 
@@ -216,19 +224,19 @@ class config:
     SVM_hparams_dist = {
         'C': expon(loc=0.01, scale=20),
         # "C": uniform(2, 10),
-        "gamma": uniform(0.1, 1),
+        "gamma": uniform(1e-5, 1e-2),
         'kernel': ['rbf', 'poly', 'sigmoid'],
-        'degree': sp_randint(1, 10),
+        'degree': sp_randint(1, 3),
         'class_weight': ['balanced', None],
         'tol': [1e-3, 1e-4],
-        'max_iter': [3000],
+        'max_iter': [100000],
         'probability': [True],
         # 'dual': [True, False]
     }
     DT_hparams_dist = {
         'max_depth': sp_randint(10, 200),
-        'min_samples_split': list(np.linspace(2, 51, 50)),
-        'min_samples_leaf': list(np.linspace(1, 15, 15)),
+        'min_samples_split': sp_randint(2, 51),
+        'min_samples_leaf': sp_randint(1, 15),
         # 'max_features': sp_randint(1, 11),
     }
     RF_hparams_dist = {
@@ -238,17 +246,17 @@ class config:
         "n_estimators": sp_randint(250, 2000),
         # 'criterion': ['gini', 'entropy'],
         # 'max_features': ['sqrt', 'log2'],  # sp_randint(1, 11)
-        'min_samples_leaf': sp_randint(1, 5),
-        'min_samples_split': sp_randint(2, 11),
+        'min_samples_leaf': sp_randint(1, 10),
+        'min_samples_split': sp_randint(2, 50),
     }
     XGB_hparams_dist = {
         "n_estimators": sp_randint(500, 4000),
         'max_depth': sp_randint(3, 300),
         # 'eta': expon(loc=0.01, scale=0.1),  # 'learning_rate'
         # hyperparameters to avoid overfitting
-        'gamma': uniform(0, 3),
-        'subsample': truncnorm(0.7, 1),
-        'colsample_bytree': truncnorm(0, 1),
+        'gamma': sp_randint(0, 5),
+        'subsample': truncnorm(0.8, 1),
+        'colsample_bytree': truncnorm(0.8, 1),
         'min_child_weight': sp_randint(1, 10),
     }
     MLP_hparams_dist = {
