@@ -68,7 +68,7 @@ class config:
     #: int: Seed used by each of the random number generators.
     seed_no = 13
 
-    base_dir = '/media/disk/LGM-Geocoding-utils/experiments'
+    base_dir = '/media/disk/LGM-Geocoding'
 
     services = [
         'original',

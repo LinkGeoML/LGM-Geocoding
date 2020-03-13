@@ -24,8 +24,8 @@ def main():
     ap.add_argument('-experiment_path', required=True)
     args = vars(ap.parse_args())
 
-    features_path = os.path.join(config.base_dir, args['experiment_path'], 'features_extraction_results')
-    model_training_path = os.path.join(config.base_dir, args['experiment_path'], 'model_training_results')
+    features_path = os.path.join(config.base_dir, 'experiments', args['experiment_path'], 'features_extraction_results')
+    model_training_path = os.path.join(config.base_dir, 'experiments', args['experiment_path'], 'model_training_results')
 
     for path in [features_path, model_training_path]:
         if os.path.exists(path) is False:
