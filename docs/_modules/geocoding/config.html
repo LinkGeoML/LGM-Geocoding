@@ -1,0 +1,464 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>geocoding.config &mdash; LGM-Geocoding  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> LGM-Geocoding
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../config.html">config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../writers.html">writers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../osm_utilities.html">OSM utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../features_utilities.html">features utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../clf_utilities.html">classifier utilities</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">LGM-Geocoding</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>geocoding.config</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+
+           <div itemprop="articleBody">
+            
+  <h1>Source code for geocoding.config</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">randint</span> <span class="k">as</span> <span class="n">sp_randint</span><span class="p">,</span> <span class="n">expon</span><span class="p">,</span> <span class="n">truncnorm</span><span class="p">,</span> <span class="n">uniform</span>
+
+
+<div class="viewcode-block" id="config"><a class="viewcode-back" href="../../config.html#geocoding.config.config">[docs]</a><span class="k">class</span> <span class="nc">config</span><span class="p">:</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class that defines the experiment configuration.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        n_folds (int): The number of folds in the experiment</span>
+<span class="sd">        source_crs (int): The EPSG crs code used in input files</span>
+<span class="sd">        target_crs (int): The EPSG crs code to transform the data</span>
+<span class="sd">        clusters_pct (float): Percentage of data points, indicating how many \</span>
+<span class="sd">            clusters to create in order to query Overpass API for streets</span>
+<span class="sd">        osm_buffer (float): A buffer distance (in meters) to consider around \</span>
+<span class="sd">            each bounding box when querying Overpass API</span>
+<span class="sd">        osm_timeout (int): Timeout (in seconds) after five requests to \</span>
+<span class="sd">            Overpass API</span>
+<span class="sd">        distance_thr (float): Distances in features greater than this value \</span>
+<span class="sd">            will be converted to this threshold</span>
+<span class="sd">        baseline_service (str): The name of the service to consider when \</span>
+<span class="sd">            measuring baseline scores</span>
+<span class="sd">        experiments_path (str): Path to folder that stores the experiments</span>
+<span class="sd">        services (list): The services (geocoders) used in the setup</span>
+
+<span class="sd">        supported_features (list): List of the supported features to choose \</span>
+<span class="sd">            from</span>
+<span class="sd">        included_features (list): List of the features to be included in the \</span>
+<span class="sd">            experiment</span>
+<span class="sd">        normalized_features (list): List of features to be normalized</span>
+
+<span class="sd">        supported_classifiers (list): List of the supported classifiers to \</span>
+<span class="sd">            choose from</span>
+<span class="sd">        included_classifiers (list): List of the classifiers to be included \</span>
+<span class="sd">            in the experiment</span>
+
+<span class="sd">        NB_hparams (dict): Parameters search space for Naive Bayes classifier</span>
+<span class="sd">        NN_hparams (dict): Parameters search space for Nearest Neighbors \</span>
+<span class="sd">            classifier</span>
+<span class="sd">        LR_hparams (dict): Parameters search space for Logistic Regression \</span>
+<span class="sd">            classifier</span>
+<span class="sd">        SVM_hparams (list): Parameters search space for SVM classifier</span>
+<span class="sd">        MLP_hparams (dict): Parameters search space for MLP classifier</span>
+<span class="sd">        DT_hparams (dict): Parameters search space for Decision Tree classifier</span>
+<span class="sd">        RF_hparams (dict): Parameters search space for Random Forest classifier</span>
+<span class="sd">        ET_hparams (dict): Parameters search space for Extra Trees classifier</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">n_folds</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">n_jobs</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1">#: int: Number of parallel jobs to be initiated. -1 means to utilize all available processors.</span>
+    <span class="c1"># accepted values: randomized, grid, hyperband - not yet implemented!!!</span>
+    <span class="n">hyperparams_search_method</span> <span class="o">=</span> <span class="s1">&#39;grid&#39;</span>
+    <span class="sd">&quot;&quot;&quot;str: Search Method to use for finding best hyperparameters. (*randomized* | *grid*).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">max_iter</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">source_crs</span> <span class="o">=</span> <span class="mi">4326</span>
+    <span class="n">target_crs</span> <span class="o">=</span> <span class="mi">3857</span>
+    <span class="n">clusters_pct</span> <span class="o">=</span> <span class="mf">0.015</span>
+    <span class="n">osm_buffer</span> <span class="o">=</span> <span class="mf">0.001</span>
+    <span class="n">osm_timeout</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="n">max_overpass_tries</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">distance_thr</span> <span class="o">=</span> <span class="mf">5000.0</span>
+    <span class="n">square_thr</span> <span class="o">=</span> <span class="mf">500000.0</span>
+    <span class="n">baseline_service</span> <span class="o">=</span> <span class="s1">&#39;original&#39;</span>
+    <span class="c1">#: int: Seed used by each of the random number generators.</span>
+    <span class="n">seed_no</span> <span class="o">=</span> <span class="mi">13</span>
+
+    <span class="n">base_dir</span> <span class="o">=</span> <span class="s1">&#39;/media/disk/LGM-Geocoding&#39;</span>
+
+    <span class="n">services</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;original&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;arcgis&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;nominatim&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">supported_features</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;normalized_coords&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;pairwise_coords_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;pairwise_points_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;centroid_coords_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;centroid_points_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mean_centroids_coords_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mean_centroids_points_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;nearest_street_distance_per_service&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;nearest_street_distance_by_centroid&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;zip_codes&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;common_nearest_street_distance&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;intersects_on_common_nearest_street&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;points_area&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;polar_coords&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">included_features</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="c1"># &#39;normalized_coords&#39;,</span>
+        <span class="s1">&#39;pairwise_coords_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;pairwise_points_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;centroid_coords_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;centroid_points_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mean_centroids_coords_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mean_centroids_points_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;nearest_street_distance_per_service&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;nearest_street_distance_by_centroid&#39;</span><span class="p">,</span>
+        <span class="c1"># &#39;zip_codes&#39;,</span>
+        <span class="s1">&#39;common_nearest_street_distance&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;intersects_on_common_nearest_street&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;points_area&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;polar_coords&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">normalized_features</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="c1"># &#39;normalized_coords&#39;,</span>
+        <span class="s1">&#39;pairwise_coords_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;pairwise_points_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;centroid_coords_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;centroid_points_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mean_centroids_coords_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mean_centroids_points_distances&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;nearest_street_distance_per_service&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;common_nearest_street_distance&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;points_area&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;polar_coords&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">supported_classifiers</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;Baseline&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;NaiveBayes&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;NearestNeighbors&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LogisticRegression&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SVM&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MLP&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;DecisionTree&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RandomForest&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ExtraTrees&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;XGBoost&#39;</span>
+    <span class="p">]</span>
+
+    <span class="n">included_classifiers</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;Baseline&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;NaiveBayes&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;NearestNeighbors&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LogisticRegression&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SVM&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MLP&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;DecisionTree&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RandomForest&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ExtraTrees&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;XGBoost&#39;</span>
+    <span class="p">]</span>
+
+    <span class="n">NB_hparams</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">NN_hparams</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;n_neighbors&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="n">LR_hparams</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;max_iter&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span>
+        <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="n">SVM_hparams</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="s1">&#39;sigmoid&#39;</span><span class="p">],</span> <span class="s1">&#39;gamma&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="mf">1e-5</span><span class="p">],</span>
+         <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">],</span> <span class="s1">&#39;probability&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">True</span><span class="p">]},</span>
+        <span class="p">{</span><span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;poly&#39;</span><span class="p">],</span> <span class="s1">&#39;degree&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;gamma&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">],</span>
+         <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">],</span> <span class="s1">&#39;max_iter&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10000</span><span class="p">],</span> <span class="s1">&#39;probability&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">True</span><span class="p">]},</span>
+    <span class="p">]</span>
+
+    <span class="n">MLP_hparams</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;hidden_layer_sizes&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mi">100</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="p">)],</span>
+        <span class="c1"># &#39;learning_rate_init&#39;: [0.0001, 0.01, 0.1],</span>
+        <span class="s1">&#39;max_iter&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">],</span>
+        <span class="s1">&#39;solver&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;sgd&#39;</span><span class="p">,</span> <span class="s1">&#39;adam&#39;</span><span class="p">],</span>
+    <span class="p">}</span>
+
+    <span class="n">DT_hparams</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">],</span>
+        <span class="s1">&#39;min_samples_split&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">],</span>
+        <span class="s1">&#39;min_samples_leaf&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+        <span class="s1">&#39;max_features&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;sqrt&quot;</span><span class="p">,</span> <span class="s2">&quot;log2&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="n">RF_hparams</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">300</span><span class="p">],</span>
+        <span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">],</span>
+        <span class="c1"># &#39;min_samples_leaf&#39;: [1, 5, 10],</span>
+        <span class="s1">&#39;min_samples_split&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+    <span class="p">}</span>
+
+    <span class="n">ET_hparams</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">300</span><span class="p">],</span>
+        <span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">],</span>
+        <span class="c1"># &#39;min_samples_leaf&#39;: [1, 5, 10],</span>
+        <span class="s1">&#39;min_samples_split&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span>
+    <span class="p">}</span>
+
+    <span class="n">XGB_hparams</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;n_estimators&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">],</span>
+        <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">300</span><span class="p">],</span>
+        <span class="c1"># # hyperparameters to avoid overfitting</span>
+        <span class="c1"># &#39;eta&#39;: list(np.linspace(0.01, 0.3, 10)),  # &#39;learning_rate&#39;</span>
+        <span class="c1"># &#39;gamma&#39;: [0, 1, 5],</span>
+        <span class="c1"># &#39;subsample&#39;: [0.8, 0.9, 1],</span>
+        <span class="c1"># # Values from 0.3 to 0.8 if you have many columns (especially if you did one-hot encoding),</span>
+        <span class="c1"># # or 0.8 to 1 if you only have a few columns</span>
+        <span class="c1"># &#39;colsample_bytree&#39;: list(np.linspace(0.8, 1, 3)),</span>
+        <span class="c1"># &#39;min_child_weight&#39;: [1, 5, 10],</span>
+    <span class="p">}</span>
+
+    <span class="c1"># These parameters constitute the search space for RandomizedSearchCV in our experiments.</span>
+    <span class="n">NB_hparams_dist</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">NN_hparams_dist</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;n_neighbors&#39;</span><span class="p">:</span> <span class="n">sp_randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">LR_hparams_dist</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;max_iter&#39;</span><span class="p">:</span> <span class="n">sp_randint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">),</span>
+        <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="n">expon</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">SVM_hparams_dist</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="n">expon</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+        <span class="c1"># &quot;C&quot;: uniform(2, 10),</span>
+        <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="n">uniform</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">),</span>
+        <span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="s1">&#39;sigmoid&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;degree&#39;</span><span class="p">:</span> <span class="n">sp_randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="s1">&#39;class_weight&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;balanced&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+        <span class="s1">&#39;tol&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1e-3</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">],</span>
+        <span class="s1">&#39;max_iter&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">100000</span><span class="p">],</span>
+        <span class="s1">&#39;probability&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">True</span><span class="p">],</span>
+        <span class="c1"># &#39;dual&#39;: [True, False]</span>
+    <span class="p">}</span>
+    <span class="n">DT_hparams_dist</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="n">sp_randint</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span>
+        <span class="s1">&#39;min_samples_split&#39;</span><span class="p">:</span> <span class="n">sp_randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">51</span><span class="p">),</span>
+        <span class="s1">&#39;min_samples_leaf&#39;</span><span class="p">:</span> <span class="n">sp_randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span>
+        <span class="c1"># &#39;max_features&#39;: sp_randint(1, 11),</span>
+    <span class="p">}</span>
+    <span class="n">RF_hparams_dist</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;bootstrap&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">],</span>
+        <span class="c1"># &#39;max_depth&#39;: [10, 20, 30, 40, 50, 60, 100, None],</span>
+        <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="n">sp_randint</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span>
+        <span class="s2">&quot;n_estimators&quot;</span><span class="p">:</span> <span class="n">sp_randint</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">2000</span><span class="p">),</span>
+        <span class="c1"># &#39;criterion&#39;: [&#39;gini&#39;, &#39;entropy&#39;],</span>
+        <span class="c1"># &#39;max_features&#39;: [&#39;sqrt&#39;, &#39;log2&#39;],  # sp_randint(1, 11)</span>
+        <span class="s1">&#39;min_samples_leaf&#39;</span><span class="p">:</span> <span class="n">sp_randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+        <span class="s1">&#39;min_samples_split&#39;</span><span class="p">:</span> <span class="n">sp_randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="n">XGB_hparams_dist</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;n_estimators&quot;</span><span class="p">:</span> <span class="n">sp_randint</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">4000</span><span class="p">),</span>
+        <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="n">sp_randint</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span>
+        <span class="c1"># &#39;eta&#39;: expon(loc=0.01, scale=0.1),  # &#39;learning_rate&#39;</span>
+        <span class="c1"># hyperparameters to avoid overfitting</span>
+        <span class="s1">&#39;gamma&#39;</span><span class="p">:</span> <span class="n">sp_randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+        <span class="s1">&#39;subsample&#39;</span><span class="p">:</span> <span class="n">truncnorm</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="s1">&#39;colsample_bytree&#39;</span><span class="p">:</span> <span class="n">truncnorm</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="s1">&#39;min_child_weight&#39;</span><span class="p">:</span> <span class="n">sp_randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="n">MLP_hparams_dist</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;learning_rate_init&#39;</span><span class="p">:</span> <span class="n">expon</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">),</span>
+        <span class="s1">&#39;max_iter&#39;</span><span class="p">:</span> <span class="n">sp_randint</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">2000</span><span class="p">),</span>
+        <span class="s1">&#39;solver&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;sgd&#39;</span><span class="p">,</span> <span class="s1">&#39;adam&#39;</span><span class="p">]</span>
+    <span class="p">}</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+	<a href="https://github.com/LinkGeoML/LGM-Geocoding">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub">
+    </a>
+
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, kgalexis, giann, vkaff
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
