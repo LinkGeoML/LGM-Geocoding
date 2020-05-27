@@ -7,7 +7,7 @@ from sklearn.cluster import KMeans
 import time
 import os
 
-from geocoding.config import config
+from geocoding.config import Config
 
 
 def query_api(query, fpath):
@@ -117,10 +117,10 @@ def download_cell(cell, fpath):
     west, south, east, north = cell
     counter = 0
     status = 1
-    while status and (counter < config.max_overpass_tries):
+    while status and (counter < Config.max_overpass_tries):
         counter += 1
         query = (
-            f'[out:json][timeout:{config.osm_timeout * counter}];'        
+            f'[out:json][timeout:{Config.osm_timeout * counter}];'        
             # f'way["highway"]["highway"!~"^(cycleway|footway)$"]'
             f'way["highway"]["highway"!~"^(cycleway)$"]'
             # 'way["highway"~"^(motorway|trunk|primary)$"];'
@@ -145,9 +145,9 @@ def cluster_points(X):
     Returns:
         numpy.ndarray: The predicted clusters labels
     """
-    n_clusters = int(config.clusters_pct * X.shape[0])
+    n_clusters = int(Config.clusters_pct * X.shape[0])
     kmeans = KMeans(
-        n_clusters=n_clusters, random_state=config.seed_no, n_init=20, max_iter=500, n_jobs=config.n_jobs
+        n_clusters=n_clusters, random_state=Config.seed_no, n_init=20, max_iter=500, n_jobs=Config.n_jobs
     ).fit(X)
     labels = kmeans.predict(X)
     return labels
@@ -168,8 +168,8 @@ def get_clusters_bboxes(X, labels):
     bboxes = {}
     for i in range(len(set(labels))):
         cluster_points = np.vstack([p for j, p in enumerate(X) if labels[j] == i])
-        xmin, ymin = cluster_points.min(axis=0) - config.osm_buffer
-        xmax, ymax = cluster_points.max(axis=0) + config.osm_buffer
+        xmin, ymin = cluster_points.min(axis=0) - Config.osm_buffer
+        xmax, ymax = cluster_points.max(axis=0) + Config.osm_buffer
         bboxes[i] = [xmin, ymin, xmax, ymax]
     # print({k: v for k, v in sorted(bboxes.items(), key=lambda item: item[1][0])})
     return bboxes

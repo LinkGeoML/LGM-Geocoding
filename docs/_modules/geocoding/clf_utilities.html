@@ -82,10 +82,20 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../config.html">config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../writers.html">writers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utilities.html">utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../utilities.html#related-to-classifiers">related to classifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../utilities.html#related-to-osm">related to OSM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../utilities.html#related-to-features">related to features</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../osm_utilities.html">OSM utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../features_utilities.html">features utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../clf_utilities.html">classifier utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">pipeline_processes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#algorithm-selection">algorithm selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#model-creation">model creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#model-training">model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#model-deployment">model deployment</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -163,7 +173,7 @@
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">f1_score</span>
 <span class="kn">from</span> <span class="nn">xgboost</span> <span class="kn">import</span> <span class="n">XGBClassifier</span>
 
-<span class="kn">from</span> <span class="nn">geocoding.config</span> <span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span> <span class="nn">geocoding.config</span> <span class="kn">import</span> <span class="n">Config</span>
 
 
 <span class="n">clf_callable_map</span> <span class="o">=</span> <span class="p">{</span>
@@ -179,19 +189,19 @@
 <span class="p">}</span>
 
 <span class="n">clf_hparams_map</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;NaiveBayes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">NB_hparams</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">NB_hparams_dist</span><span class="p">],</span>
-    <span class="s1">&#39;NearestNeighbors&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">NN_hparams</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">NN_hparams_dist</span><span class="p">],</span>
-    <span class="s1">&#39;LogisticRegression&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">LR_hparams</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">LR_hparams_dist</span><span class="p">],</span>
-    <span class="s1">&#39;SVM&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">SVM_hparams</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">SVM_hparams_dist</span><span class="p">],</span>
-    <span class="s1">&#39;MLP&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">MLP_hparams</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">MLP_hparams_dist</span><span class="p">],</span>
-    <span class="s1">&#39;DecisionTree&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">DT_hparams</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">DT_hparams_dist</span><span class="p">],</span>
-    <span class="s1">&#39;RandomForest&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">RF_hparams</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">RF_hparams_dist</span><span class="p">],</span>
-    <span class="s1">&#39;ExtraTrees&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">ET_hparams</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">RF_hparams_dist</span><span class="p">],</span>
-    <span class="s1">&#39;XGBoost&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">XGB_hparams</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">XGB_hparams_dist</span><span class="p">],</span>
+    <span class="s1">&#39;NaiveBayes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">Config</span><span class="o">.</span><span class="n">NB_hparams</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">NB_hparams_dist</span><span class="p">],</span>
+    <span class="s1">&#39;NearestNeighbors&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">Config</span><span class="o">.</span><span class="n">NN_hparams</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">NN_hparams_dist</span><span class="p">],</span>
+    <span class="s1">&#39;LogisticRegression&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">Config</span><span class="o">.</span><span class="n">LR_hparams</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">LR_hparams_dist</span><span class="p">],</span>
+    <span class="s1">&#39;SVM&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">Config</span><span class="o">.</span><span class="n">SVM_hparams</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">SVM_hparams_dist</span><span class="p">],</span>
+    <span class="s1">&#39;MLP&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">Config</span><span class="o">.</span><span class="n">MLP_hparams</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">MLP_hparams_dist</span><span class="p">],</span>
+    <span class="s1">&#39;DecisionTree&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">Config</span><span class="o">.</span><span class="n">DT_hparams</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">DT_hparams_dist</span><span class="p">],</span>
+    <span class="s1">&#39;RandomForest&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">Config</span><span class="o">.</span><span class="n">RF_hparams</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">RF_hparams_dist</span><span class="p">],</span>
+    <span class="s1">&#39;ExtraTrees&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">Config</span><span class="o">.</span><span class="n">ET_hparams</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">RF_hparams_dist</span><span class="p">],</span>
+    <span class="s1">&#39;XGBoost&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">Config</span><span class="o">.</span><span class="n">XGB_hparams</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">XGB_hparams_dist</span><span class="p">],</span>
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="train_classifier"><a class="viewcode-back" href="../../clf_utilities.html#geocoding.clf_utilities.train_classifier">[docs]</a><span class="k">def</span> <span class="nf">train_classifier</span><span class="p">(</span><span class="n">clf_name</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">):</span>
+<div class="viewcode-block" id="train_classifier"><a class="viewcode-back" href="../../utilities.html#geocoding.clf_utilities.train_classifier">[docs]</a><span class="k">def</span> <span class="nf">train_classifier</span><span class="p">(</span><span class="n">clf_name</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Trains a classifier through grid search.</span>
 
@@ -204,9 +214,9 @@
 <span class="sd">        object: The trained classifier</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">clf</span> <span class="o">=</span> <span class="n">clf_callable_map</span><span class="p">[</span><span class="n">clf_name</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">hyperparams_search_method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;grid&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">Config</span><span class="o">.</span><span class="n">hyperparams_search_method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;grid&#39;</span><span class="p">:</span>
         <span class="n">params</span> <span class="o">=</span> <span class="n">clf_hparams_map</span><span class="p">[</span><span class="n">clf_name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">clf</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">n_folds</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">clf</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">Config</span><span class="o">.</span><span class="n">n_folds</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="n">Config</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">Config</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
         <span class="c1"># elif self.search_method.lower() == &#39;hyperband&#39; and clf_key in [&#39;XGBoost&#39;, &#39;Extra-Trees&#39;, &#39;Random Forest&#39;]:</span>
         <span class="c1">#     HyperbandSearchCV(</span>
         <span class="c1">#         clf_val[0](probability=True) if clf_key == &#39;SVM&#39; else clf_val[0](), clf_val[2].copy().pop(&#39;n_estimators&#39;),</span>
@@ -218,13 +228,13 @@
     <span class="k">else</span><span class="p">:</span>  <span class="c1"># randomized is used as default</span>
         <span class="n">params</span> <span class="o">=</span> <span class="n">clf_hparams_map</span><span class="p">[</span><span class="n">clf_name</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">clf</span> <span class="o">=</span> <span class="n">RandomizedSearchCV</span><span class="p">(</span>
-            <span class="n">clf</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">n_folds</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">max_iter</span>
+            <span class="n">clf</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">Config</span><span class="o">.</span><span class="n">n_folds</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="n">Config</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">Config</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="n">Config</span><span class="o">.</span><span class="n">max_iter</span>
         <span class="p">)</span>
     <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">clf</span></div>
 
 
-<div class="viewcode-block" id="evaluate"><a class="viewcode-back" href="../../clf_utilities.html#geocoding.clf_utilities.evaluate">[docs]</a><span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
+<div class="viewcode-block" id="evaluate"><a class="viewcode-back" href="../../utilities.html#geocoding.clf_utilities.evaluate">[docs]</a><span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Evaluates model predictions through a series of metrics.</span>
 
@@ -246,7 +256,7 @@
     <span class="k">return</span> <span class="n">scores</span></div>
 
 
-<div class="viewcode-block" id="normalize_scores"><a class="viewcode-back" href="../../clf_utilities.html#geocoding.clf_utilities.normalize_scores">[docs]</a><span class="k">def</span> <span class="nf">normalize_scores</span><span class="p">(</span><span class="n">scores</span><span class="p">):</span>
+<div class="viewcode-block" id="normalize_scores"><a class="viewcode-back" href="../../utilities.html#geocoding.clf_utilities.normalize_scores">[docs]</a><span class="k">def</span> <span class="nf">normalize_scores</span><span class="p">(</span><span class="n">scores</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Normalizes predictions scores to a probabilities-like format.</span>
 
@@ -262,7 +272,7 @@
     <span class="k">return</span> <span class="n">normalized</span></div>
 
 
-<div class="viewcode-block" id="get_predictions"><a class="viewcode-back" href="../../clf_utilities.html#geocoding.clf_utilities.get_predictions">[docs]</a><span class="k">def</span> <span class="nf">get_predictions</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_test</span><span class="p">):</span>
+<div class="viewcode-block" id="get_predictions"><a class="viewcode-back" href="../../utilities.html#geocoding.clf_utilities.get_predictions">[docs]</a><span class="k">def</span> <span class="nf">get_predictions</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_test</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Makes predictions utilizing *model* over *X_test*.</span>
 
@@ -282,7 +292,7 @@
     <span class="k">return</span> <span class="n">y_preds</span></div>
 
 
-<div class="viewcode-block" id="inverse_transform_labels"><a class="viewcode-back" href="../../clf_utilities.html#geocoding.clf_utilities.inverse_transform_labels">[docs]</a><span class="k">def</span> <span class="nf">inverse_transform_labels</span><span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">preds</span><span class="p">):</span>
+<div class="viewcode-block" id="inverse_transform_labels"><a class="viewcode-back" href="../../utilities.html#geocoding.clf_utilities.inverse_transform_labels">[docs]</a><span class="k">def</span> <span class="nf">inverse_transform_labels</span><span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">preds</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Utilizes *encoder* to transform encoded labels back to the original \</span>
 <span class="sd">    strings.</span>
@@ -303,7 +313,7 @@
     <span class="k">return</span> <span class="n">k_preds_new</span></div>
 
 
-<div class="viewcode-block" id="is_valid"><a class="viewcode-back" href="../../clf_utilities.html#geocoding.clf_utilities.is_valid">[docs]</a><span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="n">clf_name</span><span class="p">):</span>
+<div class="viewcode-block" id="is_valid"><a class="viewcode-back" href="../../utilities.html#geocoding.clf_utilities.is_valid">[docs]</a><span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="n">clf_name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Checks whether *clf_name* is a valid classifier&#39;s name with respect to \</span>
 <span class="sd">    the experiment setup.</span>
@@ -315,7 +325,7 @@
 <span class="sd">        bool: Returns True if given classifier&#39;s name is valid</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">supported_clfs</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">clf</span> <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">supported_classifiers</span> <span class="k">if</span> <span class="n">clf</span> <span class="o">!=</span> <span class="s1">&#39;Baseline&#39;</span>
+        <span class="n">clf</span> <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="n">Config</span><span class="o">.</span><span class="n">supported_classifiers</span> <span class="k">if</span> <span class="n">clf</span> <span class="o">!=</span> <span class="s1">&#39;Baseline&#39;</span>
     <span class="p">]</span>
     <span class="k">if</span> <span class="n">clf_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">supported_clfs</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Supported classifiers:&#39;</span><span class="p">,</span> <span class="n">supported_clfs</span><span class="p">)</span>
@@ -323,7 +333,7 @@
     <span class="k">return</span> <span class="kc">True</span></div>
 
 
-<div class="viewcode-block" id="create_clf_params_product_generator"><a class="viewcode-back" href="../../clf_utilities.html#geocoding.clf_utilities.create_clf_params_product_generator">[docs]</a><span class="k">def</span> <span class="nf">create_clf_params_product_generator</span><span class="p">(</span><span class="n">params_grid</span><span class="p">):</span>
+<div class="viewcode-block" id="create_clf_params_product_generator"><a class="viewcode-back" href="../../utilities.html#geocoding.clf_utilities.create_clf_params_product_generator">[docs]</a><span class="k">def</span> <span class="nf">create_clf_params_product_generator</span><span class="p">(</span><span class="n">params_grid</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates all possible combinations of classifier&#39;s hyperparameters values.</span>
 
@@ -373,7 +383,7 @@
 
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.Navigation.enable(false);
       });
   </script>
 

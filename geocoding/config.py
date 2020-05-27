@@ -2,10 +2,10 @@ import numpy as np
 from scipy.stats import randint as sp_randint, expon, truncnorm, uniform
 
 
-class config:
+class Config:
 
     """
-    Class that defines the experiment configuration.
+    Class that configures the execution process.
 
     Attributes:
         n_folds (int): The number of folds in the experiment
@@ -17,6 +17,8 @@ class config:
             each bounding box when querying Overpass API
         osm_timeout (int): Timeout (in seconds) after five requests to \
             Overpass API
+        max_overpass_tries (int): Maximum number of failed tries to extract the road network when querying the
+            Overpass API before quiting.
         distance_thr (float): Distances in features greater than this value \
             will be converted to this threshold
         baseline_service (str): The name of the service to consider when \
@@ -53,6 +55,8 @@ class config:
     hyperparams_search_method = 'grid'
     """str: Search Method to use for finding best hyperparameters. (*randomized* | *grid*).
     """
+    #: int: Number of iterations that RandomizedSearchCV should execute. It applies only when
+    #: :attr:`hyperparams_search_method` equals to 'randomized'.
     max_iter = 30
     verbose = True
 
@@ -65,7 +69,7 @@ class config:
     distance_thr = 5000.0
     square_thr = 500000.0
     baseline_service = 'original'
-    #: int: Seed used by each of the random number generators.
+    #: int: Seed to use by random number generators.
     seed_no = 13
 
     base_dir = '/media/disk/LGM-Geocoding'

@@ -3,7 +3,7 @@ import csv
 import os
 
 from geocoding import clf_utilities as clf_ut
-from geocoding.config import config
+from geocoding.config import Config
 
 
 def write_feats_space(fpath):
@@ -19,8 +19,8 @@ def write_feats_space(fpath):
     with open(fpath, 'w') as file:
         writer = csv.writer(file)
         writer.writerow(['feature', 'normalized'])
-        for f in config.included_features:
-            writer.writerow([f, True if f in config.normalized_features else False])
+        for f in Config.included_features:
+            writer.writerow([f, True if f in Config.normalized_features else False])
 
 
 def write_clf_space(fpath, clf_name, best_params=None):
@@ -88,7 +88,7 @@ def write_predictions(fpath, df, preds):
     Returns:
         None
     """
-    n_services = len(config.services)
+    n_services = len(Config.services)
     with open(fpath, 'w', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerow(['address', f'predictions'])

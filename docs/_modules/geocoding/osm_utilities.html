@@ -82,10 +82,20 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../config.html">config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../writers.html">writers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utilities.html">utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../utilities.html#related-to-classifiers">related to classifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../utilities.html#related-to-osm">related to OSM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../utilities.html#related-to-features">related to features</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../osm_utilities.html">OSM utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../features_utilities.html">features utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../clf_utilities.html">classifier utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">pipeline_processes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#algorithm-selection">algorithm selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#model-creation">model creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#model-training">model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#model-deployment">model deployment</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -159,10 +169,10 @@
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">geocoding.config</span> <span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span> <span class="nn">geocoding.config</span> <span class="kn">import</span> <span class="n">Config</span>
 
 
-<div class="viewcode-block" id="query_api"><a class="viewcode-back" href="../../osm_utilities.html#geocoding.osm_utilities.query_api">[docs]</a><span class="k">def</span> <span class="nf">query_api</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">fpath</span><span class="p">):</span>
+<div class="viewcode-block" id="query_api"><a class="viewcode-back" href="../../utilities.html#geocoding.osm_utilities.query_api">[docs]</a><span class="k">def</span> <span class="nf">query_api</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">fpath</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Queries Overpass API for *query*.</span>
 
@@ -186,7 +196,7 @@
     <span class="k">return</span> <span class="n">status</span></div>
 
 
-<div class="viewcode-block" id="parse_streets"><a class="viewcode-back" href="../../osm_utilities.html#geocoding.osm_utilities.parse_streets">[docs]</a><span class="k">def</span> <span class="nf">parse_streets</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
+<div class="viewcode-block" id="parse_streets"><a class="viewcode-back" href="../../utilities.html#geocoding.osm_utilities.parse_streets">[docs]</a><span class="k">def</span> <span class="nf">parse_streets</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parses the API response from *fpath* and converts it to a dataframe.</span>
 
@@ -217,7 +227,7 @@
     <span class="k">return</span> <span class="n">street_df</span></div>
 
 
-<div class="viewcode-block" id="extract_streets"><a class="viewcode-back" href="../../osm_utilities.html#geocoding.osm_utilities.extract_streets">[docs]</a><span class="k">def</span> <span class="nf">extract_streets</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<div class="viewcode-block" id="extract_streets"><a class="viewcode-back" href="../../utilities.html#geocoding.osm_utilities.extract_streets">[docs]</a><span class="k">def</span> <span class="nf">extract_streets</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A wrapper function that administrates the streets download.</span>
 
@@ -253,7 +263,7 @@
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Extracted </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">street_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="si">}</span><span class="s1"> unique streets&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="download_cell"><a class="viewcode-back" href="../../osm_utilities.html#geocoding.osm_utilities.download_cell">[docs]</a><span class="k">def</span> <span class="nf">download_cell</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">fpath</span><span class="p">):</span>
+<div class="viewcode-block" id="download_cell"><a class="viewcode-back" href="../../utilities.html#geocoding.osm_utilities.download_cell">[docs]</a><span class="k">def</span> <span class="nf">download_cell</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">fpath</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Downloads *cell* from Overpass API, writes results in *fpath* and then \</span>
 <span class="sd">    parses them into a pandas.DataFrame.</span>
@@ -269,10 +279,10 @@
     <span class="n">west</span><span class="p">,</span> <span class="n">south</span><span class="p">,</span> <span class="n">east</span><span class="p">,</span> <span class="n">north</span> <span class="o">=</span> <span class="n">cell</span>
     <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">status</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="k">while</span> <span class="n">status</span> <span class="ow">and</span> <span class="p">(</span><span class="n">counter</span> <span class="o">&lt;</span> <span class="n">config</span><span class="o">.</span><span class="n">max_overpass_tries</span><span class="p">):</span>
+    <span class="k">while</span> <span class="n">status</span> <span class="ow">and</span> <span class="p">(</span><span class="n">counter</span> <span class="o">&lt;</span> <span class="n">Config</span><span class="o">.</span><span class="n">max_overpass_tries</span><span class="p">):</span>
         <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="n">query</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s1">&#39;[out:json][timeout:</span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">osm_timeout</span> <span class="o">*</span> <span class="n">counter</span><span class="si">}</span><span class="s1">];&#39;</span>        
+            <span class="sa">f</span><span class="s1">&#39;[out:json][timeout:</span><span class="si">{</span><span class="n">Config</span><span class="o">.</span><span class="n">osm_timeout</span> <span class="o">*</span> <span class="n">counter</span><span class="si">}</span><span class="s1">];&#39;</span>        
             <span class="c1"># f&#39;way[&quot;highway&quot;][&quot;highway&quot;!~&quot;^(cycleway|footway)$&quot;]&#39;</span>
             <span class="sa">f</span><span class="s1">&#39;way[&quot;highway&quot;][&quot;highway&quot;!~&quot;^(cycleway)$&quot;]&#39;</span>
             <span class="c1"># &#39;way[&quot;highway&quot;~&quot;^(motorway|trunk|primary)$&quot;];&#39;</span>
@@ -287,7 +297,7 @@
     <span class="k">return</span> <span class="n">parse_streets</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="cluster_points"><a class="viewcode-back" href="../../osm_utilities.html#geocoding.osm_utilities.cluster_points">[docs]</a><span class="k">def</span> <span class="nf">cluster_points</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="cluster_points"><a class="viewcode-back" href="../../utilities.html#geocoding.osm_utilities.cluster_points">[docs]</a><span class="k">def</span> <span class="nf">cluster_points</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Clusters points given in *X*.</span>
 
@@ -297,15 +307,15 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        numpy.ndarray: The predicted clusters labels</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">n_clusters</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">clusters_pct</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">n_clusters</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">clusters_pct</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span>
-        <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">seed_no</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">n_jobs</span>
+        <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">Config</span><span class="o">.</span><span class="n">seed_no</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="n">Config</span><span class="o">.</span><span class="n">n_jobs</span>
     <span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="n">labels</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">labels</span></div>
 
 
-<div class="viewcode-block" id="get_clusters_bboxes"><a class="viewcode-back" href="../../osm_utilities.html#geocoding.osm_utilities.get_clusters_bboxes">[docs]</a><span class="k">def</span> <span class="nf">get_clusters_bboxes</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+<div class="viewcode-block" id="get_clusters_bboxes"><a class="viewcode-back" href="../../utilities.html#geocoding.osm_utilities.get_clusters_bboxes">[docs]</a><span class="k">def</span> <span class="nf">get_clusters_bboxes</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extracts a bounding box for each one of the clusters.</span>
 
@@ -320,8 +330,8 @@
     <span class="n">bboxes</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">labels</span><span class="p">))):</span>
         <span class="n">cluster_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">p</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="k">if</span> <span class="n">labels</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">])</span>
-        <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span> <span class="o">=</span> <span class="n">cluster_points</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">config</span><span class="o">.</span><span class="n">osm_buffer</span>
-        <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">cluster_points</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">osm_buffer</span>
+        <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span> <span class="o">=</span> <span class="n">cluster_points</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">Config</span><span class="o">.</span><span class="n">osm_buffer</span>
+        <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">cluster_points</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">Config</span><span class="o">.</span><span class="n">osm_buffer</span>
         <span class="n">bboxes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">]</span>
     <span class="c1"># print({k: v for k, v in sorted(bboxes.items(), key=lambda item: item[1][0])})</span>
     <span class="k">return</span> <span class="n">bboxes</span></div>
@@ -360,7 +370,7 @@
 
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.Navigation.enable(false);
       });
   </script>
 

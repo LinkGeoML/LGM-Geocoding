@@ -82,10 +82,20 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../config.html">config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../writers.html">writers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utilities.html">utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../utilities.html#related-to-classifiers">related to classifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../utilities.html#related-to-osm">related to OSM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../utilities.html#related-to-features">related to features</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../osm_utilities.html">OSM utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../features_utilities.html">features utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../clf_utilities.html">classifier utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">pipeline_processes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#algorithm-selection">algorithm selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#model-creation">model creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#model-training">model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#model-deployment">model deployment</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -154,10 +164,10 @@
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">randint</span> <span class="k">as</span> <span class="n">sp_randint</span><span class="p">,</span> <span class="n">expon</span><span class="p">,</span> <span class="n">truncnorm</span><span class="p">,</span> <span class="n">uniform</span>
 
 
-<div class="viewcode-block" id="config"><a class="viewcode-back" href="../../config.html#geocoding.config.config">[docs]</a><span class="k">class</span> <span class="nc">config</span><span class="p">:</span>
+<div class="viewcode-block" id="Config"><a class="viewcode-back" href="../../config.html#geocoding.config.Config">[docs]</a><span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Class that defines the experiment configuration.</span>
+<span class="sd">    Class that configures the execution process.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        n_folds (int): The number of folds in the experiment</span>
@@ -169,6 +179,8 @@
 <span class="sd">            each bounding box when querying Overpass API</span>
 <span class="sd">        osm_timeout (int): Timeout (in seconds) after five requests to \</span>
 <span class="sd">            Overpass API</span>
+<span class="sd">        max_overpass_tries (int): Maximum number of failed tries to extract the road network when querying the</span>
+<span class="sd">            Overpass API before quiting.</span>
 <span class="sd">        distance_thr (float): Distances in features greater than this value \</span>
 <span class="sd">            will be converted to this threshold</span>
 <span class="sd">        baseline_service (str): The name of the service to consider when \</span>
@@ -205,6 +217,8 @@
     <span class="n">hyperparams_search_method</span> <span class="o">=</span> <span class="s1">&#39;grid&#39;</span>
     <span class="sd">&quot;&quot;&quot;str: Search Method to use for finding best hyperparameters. (*randomized* | *grid*).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#: int: Number of iterations that RandomizedSearchCV should execute. It applies only when</span>
+    <span class="c1">#: :attr:`hyperparams_search_method` equals to &#39;randomized&#39;.</span>
     <span class="n">max_iter</span> <span class="o">=</span> <span class="mi">30</span>
     <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -217,7 +231,7 @@
     <span class="n">distance_thr</span> <span class="o">=</span> <span class="mf">5000.0</span>
     <span class="n">square_thr</span> <span class="o">=</span> <span class="mf">500000.0</span>
     <span class="n">baseline_service</span> <span class="o">=</span> <span class="s1">&#39;original&#39;</span>
-    <span class="c1">#: int: Seed used by each of the random number generators.</span>
+    <span class="c1">#: int: Seed to use by random number generators.</span>
     <span class="n">seed_no</span> <span class="o">=</span> <span class="mi">13</span>
 
     <span class="n">base_dir</span> <span class="o">=</span> <span class="s1">&#39;/media/disk/LGM-Geocoding&#39;</span>
@@ -451,7 +465,7 @@
 
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.Navigation.enable(false);
       });
   </script>
 

@@ -84,10 +84,20 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="writers.html">writers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html#related-to-classifiers">related to classifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html#related-to-osm">related to OSM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html#related-to-features">related to features</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="osm_utilities.html">OSM utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="features_utilities.html">features utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="clf_utilities.html">classifier utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html">pipeline_processes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html#algorithm-selection">algorithm selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html#model-creation">model creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html#model-training">model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html#model-deployment">model deployment</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -156,12 +166,12 @@
   <div class="section" id="module-geocoding.config">
 <span id="config"></span><h1>config<a class="headerlink" href="#module-geocoding.config" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="geocoding.config.config">
-<em class="property">class </em><code class="sig-prename descclassname">geocoding.config.</code><code class="sig-name descname">config</code><a class="reference internal" href="_modules/geocoding/config.html#config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geocoding.config.config" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class that defines the experiment configuration.</p>
+<dt id="geocoding.config.Config">
+<em class="property">class </em><code class="sig-prename descclassname">geocoding.config.</code><code class="sig-name descname">Config</code><a class="reference internal" href="_modules/geocoding/config.html#Config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geocoding.config.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that configures the execution process.</p>
 <dl class="py attribute">
-<dt id="geocoding.config.config.n_folds">
-<code class="sig-name descname">n_folds</code><a class="headerlink" href="#geocoding.config.config.n_folds" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.n_folds">
+<code class="sig-name descname">n_folds</code><a class="headerlink" href="#geocoding.config.Config.n_folds" title="Permalink to this definition">¶</a></dt>
 <dd><p>The number of folds in the experiment</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -171,8 +181,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.source_crs">
-<code class="sig-name descname">source_crs</code><a class="headerlink" href="#geocoding.config.config.source_crs" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.source_crs">
+<code class="sig-name descname">source_crs</code><a class="headerlink" href="#geocoding.config.Config.source_crs" title="Permalink to this definition">¶</a></dt>
 <dd><p>The EPSG crs code used in input files</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -182,8 +192,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.target_crs">
-<code class="sig-name descname">target_crs</code><a class="headerlink" href="#geocoding.config.config.target_crs" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.target_crs">
+<code class="sig-name descname">target_crs</code><a class="headerlink" href="#geocoding.config.Config.target_crs" title="Permalink to this definition">¶</a></dt>
 <dd><p>The EPSG crs code to transform the data</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -193,8 +203,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.clusters_pct">
-<code class="sig-name descname">clusters_pct</code><a class="headerlink" href="#geocoding.config.config.clusters_pct" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.clusters_pct">
+<code class="sig-name descname">clusters_pct</code><a class="headerlink" href="#geocoding.config.Config.clusters_pct" title="Permalink to this definition">¶</a></dt>
 <dd><p>Percentage of data points, indicating how many             clusters to create in order to query Overpass API for streets</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -204,8 +214,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.osm_buffer">
-<code class="sig-name descname">osm_buffer</code><a class="headerlink" href="#geocoding.config.config.osm_buffer" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.osm_buffer">
+<code class="sig-name descname">osm_buffer</code><a class="headerlink" href="#geocoding.config.Config.osm_buffer" title="Permalink to this definition">¶</a></dt>
 <dd><p>A buffer distance (in meters) to consider around             each bounding box when querying Overpass API</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -215,8 +225,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.osm_timeout">
-<code class="sig-name descname">osm_timeout</code><a class="headerlink" href="#geocoding.config.config.osm_timeout" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.osm_timeout">
+<code class="sig-name descname">osm_timeout</code><a class="headerlink" href="#geocoding.config.Config.osm_timeout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Timeout (in seconds) after five requests to             Overpass API</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -226,8 +236,20 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.distance_thr">
-<code class="sig-name descname">distance_thr</code><a class="headerlink" href="#geocoding.config.config.distance_thr" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.max_overpass_tries">
+<code class="sig-name descname">max_overpass_tries</code><a class="headerlink" href="#geocoding.config.Config.max_overpass_tries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum number of failed tries to extract the road network when querying the
+Overpass API before quiting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="geocoding.config.Config.distance_thr">
+<code class="sig-name descname">distance_thr</code><a class="headerlink" href="#geocoding.config.Config.distance_thr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Distances in features greater than this value             will be converted to this threshold</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -237,8 +259,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.baseline_service">
-<code class="sig-name descname">baseline_service</code><a class="headerlink" href="#geocoding.config.config.baseline_service" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.baseline_service">
+<code class="sig-name descname">baseline_service</code><a class="headerlink" href="#geocoding.config.Config.baseline_service" title="Permalink to this definition">¶</a></dt>
 <dd><p>The name of the service to consider when             measuring baseline scores</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -248,8 +270,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.experiments_path">
-<code class="sig-name descname">experiments_path</code><a class="headerlink" href="#geocoding.config.config.experiments_path" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.experiments_path">
+<code class="sig-name descname">experiments_path</code><a class="headerlink" href="#geocoding.config.Config.experiments_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Path to folder that stores the experiments</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -259,8 +281,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.services">
-<code class="sig-name descname">services</code><a class="headerlink" href="#geocoding.config.config.services" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.services">
+<code class="sig-name descname">services</code><a class="headerlink" href="#geocoding.config.Config.services" title="Permalink to this definition">¶</a></dt>
 <dd><p>The services (geocoders) used in the setup</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -270,8 +292,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.supported_features">
-<code class="sig-name descname">supported_features</code><a class="headerlink" href="#geocoding.config.config.supported_features" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.supported_features">
+<code class="sig-name descname">supported_features</code><a class="headerlink" href="#geocoding.config.Config.supported_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of the supported features to choose             from</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -281,8 +303,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.included_features">
-<code class="sig-name descname">included_features</code><a class="headerlink" href="#geocoding.config.config.included_features" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.included_features">
+<code class="sig-name descname">included_features</code><a class="headerlink" href="#geocoding.config.Config.included_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of the features to be included in the             experiment</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -292,8 +314,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.normalized_features">
-<code class="sig-name descname">normalized_features</code><a class="headerlink" href="#geocoding.config.config.normalized_features" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.normalized_features">
+<code class="sig-name descname">normalized_features</code><a class="headerlink" href="#geocoding.config.Config.normalized_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of features to be normalized</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -303,8 +325,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.supported_classifiers">
-<code class="sig-name descname">supported_classifiers</code><a class="headerlink" href="#geocoding.config.config.supported_classifiers" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.supported_classifiers">
+<code class="sig-name descname">supported_classifiers</code><a class="headerlink" href="#geocoding.config.Config.supported_classifiers" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of the supported classifiers to             choose from</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -314,8 +336,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.included_classifiers">
-<code class="sig-name descname">included_classifiers</code><a class="headerlink" href="#geocoding.config.config.included_classifiers" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.included_classifiers">
+<code class="sig-name descname">included_classifiers</code><a class="headerlink" href="#geocoding.config.Config.included_classifiers" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of the classifiers to be included             in the experiment</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -325,8 +347,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.NB_hparams">
-<code class="sig-name descname">NB_hparams</code><a class="headerlink" href="#geocoding.config.config.NB_hparams" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.NB_hparams">
+<code class="sig-name descname">NB_hparams</code><a class="headerlink" href="#geocoding.config.Config.NB_hparams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameters search space for Naive Bayes classifier</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -336,8 +358,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.NN_hparams">
-<code class="sig-name descname">NN_hparams</code><a class="headerlink" href="#geocoding.config.config.NN_hparams" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.NN_hparams">
+<code class="sig-name descname">NN_hparams</code><a class="headerlink" href="#geocoding.config.Config.NN_hparams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameters search space for Nearest Neighbors             classifier</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -347,8 +369,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.LR_hparams">
-<code class="sig-name descname">LR_hparams</code><a class="headerlink" href="#geocoding.config.config.LR_hparams" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.LR_hparams">
+<code class="sig-name descname">LR_hparams</code><a class="headerlink" href="#geocoding.config.Config.LR_hparams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameters search space for Logistic Regression             classifier</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -358,8 +380,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.SVM_hparams">
-<code class="sig-name descname">SVM_hparams</code><a class="headerlink" href="#geocoding.config.config.SVM_hparams" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.SVM_hparams">
+<code class="sig-name descname">SVM_hparams</code><a class="headerlink" href="#geocoding.config.Config.SVM_hparams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameters search space for SVM classifier</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -369,8 +391,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.MLP_hparams">
-<code class="sig-name descname">MLP_hparams</code><a class="headerlink" href="#geocoding.config.config.MLP_hparams" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.MLP_hparams">
+<code class="sig-name descname">MLP_hparams</code><a class="headerlink" href="#geocoding.config.Config.MLP_hparams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameters search space for MLP classifier</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -380,8 +402,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.DT_hparams">
-<code class="sig-name descname">DT_hparams</code><a class="headerlink" href="#geocoding.config.config.DT_hparams" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.DT_hparams">
+<code class="sig-name descname">DT_hparams</code><a class="headerlink" href="#geocoding.config.Config.DT_hparams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameters search space for Decision Tree classifier</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -391,8 +413,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.RF_hparams">
-<code class="sig-name descname">RF_hparams</code><a class="headerlink" href="#geocoding.config.config.RF_hparams" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.RF_hparams">
+<code class="sig-name descname">RF_hparams</code><a class="headerlink" href="#geocoding.config.Config.RF_hparams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameters search space for Random Forest classifier</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -402,8 +424,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.ET_hparams">
-<code class="sig-name descname">ET_hparams</code><a class="headerlink" href="#geocoding.config.config.ET_hparams" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.ET_hparams">
+<code class="sig-name descname">ET_hparams</code><a class="headerlink" href="#geocoding.config.Config.ET_hparams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameters search space for Extra Trees classifier</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -413,8 +435,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.hyperparams_search_method">
-<code class="sig-name descname">hyperparams_search_method</code><em class="property"> = 'grid'</em><a class="headerlink" href="#geocoding.config.config.hyperparams_search_method" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.hyperparams_search_method">
+<code class="sig-name descname">hyperparams_search_method</code><em class="property"> = 'grid'</em><a class="headerlink" href="#geocoding.config.Config.hyperparams_search_method" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search Method to use for finding best hyperparameters. (<em>randomized</em> | <em>grid</em>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -424,8 +446,20 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.n_jobs">
-<code class="sig-name descname">n_jobs</code><em class="property"> = 4</em><a class="headerlink" href="#geocoding.config.config.n_jobs" title="Permalink to this definition">¶</a></dt>
+<dt id="geocoding.config.Config.max_iter">
+<code class="sig-name descname">max_iter</code><em class="property"> = 30</em><a class="headerlink" href="#geocoding.config.Config.max_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of iterations that RandomizedSearchCV should execute. It applies only when
+<a class="reference internal" href="#geocoding.config.Config.hyperparams_search_method" title="geocoding.config.Config.hyperparams_search_method"><code class="xref py py-attr docutils literal notranslate"><span class="pre">hyperparams_search_method</span></code></a> equals to ‘randomized’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="geocoding.config.Config.n_jobs">
+<code class="sig-name descname">n_jobs</code><em class="property"> = 4</em><a class="headerlink" href="#geocoding.config.Config.n_jobs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of parallel jobs to be initiated. -1 means to utilize all available processors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -435,9 +469,9 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="geocoding.config.config.seed_no">
-<code class="sig-name descname">seed_no</code><em class="property"> = 13</em><a class="headerlink" href="#geocoding.config.config.seed_no" title="Permalink to this definition">¶</a></dt>
-<dd><p>Seed used by each of the random number generators.</p>
+<dt id="geocoding.config.Config.seed_no">
+<code class="sig-name descname">seed_no</code><em class="property"> = 13</em><a class="headerlink" href="#geocoding.config.Config.seed_no" title="Permalink to this definition">¶</a></dt>
+<dd><p>Seed to use by random number generators.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>int</p>
@@ -492,7 +526,7 @@
 
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.Navigation.enable(false);
       });
   </script>
 

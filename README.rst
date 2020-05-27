@@ -63,35 +63,35 @@ the following steps will refer to in order to output their results. Each step ca
 1. **Features extraction**
     .. code:: bash
 
-        python features_extraction.py -fpath <fpath>
+        python -m geocoding.features_extraction -fpath <fpath>
 
     where *<fpath>* is the path to the csv file containing train data.
 
 2. **Algorithm selection**
     .. code:: bash
 
-        python algorithm_selection.py -experiment_path <exp_path>
+        python -m geocoding.algorithm_selection -experiment_path <exp_path>
 
     where *<exp_path>* is the path to the folder created from the first step.
 
 3. **Model selection**
     .. code:: bash
 
-        python model_selection.py -classifier <clf_name> -experiment_path <exp_path>
+        python -m geocoding.model_selection -classifier <clf_name> -experiment_path <exp_path>
 
     where *<clf_name>* is the classifier's name to be optimized in order to build the model and *<exp_path>* same as before.
 
 4. **Model training**
     .. code:: bash
 
-        python model_training.py -experiment_path <exp_path>
+        python -m geocoding.model_training -experiment_path <exp_path>
 
     where *<exp_path>* same as before.
 
 5. **Model deployment**
     .. code:: bash
 
-        python model_deployment.py -experiment_path <exp_path> -fpath <fpath>
+        python -m geocoding.model_deployment -experiment_path <exp_path> -fpath <fpath>
 
     where *<exp_path>* same as before and *<fpath>* is the path to the csv file containing the test data.
 

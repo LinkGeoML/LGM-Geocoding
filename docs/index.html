@@ -83,10 +83,20 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="config.html">config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="writers.html">writers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html#related-to-classifiers">related to classifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html#related-to-osm">related to OSM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html#related-to-features">related to features</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="osm_utilities.html">OSM utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="features_utilities.html">features utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="clf_utilities.html">classifier utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html">pipeline_processes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html#algorithm-selection">algorithm selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html#model-creation">model creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html#model-training">model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html#model-deployment">model deployment</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -218,7 +228,7 @@ the main directory and run:</p>
 the following steps will refer to in order to output their results. Each step can be executed as follows:</p>
 <ol class="arabic">
 <li><dl>
-<dt><strong>Features extraction</strong></dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python features_extraction.py -fpath &lt;fpath&gt;
+<dt><strong>Features extraction</strong></dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m geocoding.features_extraction -fpath &lt;fpath&gt;
 </pre></div>
 </div>
 <p>where <em>&lt;fpath&gt;</em> is the path to the csv file containing train data.</p>
@@ -226,7 +236,7 @@ the following steps will refer to in order to output their results. Each step ca
 </dl>
 </li>
 <li><dl>
-<dt><strong>Algorithm selection</strong></dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python algorithm_selection.py -experiment_path &lt;exp_path&gt;
+<dt><strong>Algorithm selection</strong></dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m geocoding.algorithm_selection -experiment_path &lt;exp_path&gt;
 </pre></div>
 </div>
 <p>where <em>&lt;exp_path&gt;</em> is the path to the folder created from the first step.</p>
@@ -234,7 +244,7 @@ the following steps will refer to in order to output their results. Each step ca
 </dl>
 </li>
 <li><dl>
-<dt><strong>Model selection</strong></dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python model_selection.py -classifier &lt;clf_name&gt; -experiment_path &lt;exp_path&gt;
+<dt><strong>Model selection</strong></dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m geocoding.model_selection -classifier &lt;clf_name&gt; -experiment_path &lt;exp_path&gt;
 </pre></div>
 </div>
 <p>where <em>&lt;clf_name&gt;</em> is the classifier’s name to be optimized in order to build the model and <em>&lt;exp_path&gt;</em> same as before.</p>
@@ -242,7 +252,7 @@ the following steps will refer to in order to output their results. Each step ca
 </dl>
 </li>
 <li><dl>
-<dt><strong>Model training</strong></dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python model_training.py -experiment_path &lt;exp_path&gt;
+<dt><strong>Model training</strong></dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m geocoding.model_training -experiment_path &lt;exp_path&gt;
 </pre></div>
 </div>
 <p>where <em>&lt;exp_path&gt;</em> same as before.</p>
@@ -250,7 +260,7 @@ the following steps will refer to in order to output their results. Each step ca
 </dl>
 </li>
 <li><dl>
-<dt><strong>Model deployment</strong></dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python model_deployment.py -experiment_path &lt;exp_path&gt; -fpath &lt;fpath&gt;
+<dt><strong>Model deployment</strong></dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m geocoding.model_deployment -experiment_path &lt;exp_path&gt; -fpath &lt;fpath&gt;
 </pre></div>
 </div>
 <p>where <em>&lt;exp_path&gt;</em> same as before and <em>&lt;fpath&gt;</em> is the path to the csv file containing the test data.</p>
@@ -274,10 +284,20 @@ the following steps will refer to in order to output their results. Each step ca
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="config.html">config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="writers.html">writers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html#related-to-classifiers">related to classifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html#related-to-osm">related to OSM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html#related-to-features">related to features</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="osm_utilities.html">OSM utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="features_utilities.html">features utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="clf_utilities.html">classifier utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html">pipeline_processes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html#algorithm-selection">algorithm selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html#model-creation">model creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html#model-training">model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html#model-deployment">model deployment</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -334,7 +354,7 @@ the following steps will refer to in order to output their results. Each step ca
 
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.Navigation.enable(false);
       });
   </script>
 

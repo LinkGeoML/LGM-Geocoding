@@ -6,7 +6,7 @@ import pickle
 import time
 
 from geocoding import features_utilities as feat_ut, clf_utilities as clf_ut, writers as wrtrs
-from geocoding.config import config
+from geocoding.config import Config
 
 
 def main():
@@ -24,8 +24,8 @@ def main():
     ap.add_argument('-experiment_path', required=True)
     args = vars(ap.parse_args())
 
-    features_path = os.path.join(config.base_dir, 'experiments', args['experiment_path'], 'features_extraction_results')
-    model_training_path = os.path.join(config.base_dir, 'experiments', args['experiment_path'], 'model_training_results')
+    features_path = os.path.join(Config.base_dir, 'experiments', args['experiment_path'], 'features_extraction_results')
+    model_training_path = os.path.join(Config.base_dir, 'experiments', args['experiment_path'], 'model_training_results')
 
     for path in [features_path, model_training_path]:
         if os.path.exists(path) is False:
@@ -34,13 +34,13 @@ def main():
 
     t1 = time.time()
 
-    results_path = os.path.join(config.base_dir, 'experiments', args['experiment_path'], 'model_deployment_results')
+    results_path = os.path.join(Config.base_dir, 'experiments', args['experiment_path'], 'model_deployment_results')
     if os.path.exists(results_path):
         shutil.rmtree(results_path)
     os.makedirs(results_path)
     os.makedirs(os.path.join(results_path, 'features'))
 
-    df = feat_ut.load_points_df(os.path.join(config.base_dir, args['fpath']))
+    df = feat_ut.load_points_df(os.path.join(Config.base_dir, args['fpath']))
     encoder = pickle.load(open(os.path.join(features_path, 'encoder.pkl'), 'rb'))
     df, _ = feat_ut.encode_labels(df, encoder)
 

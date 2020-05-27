@@ -11,7 +11,7 @@ from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.metrics import accuracy_score, f1_score
 from xgboost import XGBClassifier
 
-from geocoding.config import config
+from geocoding.config import Config
 
 
 clf_callable_map = {
@@ -27,15 +27,15 @@ clf_callable_map = {
 }
 
 clf_hparams_map = {
-    'NaiveBayes': [config.NB_hparams, config.NB_hparams_dist],
-    'NearestNeighbors': [config.NN_hparams, config.NN_hparams_dist],
-    'LogisticRegression': [config.LR_hparams, config.LR_hparams_dist],
-    'SVM': [config.SVM_hparams, config.SVM_hparams_dist],
-    'MLP': [config.MLP_hparams, config.MLP_hparams_dist],
-    'DecisionTree': [config.DT_hparams, config.DT_hparams_dist],
-    'RandomForest': [config.RF_hparams, config.RF_hparams_dist],
-    'ExtraTrees': [config.ET_hparams, config.RF_hparams_dist],
-    'XGBoost': [config.XGB_hparams, config.XGB_hparams_dist],
+    'NaiveBayes': [Config.NB_hparams, Config.NB_hparams_dist],
+    'NearestNeighbors': [Config.NN_hparams, Config.NN_hparams_dist],
+    'LogisticRegression': [Config.LR_hparams, Config.LR_hparams_dist],
+    'SVM': [Config.SVM_hparams, Config.SVM_hparams_dist],
+    'MLP': [Config.MLP_hparams, Config.MLP_hparams_dist],
+    'DecisionTree': [Config.DT_hparams, Config.DT_hparams_dist],
+    'RandomForest': [Config.RF_hparams, Config.RF_hparams_dist],
+    'ExtraTrees': [Config.ET_hparams, Config.RF_hparams_dist],
+    'XGBoost': [Config.XGB_hparams, Config.XGB_hparams_dist],
 }
 
 
@@ -52,9 +52,9 @@ def train_classifier(clf_name, X_train, y_train):
         object: The trained classifier
     """
     clf = clf_callable_map[clf_name]
-    if config.hyperparams_search_method.lower() == 'grid':
+    if Config.hyperparams_search_method.lower() == 'grid':
         params = clf_hparams_map[clf_name][0]
-        clf = GridSearchCV(clf, params, cv=config.n_folds, n_jobs=config.n_jobs, verbose=config.verbose)
+        clf = GridSearchCV(clf, params, cv=Config.n_folds, n_jobs=Config.n_jobs, verbose=Config.verbose)
         # elif self.search_method.lower() == 'hyperband' and clf_key in ['XGBoost', 'Extra-Trees', 'Random Forest']:
         #     HyperbandSearchCV(
         #         clf_val[0](probability=True) if clf_key == 'SVM' else clf_val[0](), clf_val[2].copy().pop('n_estimators'),
@@ -66,7 +66,7 @@ def train_classifier(clf_name, X_train, y_train):
     else:  # randomized is used as default
         params = clf_hparams_map[clf_name][1]
         clf = RandomizedSearchCV(
-            clf, params, cv=config.n_folds, n_jobs=config.n_jobs, verbose=config.verbose, n_iter=config.max_iter
+            clf, params, cv=Config.n_folds, n_jobs=Config.n_jobs, verbose=Config.verbose, n_iter=Config.max_iter
         )
     clf.fit(X_train, y_train)
     return clf
@@ -163,7 +163,7 @@ def is_valid(clf_name):
         bool: Returns True if given classifier's name is valid
     """
     supported_clfs = [
-        clf for clf in config.supported_classifiers if clf != 'Baseline'
+        clf for clf in Config.supported_classifiers if clf != 'Baseline'
     ]
     if clf_name not in supported_clfs:
         print('Supported classifiers:', supported_clfs)

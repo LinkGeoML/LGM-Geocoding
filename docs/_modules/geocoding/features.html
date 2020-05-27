@@ -82,10 +82,20 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../config.html">config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../writers.html">writers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utilities.html">utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../utilities.html#related-to-classifiers">related to classifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../utilities.html#related-to-osm">related to OSM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../utilities.html#related-to-features">related to features</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../osm_utilities.html">OSM utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../features_utilities.html">features utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../clf_utilities.html">classifier utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">pipeline_processes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#algorithm-selection">algorithm selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#model-creation">model creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#model-training">model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#model-deployment">model deployment</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -156,7 +166,7 @@
 <span class="kn">import</span> <span class="nn">re</span>
 
 <span class="kn">from</span> <span class="nn">geocoding</span> <span class="kn">import</span> <span class="n">features_utilities</span> <span class="k">as</span> <span class="n">feat_ut</span>
-<span class="kn">from</span> <span class="nn">geocoding.config</span> <span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span> <span class="nn">geocoding.config</span> <span class="kn">import</span> <span class="n">Config</span>
 
 
 <div class="viewcode-block" id="get_normalized_coords"><a class="viewcode-back" href="../../features.html#geocoding.features.get_normalized_coords">[docs]</a><span class="k">def</span> <span class="nf">get_normalized_coords</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
@@ -173,7 +183,7 @@
 <span class="sd">            here (len(df), number_of_services * 2)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">col</span> <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">services</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;x_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;y_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">col</span> <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">Config</span><span class="o">.</span><span class="n">services</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;x_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;y_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="p">]</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">)))</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
@@ -181,20 +191,29 @@
     <span class="k">return</span> <span class="n">X</span></div>
 
 
-<span class="k">def</span> <span class="nf">get_polar_coords</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<div class="viewcode-block" id="get_polar_coords"><a class="viewcode-back" href="../../features.html#geocoding.features.get_polar_coords">[docs]</a><span class="k">def</span> <span class="nf">get_polar_coords</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a features array. Transforms cartesian coordinates to polar coordinates.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (pandas.DataFrame): Contains data points for which the features will be created</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        numpy.ndarray: The features array of shape (n_samples, n_features), here (len(df), number_of_services * 2)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;x_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;y_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">services</span>
+        <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;x_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;y_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">Config</span><span class="o">.</span><span class="n">services</span>
     <span class="p">]</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
         <span class="n">X</span><span class="p">[:,</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
         <span class="n">X</span><span class="p">[:,</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
-    <span class="k">return</span> <span class="n">X</span>
+    <span class="k">return</span> <span class="n">X</span></div>
 
 
 <div class="viewcode-block" id="get_pairwise_coords_distances"><a class="viewcode-back" href="../../features.html#geocoding.features.get_pairwise_coords_distances">[docs]</a><span class="k">def</span> <span class="nf">get_pairwise_coords_distances</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates a features array. For each address (each row), calculates the \</span>
+<span class="sd">    Creates a features array. For each address (each row), calculate the \</span>
 <span class="sd">    pairwise distances among coordinates suggested from different services.</span>
 
 <span class="sd">    Args:</span>
@@ -205,7 +224,7 @@
 <span class="sd">        numpy.ndarray: The features array of shape (n_samples, n_features), \</span>
 <span class="sd">            here (len(df), number_of_services * (number_of_services-1))</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
+    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">n_services</span><span class="o">*</span><span class="p">(</span><span class="n">n_services</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
     <span class="c1"># X = np.zeros((len(df), (n_services - 1) * 2))</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
@@ -220,7 +239,7 @@
             <span class="c1">#     if service not in config.baseline_service</span>
             <span class="c1"># ]</span>
             <span class="n">coords</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">coord</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">services</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">coord</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">Config</span><span class="o">.</span><span class="n">services</span>
             <span class="p">]</span>
             <span class="n">pairs</span> <span class="o">=</span> <span class="n">combinations</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
             <span class="c1"># pairs = [(x, y) for x in base_coord for y in coords]</span>
@@ -232,7 +251,7 @@
 
 <div class="viewcode-block" id="get_pairwise_points_distances"><a class="viewcode-back" href="../../features.html#geocoding.features.get_pairwise_points_distances">[docs]</a><span class="k">def</span> <span class="nf">get_pairwise_points_distances</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates a features array. For each address (each row), calculates the \</span>
+<span class="sd">    Creates a features array. For each address (each row), calculate the \</span>
 <span class="sd">    pairwise distances among points suggested from different services.</span>
 
 <span class="sd">    Args:</span>
@@ -243,7 +262,7 @@
 <span class="sd">        numpy.ndarray: The features array of shape (n_samples, n_features), \</span>
 <span class="sd">            here (len(df), (number_of_services * (number_of_services-1)) / 2)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
+    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="nb">int</span><span class="p">((</span><span class="n">n_services</span><span class="o">*</span><span class="p">(</span><span class="n">n_services</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span><span class="p">)))</span>
     <span class="c1"># X = np.zeros((len(df), n_services - 1))</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
@@ -256,7 +275,7 @@
         <span class="c1">#     for service in config.services if service not in config.baseline_service</span>
         <span class="c1"># ]</span>
         <span class="n">points</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lon_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lat_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">services</span>
+            <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lon_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lat_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">Config</span><span class="o">.</span><span class="n">services</span>
         <span class="p">]</span>
         <span class="n">pairs</span> <span class="o">=</span> <span class="n">combinations</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
         <span class="c1"># pairs = [(x, y) for x in base_point for y in points]</span>
@@ -270,7 +289,7 @@
 
 <div class="viewcode-block" id="get_centroid_coords_distances"><a class="viewcode-back" href="../../features.html#geocoding.features.get_centroid_coords_distances">[docs]</a><span class="k">def</span> <span class="nf">get_centroid_coords_distances</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates a features array. For each address (each row), calculates the \</span>
+<span class="sd">    Creates a features array. For each address (each row), calculate the \</span>
 <span class="sd">    distances between the corresponding centroid coords and the coords \</span>
 <span class="sd">    suggested from different services.</span>
 
@@ -282,13 +301,13 @@
 <span class="sd">        numpy.ndarray: The features array of shape (n_samples, n_features), \</span>
 <span class="sd">            here (len(df), number_of_services * 2)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
+    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="mi">2</span><span class="o">*</span><span class="n">n_services</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
         <span class="n">distances</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">]:</span>
             <span class="n">coords</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">coord</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
-                      <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">services</span><span class="p">]</span>
+                      <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">Config</span><span class="o">.</span><span class="n">services</span><span class="p">]</span>
             <span class="n">coords_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
             <span class="n">coords_distances</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">c</span><span class="o">-</span><span class="n">coords_mean</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">coords</span><span class="p">]</span>
             <span class="n">distances</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">coords_distances</span><span class="p">)</span>
@@ -298,7 +317,7 @@
 
 <div class="viewcode-block" id="get_centroid_points_distances"><a class="viewcode-back" href="../../features.html#geocoding.features.get_centroid_points_distances">[docs]</a><span class="k">def</span> <span class="nf">get_centroid_points_distances</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates a features array. For each address (each row), calculates the \</span>
+<span class="sd">    Creates a features array. For each address (each row), calculate the \</span>
 <span class="sd">    distances between the corresponding centroid and the points suggested \</span>
 <span class="sd">    from different services.</span>
 
@@ -310,12 +329,12 @@
 <span class="sd">        numpy.ndarray: The features array of shape (n_samples, n_features), \</span>
 <span class="sd">            here (len(df), number_of_services)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
+    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">n_services</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
         <span class="n">points</span> <span class="o">=</span> <span class="p">[(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lon_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>
                    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lat_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">])</span>
-                  <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">services</span><span class="p">]</span>
+                  <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">Config</span><span class="o">.</span><span class="n">services</span><span class="p">]</span>
         <span class="n">centroid</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">points</span><span class="p">)]</span>
         <span class="n">distances</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">Point</span><span class="p">(</span><span class="n">point</span><span class="p">)</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="n">centroid</span><span class="p">))</span>
@@ -327,7 +346,7 @@
 
 <div class="viewcode-block" id="get_mean_centroids_coords_distances"><a class="viewcode-back" href="../../features.html#geocoding.features.get_mean_centroids_coords_distances">[docs]</a><span class="k">def</span> <span class="nf">get_mean_centroids_coords_distances</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates a features array. For each address (each row), calculates the \</span>
+<span class="sd">    Creates a features array. For each address (each row), calculate the \</span>
 <span class="sd">    mean distances between the corresponding centroid coords and the coords \</span>
 <span class="sd">    suggested from different services.</span>
 
@@ -344,7 +363,7 @@
         <span class="n">distances</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">]:</span>
             <span class="n">coords</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">coord</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
-                      <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">services</span><span class="p">]</span>
+                      <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">Config</span><span class="o">.</span><span class="n">services</span><span class="p">]</span>
             <span class="n">coords_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
             <span class="n">coords_distances</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">c</span><span class="o">-</span><span class="n">coords_mean</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">coords</span><span class="p">]</span>
             <span class="n">distances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">coords_distances</span><span class="p">))</span>
@@ -354,7 +373,7 @@
 
 <div class="viewcode-block" id="get_mean_centroids_points_distances"><a class="viewcode-back" href="../../features.html#geocoding.features.get_mean_centroids_points_distances">[docs]</a><span class="k">def</span> <span class="nf">get_mean_centroids_points_distances</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates a features array. For each address (each row), calculates the \</span>
+<span class="sd">    Creates a features array. For each address (each row), calculate the \</span>
 <span class="sd">    mean distance between the corresponding centroid and the points \</span>
 <span class="sd">    suggested from different services.</span>
 
@@ -370,7 +389,7 @@
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
         <span class="n">points</span> <span class="o">=</span> <span class="p">[(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lon_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>
                    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lat_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">])</span>
-                  <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">services</span><span class="p">]</span>
+                  <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">Config</span><span class="o">.</span><span class="n">services</span><span class="p">]</span>
         <span class="n">centroid</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">points</span><span class="p">)]</span>
         <span class="n">distances</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">Point</span><span class="p">(</span><span class="n">point</span><span class="p">)</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="n">centroid</span><span class="p">))</span>
@@ -383,7 +402,7 @@
 <div class="viewcode-block" id="get_nearest_street_distance_per_service"><a class="viewcode-back" href="../../features.html#geocoding.features.get_nearest_street_distance_per_service">[docs]</a><span class="k">def</span> <span class="nf">get_nearest_street_distance_per_service</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">street_gdf</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a features array. For each address (each row) and for each \</span>
-<span class="sd">    service, calculates the distance to the nearest street.</span>
+<span class="sd">    service, calculate the distance to the nearest street.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        df (pandas.DataFrame): Contains data points for which the features \</span>
@@ -396,12 +415,12 @@
 <span class="sd">            here (len(df), number_of_services)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">street_index</span> <span class="o">=</span> <span class="n">street_gdf</span><span class="o">.</span><span class="n">sindex</span>
-    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
+    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">n_services</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
         <span class="n">points</span> <span class="o">=</span> <span class="p">[(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lon_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>
                    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lat_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">])</span>
-                  <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">services</span><span class="p">]</span>
+                  <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">Config</span><span class="o">.</span><span class="n">services</span><span class="p">]</span>
         <span class="n">distances</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">Point</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">street_gdf</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="s1">&#39;geometry&#39;</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">points</span>
@@ -415,24 +434,25 @@
 <div class="viewcode-block" id="get_common_nearest_street_distance"><a class="viewcode-back" href="../../features.html#geocoding.features.get_common_nearest_street_distance">[docs]</a><span class="k">def</span> <span class="nf">get_common_nearest_street_distance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">street_gdf</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a features array. For each address (each row) and for each \</span>
-<span class="sd">    service, calculates the distance to the nearest street.</span>
+<span class="sd">    service, calculate the distance to the nearest street that is common to all geocoding sources.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        df (pandas.DataFrame): Contains data points for which the features \</span>
 <span class="sd">            will be created</span>
 <span class="sd">        street_gdf (geopandas.GeoDataFrame): Contains all streets extracted \</span>
 <span class="sd">            from OSM, along with their geometries</span>
+<span class="sd">        k (int): The number of closest streets to fetch per geocoding source.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        numpy.ndarray: The features array of shape (n_samples, n_features), \</span>
 <span class="sd">            here (len(df), number_of_services)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">street_index</span> <span class="o">=</span> <span class="n">street_gdf</span><span class="o">.</span><span class="n">sindex</span>
-    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
+    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">n_services</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
         <span class="n">points</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lon_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lat_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">services</span>
+            <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lon_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lat_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">Config</span><span class="o">.</span><span class="n">services</span>
         <span class="p">]</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">[</span><span class="n">street_gdf</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">street_index</span><span class="o">.</span><span class="n">nearest</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">k</span><span class="p">))]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">points</span>
@@ -486,13 +506,15 @@
 <div class="viewcode-block" id="get_intersects_on_common_nearest_street"><a class="viewcode-back" href="../../features.html#geocoding.features.get_intersects_on_common_nearest_street">[docs]</a><span class="k">def</span> <span class="nf">get_intersects_on_common_nearest_street</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">street_gdf</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a features array. For each address (each row) and for each \</span>
-<span class="sd">    service, calculates the distance to the nearest street.</span>
+<span class="sd">    service, identify the nearest street that is common to all geocoding sources and return `True` if it intersects or</span>
+<span class="sd">    touches it or `False` otherwise.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        df (pandas.DataFrame): Contains data points for which the features \</span>
 <span class="sd">            will be created</span>
 <span class="sd">        street_gdf (geopandas.GeoDataFrame): Contains all streets extracted \</span>
 <span class="sd">            from OSM, along with their geometries</span>
+<span class="sd">        k (int): The number of closest streets to fetch per geocoding source.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        numpy.ndarray: The features array of shape (n_samples, n_features), \</span>
@@ -500,11 +522,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">buffer_size</span> <span class="o">=</span> <span class="mf">1.5</span>
     <span class="n">street_index</span> <span class="o">=</span> <span class="n">street_gdf</span><span class="o">.</span><span class="n">sindex</span>
-    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
+    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">n_services</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
         <span class="n">points</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lon_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lat_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">services</span>
+            <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lon_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lat_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">Config</span><span class="o">.</span><span class="n">services</span>
         <span class="p">]</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">[</span><span class="n">street_gdf</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">street_index</span><span class="o">.</span><span class="n">nearest</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">k</span><span class="p">))]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">points</span>
@@ -569,9 +591,7 @@
 
 <div class="viewcode-block" id="get_points_area"><a class="viewcode-back" href="../../features.html#geocoding.features.get_points_area">[docs]</a><span class="k">def</span> <span class="nf">get_points_area</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates a features array. For each address (each row), calculates the \</span>
-<span class="sd">    mean distance between the corresponding centroid and the points \</span>
-<span class="sd">    suggested from different services.</span>
+<span class="sd">    Creates a features array. Calculate a polygon from the coordinates of all geocoding sources.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        df (pandas.DataFrame): Contains data points for which the features \</span>
@@ -584,7 +604,7 @@
     <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
         <span class="n">poly</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">([</span>
-            <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lon_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lat_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">services</span>
+            <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lon_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lat_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">Config</span><span class="o">.</span><span class="n">services</span>
         <span class="p">])</span>
 
         <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">]</span> <span class="o">=</span> <span class="n">feat_ut</span><span class="o">.</span><span class="n">filter2</span><span class="p">([</span><span class="n">poly</span><span class="o">.</span><span class="n">area</span><span class="p">])</span>
@@ -609,12 +629,12 @@
 <span class="sd">            here (len(df), number_of_services)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">street_index</span> <span class="o">=</span> <span class="n">street_gdf</span><span class="o">.</span><span class="n">sindex</span>
-    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
+    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">n_services</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
         <span class="n">points</span> <span class="o">=</span> <span class="p">[(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lon_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>
                    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lat_</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">])</span>
-                  <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">services</span><span class="p">]</span>
+                  <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">Config</span><span class="o">.</span><span class="n">services</span><span class="p">]</span>
         <span class="n">centroid</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">points</span><span class="p">)]</span>
         <span class="n">candidates</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">street_index</span><span class="o">.</span><span class="n">nearest</span><span class="p">(</span><span class="n">centroid</span><span class="p">))</span>
         <span class="n">nearest</span> <span class="o">=</span> <span class="n">candidates</span><span class="p">[</span>
@@ -686,7 +706,7 @@
 
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.Navigation.enable(false);
       });
   </script>
 

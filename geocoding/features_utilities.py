@@ -8,7 +8,7 @@ import os
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler, RobustScaler
 
 from geocoding import features as feats, osm_utilities as osm_ut
-from geocoding.config import config
+from geocoding.config import Config
 
 
 features_getter_map = {
@@ -58,18 +58,18 @@ def load_points_df(points_fpath):
         pandas.DataFrame
     """
     df = pd.read_csv(points_fpath)
-    for service in config.services:
+    for service in Config.services:
         # service_df = df[[f'x_{service}', f'y_{service}']]
         # service_df['geometry'] = service_df.apply(lambda x: Point(x[f'x_{service}'], x[f'y_{service}']), axis=1)
         service_gdf = gpd.GeoDataFrame(
             df[[f'x_{service}', f'y_{service}']],
             geometry=gpd.points_from_xy(df[f'x_{service}'], df[f'y_{service}']),
-            crs=f'epsg:{config.source_crs}'
+            crs=f'epsg:{Config.source_crs}'
         )
         # service_gdf = gpd.GeoDataFrame(service_df, geometry='geometry', crs=f'epsg:{config.source_crs}')
         # print(service_df.geometry.crs, f'epsg:{config.source_crs}')
         # service_gdf.crs = f'epsg:{config.source_crs}'
-        service_gdf = service_gdf.to_crs(f'epsg:{config.target_crs}')
+        service_gdf = service_gdf.to_crs(f'epsg:{Config.target_crs}')
         df[f'lon_{service}'] = service_gdf.apply(lambda x: x.geometry.x, axis=1)
         df[f'lat_{service}'] = service_gdf.apply(lambda x: x.geometry.y, axis=1)
     return df
@@ -112,9 +112,9 @@ def load_street_gdf(street_fpath):
     """
     street_df = pd.read_csv(street_fpath)
     street_df['geometry'] = street_df['geometry'].apply(lambda x: loads(x))
-    street_gdf = gpd.GeoDataFrame(street_df, geometry='geometry', crs=f'epsg:{config.source_crs}')
+    street_gdf = gpd.GeoDataFrame(street_df, geometry='geometry', crs=f'epsg:{Config.source_crs}')
     # street_gdf.crs = f'epsg:{config.source_crs}'
-    street_gdf = street_gdf.to_crs(f'epsg:{config.target_crs}')
+    street_gdf = street_gdf.to_crs(f'epsg:{Config.target_crs}')
     return street_gdf
 
 
@@ -153,7 +153,7 @@ def create_train_features(df, in_path, out_path, features=None):
     Returns:
         numpy.ndarray: The train features array
     """
-    included_features = config.included_features if features is None else features
+    included_features = Config.included_features if features is None else features
 
     required_args = set([
         arg for f in included_features
@@ -169,7 +169,7 @@ def create_train_features(df, in_path, out_path, features=None):
         cols.extend(get_feature_col_names(f, X.shape[-1]))
         nonScaledXmin.append(np.amin(X, axis=0))
         nonScaledXmax.append(np.amax(X, axis=0))
-        if f in config.normalized_features:
+        if f in Config.normalized_features:
             X, scaler = normalize_features(X)
             pickle.dump(scaler, open(os.path.join(out_path, 'pickled_objects', f'{f}_scaler.pkl'), 'wb'))
         np.save(out_path + f'/features/{f}_train.npy', X)
@@ -202,7 +202,7 @@ def create_test_features(df, in_path, scalers_path, out_path, features=None):
     Returns:
         numpy.ndarray: The test features array
     """
-    included_features = config.included_features if features is None else features
+    included_features = Config.included_features if features is None else features
 
     required_args = set([
         arg for f in included_features
@@ -213,7 +213,7 @@ def create_test_features(df, in_path, scalers_path, out_path, features=None):
     for f in included_features:
         X = getattr(feats, features_getter_map[f])(
             *[args[arg] for arg in features_getter_args_map[f]])
-        if f in config.normalized_features:
+        if f in Config.normalized_features:
             scaler = pickle.load(open(os.path.join(scalers_path, f'{f}_scaler.pkl'), 'rb'))
             X, _ = normalize_features(X, scaler)
         np.save(os.path.join(out_path, f'features/{f}_test.npy'), X)
@@ -258,7 +258,7 @@ def filter(values):
         list: Contains the filtered distances
     """
     values_ = [
-        config.distance_thr if v > config.distance_thr else round(v, 2)
+        Config.distance_thr if v > Config.distance_thr else round(v, 2)
         for v in values
     ]
     return values_
@@ -276,7 +276,7 @@ def filter2(values):
         list: Contains the filtered distances
     """
     values_ = [
-        config.distance_thr if v > config.square_thr else round(v, 2)
+        Config.distance_thr if v > Config.square_thr else round(v, 2)
         for v in values
     ]
     return values_
@@ -336,7 +336,7 @@ def get_points(df):
     Returns:
         numpy.ndarray
     """
-    points = [df[[f'x_{service}', f'y_{service}']].to_numpy() for service in config.services]
+    points = [df[[f'x_{service}', f'y_{service}']].to_numpy() for service in Config.services]
     points = np.vstack(points)
 
     return points
@@ -356,7 +356,7 @@ def get_required_external_files(df, path, features=None):
     Returns:
         None
     """
-    included_features = config.included_features if features is None else features
+    included_features = Config.included_features if features is None else features
     required_args = set([
         arg for f in included_features
         for arg in features_getter_args_map[f]

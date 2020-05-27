@@ -14,16 +14,15 @@ API Reference
 View the auto-generated API documentation for information on a specific function, class, or method.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
    :name: mastertoc
 
    config
    writers
+   utilities
    features
-   osm_utilities
-   features_utilities
-   clf_utilities
+   pipeline
 
 Indices and tables
 ==================

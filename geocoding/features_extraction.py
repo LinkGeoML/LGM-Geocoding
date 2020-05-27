@@ -9,7 +9,7 @@ import time
 from sklearn.model_selection import StratifiedKFold
 
 from geocoding import features_utilities as feat_ut, writers as wrtrs
-from geocoding.config import config
+from geocoding.config import Config
 
 
 def main():
@@ -29,7 +29,7 @@ def main():
 
     # Create folder to store experiment
     date_time = datetime.datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
-    exp_path = os.path.join(config.base_dir, 'experiments', f'exp_{date_time}')
+    exp_path = os.path.join(Config.base_dir, 'experiments', f'exp_{date_time}')
     os.makedirs(exp_path)
 
     # Create folder to store feature extraction results
@@ -38,7 +38,7 @@ def main():
     copyfile('./config.py', os.path.join(exp_path, 'config.py'))
 
     # Load dataset into dataframe
-    df = feat_ut.load_points_df(os.path.join(config.base_dir, args['fpath']))
+    df = feat_ut.load_points_df(os.path.join(Config.base_dir, args['fpath']))
     # Shuffle dataframe
     df = df.sample(frac=1).reset_index(drop=True)
     # Encode labels
@@ -50,7 +50,7 @@ def main():
     feat_ut.get_required_external_files(df, results_path)
 
     addresses, targets = list(df['address']), list(df['target'])
-    skf = StratifiedKFold(n_splits=config.n_folds)
+    skf = StratifiedKFold(n_splits=Config.n_folds)
     fold = 1
 
     for train_idxs, test_idxs in skf.split(addresses, targets):

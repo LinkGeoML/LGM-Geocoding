@@ -4,7 +4,7 @@ from shapely.geometry import Point, asLineString, Polygon
 import re
 
 from geocoding import features_utilities as feat_ut
-from geocoding.config import config
+from geocoding.config import Config
 
 
 def get_normalized_coords(df):
@@ -21,7 +21,7 @@ def get_normalized_coords(df):
             here (len(df), number_of_services * 2)
     """
     cols = [
-        col for service in config.services for col in (f'x_{service}', f'y_{service}')
+        col for service in Config.services for col in (f'x_{service}', f'y_{service}')
     ]
     X = np.zeros((len(df), len(cols)))
     for i, col in enumerate(cols):
@@ -30,8 +30,17 @@ def get_normalized_coords(df):
 
 
 def get_polar_coords(df):
+    """
+    Creates a features array. Transforms cartesian coordinates to polar coordinates.
+
+    Args:
+        df (pandas.DataFrame): Contains data points for which the features will be created
+
+    Returns:
+        numpy.ndarray: The features array of shape (n_samples, n_features), here (len(df), number_of_services * 2)
+    """
     cols = [
-        (f'x_{service}', f'y_{service}') for service in config.services
+        (f'x_{service}', f'y_{service}') for service in Config.services
     ]
     X = np.zeros((len(df), len(cols)*2))
     for i, col in enumerate(cols):
@@ -42,7 +51,7 @@ def get_polar_coords(df):
 
 def get_pairwise_coords_distances(df):
     """
-    Creates a features array. For each address (each row), calculates the \
+    Creates a features array. For each address (each row), calculate the \
     pairwise distances among coordinates suggested from different services.
 
     Args:
@@ -53,7 +62,7 @@ def get_pairwise_coords_distances(df):
         numpy.ndarray: The features array of shape (n_samples, n_features), \
             here (len(df), number_of_services * (number_of_services-1))
     """
-    n_services = len(config.services)
+    n_services = len(Config.services)
     X = np.zeros((len(df), n_services*(n_services-1)))
     # X = np.zeros((len(df), (n_services - 1) * 2))
     for i in df.itertuples():
@@ -68,7 +77,7 @@ def get_pairwise_coords_distances(df):
             #     if service not in config.baseline_service
             # ]
             coords = [
-                df.loc[i.Index, f'{coord}_{service}'] for service in config.services
+                df.loc[i.Index, f'{coord}_{service}'] for service in Config.services
             ]
             pairs = combinations(coords, 2)
             # pairs = [(x, y) for x in base_coord for y in coords]
@@ -80,7 +89,7 @@ def get_pairwise_coords_distances(df):
 
 def get_pairwise_points_distances(df):
     """
-    Creates a features array. For each address (each row), calculates the \
+    Creates a features array. For each address (each row), calculate the \
     pairwise distances among points suggested from different services.
 
     Args:
@@ -91,7 +100,7 @@ def get_pairwise_points_distances(df):
         numpy.ndarray: The features array of shape (n_samples, n_features), \
             here (len(df), (number_of_services * (number_of_services-1)) / 2)
     """
-    n_services = len(config.services)
+    n_services = len(Config.services)
     X = np.zeros((len(df), int((n_services*(n_services-1))/2)))
     # X = np.zeros((len(df), n_services - 1))
     for i in df.itertuples():
@@ -104,7 +113,7 @@ def get_pairwise_points_distances(df):
         #     for service in config.services if service not in config.baseline_service
         # ]
         points = [
-            (df.loc[i.Index, f'lon_{service}'], df.loc[i.Index, f'lat_{service}']) for service in config.services
+            (df.loc[i.Index, f'lon_{service}'], df.loc[i.Index, f'lat_{service}']) for service in Config.services
         ]
         pairs = combinations(points, 2)
         # pairs = [(x, y) for x in base_point for y in points]
@@ -118,7 +127,7 @@ def get_pairwise_points_distances(df):
 
 def get_centroid_coords_distances(df):
     """
-    Creates a features array. For each address (each row), calculates the \
+    Creates a features array. For each address (each row), calculate the \
     distances between the corresponding centroid coords and the coords \
     suggested from different services.
 
@@ -130,13 +139,13 @@ def get_centroid_coords_distances(df):
         numpy.ndarray: The features array of shape (n_samples, n_features), \
             here (len(df), number_of_services * 2)
     """
-    n_services = len(config.services)
+    n_services = len(Config.services)
     X = np.zeros((len(df), 2*n_services))
     for i in df.itertuples():
         distances = []
         for coord in ['lon', 'lat']:
             coords = [df.loc[i.Index, f'{coord}_{service}']
-                      for service in config.services]
+                      for service in Config.services]
             coords_mean = np.mean(coords)
             coords_distances = [np.abs(c-coords_mean) for c in coords]
             distances.extend(coords_distances)
@@ -146,7 +155,7 @@ def get_centroid_coords_distances(df):
 
 def get_centroid_points_distances(df):
     """
-    Creates a features array. For each address (each row), calculates the \
+    Creates a features array. For each address (each row), calculate the \
     distances between the corresponding centroid and the points suggested \
     from different services.
 
@@ -158,12 +167,12 @@ def get_centroid_points_distances(df):
         numpy.ndarray: The features array of shape (n_samples, n_features), \
             here (len(df), number_of_services)
     """
-    n_services = len(config.services)
+    n_services = len(Config.services)
     X = np.zeros((len(df), n_services))
     for i in df.itertuples():
         points = [(df.loc[i.Index, f'lon_{service}'],
                    df.loc[i.Index, f'lat_{service}'])
-                  for service in config.services]
+                  for service in Config.services]
         centroid = [sum(x)/len(x) for x in zip(*points)]
         distances = [
             Point(point).distance(Point(centroid))
@@ -175,7 +184,7 @@ def get_centroid_points_distances(df):
 
 def get_mean_centroids_coords_distances(df):
     """
-    Creates a features array. For each address (each row), calculates the \
+    Creates a features array. For each address (each row), calculate the \
     mean distances between the corresponding centroid coords and the coords \
     suggested from different services.
 
@@ -192,7 +201,7 @@ def get_mean_centroids_coords_distances(df):
         distances = []
         for coord in ['lon', 'lat']:
             coords = [df.loc[i.Index, f'{coord}_{service}']
-                      for service in config.services]
+                      for service in Config.services]
             coords_mean = np.mean(coords)
             coords_distances = [np.abs(c-coords_mean) for c in coords]
             distances.append(np.mean(coords_distances))
@@ -202,7 +211,7 @@ def get_mean_centroids_coords_distances(df):
 
 def get_mean_centroids_points_distances(df):
     """
-    Creates a features array. For each address (each row), calculates the \
+    Creates a features array. For each address (each row), calculate the \
     mean distance between the corresponding centroid and the points \
     suggested from different services.
 
@@ -218,7 +227,7 @@ def get_mean_centroids_points_distances(df):
     for i in df.itertuples():
         points = [(df.loc[i.Index, f'lon_{service}'],
                    df.loc[i.Index, f'lat_{service}'])
-                  for service in config.services]
+                  for service in Config.services]
         centroid = [sum(x)/len(x) for x in zip(*points)]
         distances = [
             Point(point).distance(Point(centroid))
@@ -231,7 +240,7 @@ def get_mean_centroids_points_distances(df):
 def get_nearest_street_distance_per_service(df, street_gdf):
     """
     Creates a features array. For each address (each row) and for each \
-    service, calculates the distance to the nearest street.
+    service, calculate the distance to the nearest street.
 
     Args:
         df (pandas.DataFrame): Contains data points for which the features \
@@ -244,12 +253,12 @@ def get_nearest_street_distance_per_service(df, street_gdf):
             here (len(df), number_of_services)
     """
     street_index = street_gdf.sindex
-    n_services = len(config.services)
+    n_services = len(Config.services)
     X = np.zeros((len(df), n_services))
     for i in df.itertuples():
         points = [(df.loc[i.Index, f'lon_{service}'],
                    df.loc[i.Index, f'lat_{service}'])
-                  for service in config.services]
+                  for service in Config.services]
         distances = [
             Point(p).distance(street_gdf.iloc[c]['geometry'])
             for p in points
@@ -263,24 +272,25 @@ def get_nearest_street_distance_per_service(df, street_gdf):
 def get_common_nearest_street_distance(df, street_gdf, k=3):
     """
     Creates a features array. For each address (each row) and for each \
-    service, calculates the distance to the nearest street.
+    service, calculate the distance to the nearest street that is common to all geocoding sources.
 
     Args:
         df (pandas.DataFrame): Contains data points for which the features \
             will be created
         street_gdf (geopandas.GeoDataFrame): Contains all streets extracted \
             from OSM, along with their geometries
+        k (int): The number of closest streets to fetch per geocoding source.
 
     Returns:
         numpy.ndarray: The features array of shape (n_samples, n_features), \
             here (len(df), number_of_services)
     """
     street_index = street_gdf.sindex
-    n_services = len(config.services)
+    n_services = len(Config.services)
     X = np.zeros((len(df), n_services))
     for i in df.itertuples():
         points = [
-            (df.loc[i.Index, f'lon_{service}'], df.loc[i.Index, f'lat_{service}']) for service in config.services
+            (df.loc[i.Index, f'lon_{service}'], df.loc[i.Index, f'lat_{service}']) for service in Config.services
         ]
         lines = [
             [street_gdf.iloc[c]['geometry'] for c in list(street_index.nearest(p, k))] for p in points
@@ -334,13 +344,15 @@ def get_common_nearest_street_distance(df, street_gdf, k=3):
 def get_intersects_on_common_nearest_street(df, street_gdf, k=3):
     """
     Creates a features array. For each address (each row) and for each \
-    service, calculates the distance to the nearest street.
+    service, identify the nearest street that is common to all geocoding sources and return `True` if it intersects or
+    touches it or `False` otherwise.
 
     Args:
         df (pandas.DataFrame): Contains data points for which the features \
             will be created
         street_gdf (geopandas.GeoDataFrame): Contains all streets extracted \
             from OSM, along with their geometries
+        k (int): The number of closest streets to fetch per geocoding source.
 
     Returns:
         numpy.ndarray: The features array of shape (n_samples, n_features), \
@@ -348,11 +360,11 @@ def get_intersects_on_common_nearest_street(df, street_gdf, k=3):
     """
     buffer_size = 1.5
     street_index = street_gdf.sindex
-    n_services = len(config.services)
+    n_services = len(Config.services)
     X = np.zeros((len(df), n_services))
     for i in df.itertuples():
         points = [
-            (df.loc[i.Index, f'lon_{service}'], df.loc[i.Index, f'lat_{service}']) for service in config.services
+            (df.loc[i.Index, f'lon_{service}'], df.loc[i.Index, f'lat_{service}']) for service in Config.services
         ]
         lines = [
             [street_gdf.iloc[c]['geometry'] for c in list(street_index.nearest(p, k))] for p in points
@@ -417,9 +429,7 @@ def get_intersects_on_common_nearest_street(df, street_gdf, k=3):
 
 def get_points_area(df):
     """
-    Creates a features array. For each address (each row), calculates the \
-    mean distance between the corresponding centroid and the points \
-    suggested from different services.
+    Creates a features array. Calculate a polygon from the coordinates of all geocoding sources.
 
     Args:
         df (pandas.DataFrame): Contains data points for which the features \
@@ -432,7 +442,7 @@ def get_points_area(df):
     X = np.zeros((len(df), 1))
     for i in df.itertuples():
         poly = Polygon([
-            (df.loc[i.Index, f'lon_{service}'], df.loc[i.Index, f'lat_{service}']) for service in config.services
+            (df.loc[i.Index, f'lon_{service}'], df.loc[i.Index, f'lat_{service}']) for service in Config.services
         ])
 
         X[i.Index] = feat_ut.filter2([poly.area])
@@ -457,12 +467,12 @@ def get_nearest_street_distance_by_centroid(df, street_gdf):
             here (len(df), number_of_services)
     """
     street_index = street_gdf.sindex
-    n_services = len(config.services)
+    n_services = len(Config.services)
     X = np.zeros((len(df), n_services))
     for i in df.itertuples():
         points = [(df.loc[i.Index, f'lon_{service}'],
                    df.loc[i.Index, f'lat_{service}'])
-                  for service in config.services]
+                  for service in Config.services]
         centroid = [sum(x)/len(x) for x in zip(*points)]
         candidates = list(street_index.nearest(centroid))
         nearest = candidates[

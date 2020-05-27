@@ -82,10 +82,20 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../config.html">config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../writers.html">writers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utilities.html">utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../utilities.html#related-to-classifiers">related to classifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../utilities.html#related-to-osm">related to OSM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../utilities.html#related-to-features">related to features</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../osm_utilities.html">OSM utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../features_utilities.html">features utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../clf_utilities.html">classifier utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">pipeline_processes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#algorithm-selection">algorithm selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#model-creation">model creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#model-training">model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipeline.html#model-deployment">model deployment</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -155,7 +165,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">geocoding</span> <span class="kn">import</span> <span class="n">clf_utilities</span> <span class="k">as</span> <span class="n">clf_ut</span>
-<span class="kn">from</span> <span class="nn">geocoding.config</span> <span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span> <span class="nn">geocoding.config</span> <span class="kn">import</span> <span class="n">Config</span>
 
 
 <div class="viewcode-block" id="write_feats_space"><a class="viewcode-back" href="../../writers.html#geocoding.writers.write_feats_space">[docs]</a><span class="k">def</span> <span class="nf">write_feats_space</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
@@ -171,8 +181,8 @@
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
         <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;feature&#39;</span><span class="p">,</span> <span class="s1">&#39;normalized&#39;</span><span class="p">])</span>
-        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">included_features</span><span class="p">:</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">f</span><span class="p">,</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">normalized_features</span> <span class="k">else</span> <span class="kc">False</span><span class="p">])</span></div>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">Config</span><span class="o">.</span><span class="n">included_features</span><span class="p">:</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">f</span><span class="p">,</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">Config</span><span class="o">.</span><span class="n">normalized_features</span> <span class="k">else</span> <span class="kc">False</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="write_clf_space"><a class="viewcode-back" href="../../writers.html#geocoding.writers.write_clf_space">[docs]</a><span class="k">def</span> <span class="nf">write_clf_space</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">clf_name</span><span class="p">,</span> <span class="n">best_params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -240,7 +250,7 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
+    <span class="n">n_services</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
         <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;address&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;predictions&#39;</span><span class="p">])</span>
@@ -287,7 +297,7 @@
 
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.Navigation.enable(false);
       });
   </script>
 

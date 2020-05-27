@@ -83,10 +83,20 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="config.html">config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="writers.html">writers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html#related-to-classifiers">related to classifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html#related-to-osm">related to OSM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html#related-to-features">related to features</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="osm_utilities.html">OSM utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="features_utilities.html">features utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="clf_utilities.html">classifier utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html">pipeline_processes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html#algorithm-selection">algorithm selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html#model-creation">model creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html#model-training">model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html#model-deployment">model deployment</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -177,7 +187,7 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="config.html#geocoding.config.config.baseline_service">baseline_service (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.baseline_service">baseline_service (geocoding.config.Config attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -185,19 +195,19 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="osm_utilities.html#geocoding.osm_utilities.cluster_points">cluster_points() (in module geocoding.osm_utilities)</a>
+      <li><a href="utilities.html#geocoding.osm_utilities.cluster_points">cluster_points() (in module geocoding.osm_utilities)</a>
 </li>
-      <li><a href="config.html#geocoding.config.config.clusters_pct">clusters_pct (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.clusters_pct">clusters_pct (geocoding.config.Config attribute)</a>
 </li>
-      <li><a href="config.html#geocoding.config.config">config (class in geocoding.config)</a>
+      <li><a href="config.html#geocoding.config.Config">Config (class in geocoding.config)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="clf_utilities.html#geocoding.clf_utilities.create_clf_params_product_generator">create_clf_params_product_generator() (in module geocoding.clf_utilities)</a>
+      <li><a href="utilities.html#geocoding.clf_utilities.create_clf_params_product_generator">create_clf_params_product_generator() (in module geocoding.clf_utilities)</a>
 </li>
-      <li><a href="features_utilities.html#geocoding.features_utilities.create_test_features">create_test_features() (in module geocoding.features_utilities)</a>
+      <li><a href="utilities.html#geocoding.features_utilities.create_test_features">create_test_features() (in module geocoding.features_utilities)</a>
 </li>
-      <li><a href="features_utilities.html#geocoding.features_utilities.create_train_features">create_train_features() (in module geocoding.features_utilities)</a>
+      <li><a href="utilities.html#geocoding.features_utilities.create_train_features">create_train_features() (in module geocoding.features_utilities)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -205,13 +215,13 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="config.html#geocoding.config.config.distance_thr">distance_thr (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.distance_thr">distance_thr (geocoding.config.Config attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="osm_utilities.html#geocoding.osm_utilities.download_cell">download_cell() (in module geocoding.osm_utilities)</a>
+      <li><a href="utilities.html#geocoding.osm_utilities.download_cell">download_cell() (in module geocoding.osm_utilities)</a>
 </li>
-      <li><a href="config.html#geocoding.config.config.DT_hparams">DT_hparams (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.DT_hparams">DT_hparams (geocoding.config.Config attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -219,17 +229,17 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="features_utilities.html#geocoding.features_utilities.encode_labels">encode_labels() (in module geocoding.features_utilities)</a>
+      <li><a href="utilities.html#geocoding.features_utilities.encode_labels">encode_labels() (in module geocoding.features_utilities)</a>
 </li>
-      <li><a href="config.html#geocoding.config.config.ET_hparams">ET_hparams (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.ET_hparams">ET_hparams (geocoding.config.Config attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="clf_utilities.html#geocoding.clf_utilities.evaluate">evaluate() (in module geocoding.clf_utilities)</a>
+      <li><a href="utilities.html#geocoding.clf_utilities.evaluate">evaluate() (in module geocoding.clf_utilities)</a>
 </li>
-      <li><a href="config.html#geocoding.config.config.experiments_path">experiments_path (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.experiments_path">experiments_path (geocoding.config.Config attribute)</a>
 </li>
-      <li><a href="osm_utilities.html#geocoding.osm_utilities.extract_streets">extract_streets() (in module geocoding.osm_utilities)</a>
+      <li><a href="utilities.html#geocoding.osm_utilities.extract_streets">extract_streets() (in module geocoding.osm_utilities)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -237,11 +247,11 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="features_utilities.html#geocoding.features_utilities.filter">filter() (in module geocoding.features_utilities)</a>
+      <li><a href="utilities.html#geocoding.features_utilities.filter">filter() (in module geocoding.features_utilities)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="features_utilities.html#geocoding.features_utilities.filter2">filter2() (in module geocoding.features_utilities)</a>
+      <li><a href="utilities.html#geocoding.features_utilities.filter2">filter2() (in module geocoding.features_utilities)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -250,10 +260,17 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
+    geocoding.algorithm_selection
+
+      <ul>
+        <li><a href="pipeline.html#module-geocoding.algorithm_selection">module</a>
+</li>
+      </ul></li>
+      <li>
     geocoding.clf_utilities
 
       <ul>
-        <li><a href="clf_utilities.html#module-geocoding.clf_utilities">module</a>
+        <li><a href="utilities.html#module-geocoding.clf_utilities">module</a>
 </li>
       </ul></li>
       <li>
@@ -274,14 +291,35 @@
     geocoding.features_utilities
 
       <ul>
-        <li><a href="features_utilities.html#module-geocoding.features_utilities">module</a>
+        <li><a href="utilities.html#module-geocoding.features_utilities">module</a>
+</li>
+      </ul></li>
+      <li>
+    geocoding.model_deployment
+
+      <ul>
+        <li><a href="pipeline.html#module-geocoding.model_deployment">module</a>
+</li>
+      </ul></li>
+      <li>
+    geocoding.model_selection
+
+      <ul>
+        <li><a href="pipeline.html#module-geocoding.model_selection">module</a>
+</li>
+      </ul></li>
+      <li>
+    geocoding.model_training
+
+      <ul>
+        <li><a href="pipeline.html#module-geocoding.model_training">module</a>
 </li>
       </ul></li>
       <li>
     geocoding.osm_utilities
 
       <ul>
-        <li><a href="osm_utilities.html#module-geocoding.osm_utilities">module</a>
+        <li><a href="utilities.html#module-geocoding.osm_utilities">module</a>
 </li>
       </ul></li>
       <li>
@@ -291,13 +329,13 @@
         <li><a href="writers.html#module-geocoding.writers">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="features.html#geocoding.features.get_centroid_coords_distances">get_centroid_coords_distances() (in module geocoding.features)</a>
 </li>
       <li><a href="features.html#geocoding.features.get_centroid_points_distances">get_centroid_points_distances() (in module geocoding.features)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="osm_utilities.html#geocoding.osm_utilities.get_clusters_bboxes">get_clusters_bboxes() (in module geocoding.osm_utilities)</a>
+      <li><a href="utilities.html#geocoding.osm_utilities.get_clusters_bboxes">get_clusters_bboxes() (in module geocoding.osm_utilities)</a>
 </li>
       <li><a href="features.html#geocoding.features.get_common_nearest_street_distance">get_common_nearest_street_distance() (in module geocoding.features)</a>
 </li>
@@ -317,13 +355,15 @@
 </li>
       <li><a href="features.html#geocoding.features.get_pairwise_points_distances">get_pairwise_points_distances() (in module geocoding.features)</a>
 </li>
-      <li><a href="features_utilities.html#geocoding.features_utilities.get_points">get_points() (in module geocoding.features_utilities)</a>
+      <li><a href="utilities.html#geocoding.features_utilities.get_points">get_points() (in module geocoding.features_utilities)</a>
 </li>
       <li><a href="features.html#geocoding.features.get_points_area">get_points_area() (in module geocoding.features)</a>
 </li>
-      <li><a href="clf_utilities.html#geocoding.clf_utilities.get_predictions">get_predictions() (in module geocoding.clf_utilities)</a>
+      <li><a href="features.html#geocoding.features.get_polar_coords">get_polar_coords() (in module geocoding.features)</a>
 </li>
-      <li><a href="features_utilities.html#geocoding.features_utilities.get_required_external_files">get_required_external_files() (in module geocoding.features_utilities)</a>
+      <li><a href="utilities.html#geocoding.clf_utilities.get_predictions">get_predictions() (in module geocoding.clf_utilities)</a>
+</li>
+      <li><a href="utilities.html#geocoding.features_utilities.get_required_external_files">get_required_external_files() (in module geocoding.features_utilities)</a>
 </li>
       <li><a href="features.html#geocoding.features.get_zip_codes">get_zip_codes() (in module geocoding.features)</a>
 </li>
@@ -333,7 +373,7 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="config.html#geocoding.config.config.hyperparams_search_method">hyperparams_search_method (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.hyperparams_search_method">hyperparams_search_method (geocoding.config.Config attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -341,15 +381,15 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="config.html#geocoding.config.config.included_classifiers">included_classifiers (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.included_classifiers">included_classifiers (geocoding.config.Config attribute)</a>
 </li>
-      <li><a href="config.html#geocoding.config.config.included_features">included_features (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.included_features">included_features (geocoding.config.Config attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="clf_utilities.html#geocoding.clf_utilities.inverse_transform_labels">inverse_transform_labels() (in module geocoding.clf_utilities)</a>
+      <li><a href="utilities.html#geocoding.clf_utilities.inverse_transform_labels">inverse_transform_labels() (in module geocoding.clf_utilities)</a>
 </li>
-      <li><a href="clf_utilities.html#geocoding.clf_utilities.is_valid">is_valid() (in module geocoding.clf_utilities)</a>
+      <li><a href="utilities.html#geocoding.clf_utilities.is_valid">is_valid() (in module geocoding.clf_utilities)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -357,13 +397,13 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="features_utilities.html#geocoding.features_utilities.load_points_df">load_points_df() (in module geocoding.features_utilities)</a>
+      <li><a href="utilities.html#geocoding.features_utilities.load_points_df">load_points_df() (in module geocoding.features_utilities)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="features_utilities.html#geocoding.features_utilities.load_street_gdf">load_street_gdf() (in module geocoding.features_utilities)</a>
+      <li><a href="utilities.html#geocoding.features_utilities.load_street_gdf">load_street_gdf() (in module geocoding.features_utilities)</a>
 </li>
-      <li><a href="config.html#geocoding.config.config.LR_hparams">LR_hparams (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.LR_hparams">LR_hparams (geocoding.config.Config attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -371,21 +411,43 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="config.html#geocoding.config.config.MLP_hparams">MLP_hparams (geocoding.config.config attribute)</a>
+      <li><a href="pipeline.html#geocoding.algorithm_selection.main">main() (in module geocoding.algorithm_selection)</a>
+
+      <ul>
+        <li><a href="pipeline.html#geocoding.model_deployment.main">(in module geocoding.model_deployment)</a>
+</li>
+        <li><a href="pipeline.html#geocoding.model_selection.main">(in module geocoding.model_selection)</a>
+</li>
+        <li><a href="pipeline.html#geocoding.model_training.main">(in module geocoding.model_training)</a>
+</li>
+      </ul></li>
+      <li><a href="config.html#geocoding.config.Config.max_iter">max_iter (geocoding.config.Config attribute)</a>
+</li>
+      <li><a href="config.html#geocoding.config.Config.max_overpass_tries">max_overpass_tries (geocoding.config.Config attribute)</a>
+</li>
+      <li><a href="config.html#geocoding.config.Config.MLP_hparams">MLP_hparams (geocoding.config.Config attribute)</a>
 </li>
       <li>
     module
 
       <ul>
-        <li><a href="clf_utilities.html#module-geocoding.clf_utilities">geocoding.clf_utilities</a>
+        <li><a href="pipeline.html#module-geocoding.algorithm_selection">geocoding.algorithm_selection</a>
+</li>
+        <li><a href="utilities.html#module-geocoding.clf_utilities">geocoding.clf_utilities</a>
 </li>
         <li><a href="config.html#module-geocoding.config">geocoding.config</a>
 </li>
         <li><a href="features.html#module-geocoding.features">geocoding.features</a>
 </li>
-        <li><a href="features_utilities.html#module-geocoding.features_utilities">geocoding.features_utilities</a>
+        <li><a href="utilities.html#module-geocoding.features_utilities">geocoding.features_utilities</a>
 </li>
-        <li><a href="osm_utilities.html#module-geocoding.osm_utilities">geocoding.osm_utilities</a>
+        <li><a href="pipeline.html#module-geocoding.model_deployment">geocoding.model_deployment</a>
+</li>
+        <li><a href="pipeline.html#module-geocoding.model_selection">geocoding.model_selection</a>
+</li>
+        <li><a href="pipeline.html#module-geocoding.model_training">geocoding.model_training</a>
+</li>
+        <li><a href="utilities.html#module-geocoding.osm_utilities">geocoding.osm_utilities</a>
 </li>
         <li><a href="writers.html#module-geocoding.writers">geocoding.writers</a>
 </li>
@@ -396,21 +458,21 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="config.html#geocoding.config.config.n_folds">n_folds (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.n_folds">n_folds (geocoding.config.Config attribute)</a>
 </li>
-      <li><a href="config.html#geocoding.config.config.n_jobs">n_jobs (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.n_jobs">n_jobs (geocoding.config.Config attribute)</a>
 </li>
-      <li><a href="config.html#geocoding.config.config.NB_hparams">NB_hparams (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.NB_hparams">NB_hparams (geocoding.config.Config attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="config.html#geocoding.config.config.NN_hparams">NN_hparams (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.NN_hparams">NN_hparams (geocoding.config.Config attribute)</a>
 </li>
-      <li><a href="features_utilities.html#geocoding.features_utilities.normalize_features">normalize_features() (in module geocoding.features_utilities)</a>
+      <li><a href="utilities.html#geocoding.features_utilities.normalize_features">normalize_features() (in module geocoding.features_utilities)</a>
 </li>
-      <li><a href="clf_utilities.html#geocoding.clf_utilities.normalize_scores">normalize_scores() (in module geocoding.clf_utilities)</a>
+      <li><a href="utilities.html#geocoding.clf_utilities.normalize_scores">normalize_scores() (in module geocoding.clf_utilities)</a>
 </li>
-      <li><a href="config.html#geocoding.config.config.normalized_features">normalized_features (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.normalized_features">normalized_features (geocoding.config.Config attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -418,11 +480,11 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="config.html#geocoding.config.config.osm_buffer">osm_buffer (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.osm_buffer">osm_buffer (geocoding.config.Config attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="config.html#geocoding.config.config.osm_timeout">osm_timeout (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.osm_timeout">osm_timeout (geocoding.config.Config attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -430,11 +492,11 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="osm_utilities.html#geocoding.osm_utilities.parse_streets">parse_streets() (in module geocoding.osm_utilities)</a>
+      <li><a href="utilities.html#geocoding.osm_utilities.parse_streets">parse_streets() (in module geocoding.osm_utilities)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="features_utilities.html#geocoding.features_utilities.prepare_feats_args">prepare_feats_args() (in module geocoding.features_utilities)</a>
+      <li><a href="utilities.html#geocoding.features_utilities.prepare_feats_args">prepare_feats_args() (in module geocoding.features_utilities)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -442,7 +504,7 @@
 <h2 id="Q">Q</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="osm_utilities.html#geocoding.osm_utilities.query_api">query_api() (in module geocoding.osm_utilities)</a>
+      <li><a href="utilities.html#geocoding.osm_utilities.query_api">query_api() (in module geocoding.osm_utilities)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -450,7 +512,7 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="config.html#geocoding.config.config.RF_hparams">RF_hparams (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.RF_hparams">RF_hparams (geocoding.config.Config attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -458,19 +520,19 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="config.html#geocoding.config.config.seed_no">seed_no (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.seed_no">seed_no (geocoding.config.Config attribute)</a>
 </li>
-      <li><a href="config.html#geocoding.config.config.services">services (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.services">services (geocoding.config.Config attribute)</a>
 </li>
-      <li><a href="config.html#geocoding.config.config.source_crs">source_crs (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.source_crs">source_crs (geocoding.config.Config attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="config.html#geocoding.config.config.supported_classifiers">supported_classifiers (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.supported_classifiers">supported_classifiers (geocoding.config.Config attribute)</a>
 </li>
-      <li><a href="config.html#geocoding.config.config.supported_features">supported_features (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.supported_features">supported_features (geocoding.config.Config attribute)</a>
 </li>
-      <li><a href="config.html#geocoding.config.config.SVM_hparams">SVM_hparams (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.SVM_hparams">SVM_hparams (geocoding.config.Config attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -478,11 +540,11 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="config.html#geocoding.config.config.target_crs">target_crs (geocoding.config.config attribute)</a>
+      <li><a href="config.html#geocoding.config.Config.target_crs">target_crs (geocoding.config.Config attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="clf_utilities.html#geocoding.clf_utilities.train_classifier">train_classifier() (in module geocoding.clf_utilities)</a>
+      <li><a href="utilities.html#geocoding.clf_utilities.train_classifier">train_classifier() (in module geocoding.clf_utilities)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -538,7 +600,7 @@
 
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.Navigation.enable(false);
       });
   </script>
 
