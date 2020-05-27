@@ -1,5 +1,8 @@
-Features
+features
 ========
 
-.. automodule:: features
-    :members:
+    .. automodule:: geocoding.features
+       :members:
+
+:ref:`Return Home <mastertoc>`
+

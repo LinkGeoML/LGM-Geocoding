@@ -1,5 +1,0 @@
-Features
-========
-
-.. automodule:: features
-    :members:

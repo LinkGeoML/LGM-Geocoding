@@ -1,5 +1,8 @@
-Features utilities
+features utilities
 ==================
 
-.. automodule:: features_utilities
-    :members:
+    .. automodule:: geocoding.features_utilities
+       :members:
+
+:ref:`Return Home <mastertoc>`
+

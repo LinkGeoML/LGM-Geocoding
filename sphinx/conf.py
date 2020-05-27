@@ -12,14 +12,14 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../src/'))
+sys.path.insert(0, os.path.abspath('../'))
 
 
 # -- Project information -----------------------------------------------------
 
 project = 'LGM-Geocoding'
-copyright = '2019, kgalexis, giann'
-author = 'kgalexis, giann'
+copyright = '2019, kgalexis, giann, vkaff'
+author = 'kgalexis, giann, vkaff'
 
 # The short X.Y version
 version = u''
@@ -132,7 +132,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'LGM-Geocoding.tex', u'LGM-Geocoding Documentation',
-     u'kgalexis, giann', 'manual'),
+     u'kgalexis, giann', 'vkaff', 'manual'),
 ]
 
 

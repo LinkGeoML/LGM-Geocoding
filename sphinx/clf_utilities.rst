@@ -1,5 +1,8 @@
-Classifiers utilities
+classifier utilities
 =====================
 
-.. automodule:: clf_utilities
-    :members:
+    .. automodule:: geocoding.clf_utilities
+       :members:
+
+:ref:`Return Home <mastertoc>`
+

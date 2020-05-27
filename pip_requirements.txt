@@ -1,7 +1,11 @@
-#numpy==1.16.4
-pandas==0.25.0
-#geopandas
-#shapely
-scikit-learn
-requests
+-i https://pypi.org/simple
+fiona==1.8.13
+geopandas==0.6.2
+idna==2.8
+numpy==1.17.4
+pandas==0.25.3
 rtree==0.9.3
+scikit-learn==0.22
+scipy==1.4.1
+shapely==1.6.4.post2
+xgboost==0.90

@@ -6,19 +6,24 @@
 Welcome to LGM-Geocoding's documentation!
 =========================================
 
-.. include:: README.rst
+.. include:: ../README.rst
+
+API Reference
+^^^^^^^^^^^^^^
+
+View the auto-generated API documentation for information on a specific function, class, or method.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   :name: mastertoc
 
+   config
+   writers
    features
+   osm_utilities
    features_utilities
    clf_utilities
-   osm_utilities
-   writers
-   config
-
 
 Indices and tables
 ==================
@@ -26,3 +31,4 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+

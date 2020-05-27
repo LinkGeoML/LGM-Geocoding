@@ -1,5 +1,0 @@
-Writers
-=======
-
-.. automodule:: writers
-    :members:
