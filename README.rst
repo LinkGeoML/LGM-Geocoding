@@ -11,8 +11,10 @@ on annotated datasets that contain mappings between coordinate pairs and the ide
 models that provide accurate predictions about ideal geocoding sources for previously unseen geocoding pairs. Geocoding
 implements a series of training features, regarding the different coordinate pairs that are available for each geocoder,
 the interaction between them and neighboring geospacial data (namely road data). Further, it encapsulates grid-search
-and cross-validation functionality, based on the `scikit-learn <https://scikit-learn.org/>`_ toolkit, assessing as series of
-classification models and parameterizations, in order to find the most fitting model for the data at hand.
+and cross-validation functionality, based on the `scikit-learn <https://scikit-learn.org/>`_ toolkit, assessing as series
+of classification models and parameterizations, in order to find the most fitting model for the data at hand. Indicatively,
+we succeed a 66.04% accuracy with the Random Forest classifier compared to the baseline approach that achieves
+accuracy of 55.05% (see `References`_).
 
 The source code was tested using Python 3.6 and Scikit-Learn 0.22 on a Linux server.
 
@@ -100,6 +102,10 @@ Documentation
 Source code documentation is available from `linkgeoml.github.io`__.
 
 __ https://linkgeoml.github.io/LGM-Geocoding/
+
+References
+----------
+* K. Alexis et al. Improving geocoding quality via learning to integrate multiple geocoders. SSDBM ’20.
 
 License
 -------
