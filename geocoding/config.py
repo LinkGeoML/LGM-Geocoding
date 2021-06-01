@@ -72,8 +72,7 @@ class Config:
     #: int: Seed to use by random number generators.
     seed_no = 2020
 
-    # base_dir = '/media/disk/LGM-Geocoding'
-    base_dir = '/home/bilthekid/Phd/code/repos/otherProjects/LGM-Geocoding'
+    base_dir = '/media/disk/LGM-Geocoding'
 
     services = [
         'original',
