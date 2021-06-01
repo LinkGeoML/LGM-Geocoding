@@ -9,7 +9,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.metrics import accuracy_score, f1_score
-from xgboost import XGBClassifier
+# from xgboost import XGBClassifier
 
 from geocoding.config import Config
 
@@ -23,7 +23,7 @@ clf_callable_map = {
     'DecisionTree': DecisionTreeClassifier(),
     'RandomForest': RandomForestClassifier(),
     'ExtraTrees': ExtraTreesClassifier(),
-    'XGBoost': XGBClassifier()
+    # 'XGBoost': XGBClassifier()
 }
 
 clf_hparams_map = {

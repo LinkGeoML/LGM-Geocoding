@@ -147,7 +147,7 @@ def cluster_points(X):
     """
     n_clusters = int(Config.clusters_pct * X.shape[0])
     kmeans = KMeans(
-        n_clusters=n_clusters, random_state=Config.seed_no, n_init=20, max_iter=500, n_jobs=Config.n_jobs
+        n_clusters=n_clusters, random_state=Config.seed_no, n_init=20, max_iter=500,
     ).fit(X)
     labels = kmeans.predict(X)
     return labels

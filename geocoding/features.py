@@ -260,10 +260,10 @@ def get_nearest_street_distance_per_service(df, street_gdf):
                    df.loc[i.Index, f'lat_{service}'])
                   for service in Config.services]
         distances = [
-            Point(p).distance(street_gdf.iloc[c]['geometry'])
-            for p in points
-            for c in list(street_index.nearest(p))
-
+            min([
+                Point(p).distance(street_gdf.iloc[c]['geometry'])
+                for c in list(street_index.nearest(p))
+            ]) for p in points
         ]
         X[i.Index] = feat_ut.filter(distances)
     return X

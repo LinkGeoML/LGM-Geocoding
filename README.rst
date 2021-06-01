@@ -16,7 +16,7 @@ of classification models and parameterizations, in order to find the most fittin
 we succeed a 66.04% accuracy with the Random Forest classifier compared to the baseline approach that achieves
 accuracy of 55.05% (see `References`_).
 
-The source code was tested using Python 3.6 and Scikit-Learn 0.22 on a Linux server.
+The source code was tested using Python 3.7 and Scikit-Learn 0.23.1 on a Linux server.
 
 Description
 -----------

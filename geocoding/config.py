@@ -23,7 +23,7 @@ class Config:
             will be converted to this threshold
         baseline_service (str): The name of the service to consider when \
             measuring baseline scores
-        experiments_path (str): Path to folder that stores the experiments
+        base_dir (str): Path to root folder of the source code
         services (list): The services (geocoders) used in the setup
 
         supported_features (list): List of the supported features to choose \
@@ -57,7 +57,7 @@ class Config:
     """
     #: int: Number of iterations that RandomizedSearchCV should execute. It applies only when
     #: :attr:`hyperparams_search_method` equals to 'randomized'.
-    max_iter = 30
+    max_iter = 200
     verbose = True
 
     source_crs = 4326
@@ -70,9 +70,10 @@ class Config:
     square_thr = 500000.0
     baseline_service = 'original'
     #: int: Seed to use by random number generators.
-    seed_no = 13
+    seed_no = 2020
 
-    base_dir = '/media/disk/LGM-Geocoding'
+    # base_dir = '/media/disk/LGM-Geocoding'
+    base_dir = '/home/bilthekid/Phd/code/repos/otherProjects/LGM-Geocoding'
 
     services = [
         'original',
@@ -151,58 +152,54 @@ class Config:
         'DecisionTree',
         'RandomForest',
         'ExtraTrees',
-        'XGBoost'
+        # 'XGBoost'
     ]
 
     NB_hparams = {}
-
     NN_hparams = {
         'n_neighbors': [2, 3, 5, 10]
     }
-
     LR_hparams = {
         'max_iter': [100, 500],
         'C': [0.001, 0.1, 1, 10, 1000]
     }
-
     SVM_hparams = [
-        {'kernel': ['rbf', 'sigmoid'], 'gamma': [1e-2, 1e-3, 1e-4, 1e-5],
-         'C': [0.001, 0.01, 0.1, 1, 10, 25, 50, 100, 1000], 'probability': [True]},
-        {'kernel': ['poly'], 'degree': [1, 2, 3], 'gamma': ['scale', 'auto'],
-         'C': [0.1, 1, 10, 25, 50, 100, 1000], 'max_iter': [10000], 'probability': [True]},
+        {
+            'kernel': ['rbf', 'sigmoid'], 'gamma': [1e-2, 1e-3, 1e-4, 1e-5],
+            'C': [0.001, 0.01, 0.1, 1, 10, 25, 50, 100, 1000], 'probability': [True]
+        },
+        {
+            'kernel': ['poly'], 'degree': [1, 2], 'C': [0.001, 0.01, 0.1, 1, 6, 10, 25, 50],
+            'max_iter': [100000], 'probability': [True]
+        },
     ]
-
     MLP_hparams = {
         'hidden_layer_sizes': [(100, ), (50, 50, )],
         # 'learning_rate_init': [0.0001, 0.01, 0.1],
         'max_iter': [500, 1000],
         'solver': ['sgd', 'adam'],
     }
-
     DT_hparams = {
         'max_depth': [1, 4, 16, 32, 64],
         'min_samples_split': [2, 5, 10, 20, 50, 100, 200],
         'min_samples_leaf': [1, 2, 5, 10],
         'max_features': list(np.arange(2, 11, 2)) + ["sqrt", "log2", None]
     }
-
     RF_hparams = {
         'max_depth': [5, 10, 50, 100, 250, 300],
         'n_estimators': [100, 250, 500, 1000],
         # 'min_samples_leaf': [1, 5, 10],
         'min_samples_split': [2, 10],
     }
-
     ET_hparams = {
         'max_depth': [5, 10, 50, 100, 250, 300],
         'n_estimators': [100, 250, 500, 1000],
         # 'min_samples_leaf': [1, 5, 10],
         'min_samples_split': [2, 10, 50],
     }
-
     XGB_hparams = {
         "n_estimators": [500, 1000, 3000],
-        'max_depth': [5, 10, 50, 100, 250, 300],
+        'max_depth': [5, 10, 50, 100, 250],
         # # hyperparameters to avoid overfitting
         # 'eta': list(np.linspace(0.01, 0.3, 10)),  # 'learning_rate'
         # 'gamma': [0, 1, 5],
@@ -211,20 +208,19 @@ class Config:
         # # or 0.8 to 1 if you only have a few columns
         # 'colsample_bytree': list(np.linspace(0.8, 1, 3)),
         # 'min_child_weight': [1, 5, 10],
+        "use_label_encoder": [False],
+        "eval_metric": ["mlogloss"]
     }
 
     # These parameters constitute the search space for RandomizedSearchCV in our experiments.
     NB_hparams_dist = {}
-
     NN_hparams_dist = {
         'n_neighbors': sp_randint(1, 20)
     }
-
     LR_hparams_dist = {
         'max_iter': sp_randint(100, 1000),
         'C': expon(scale=200)
     }
-
     SVM_hparams_dist = {
         'C': expon(loc=0.01, scale=20),
         # "C": uniform(2, 10),
@@ -262,6 +258,8 @@ class Config:
         'subsample': truncnorm(0.8, 1),
         'colsample_bytree': truncnorm(0.8, 1),
         'min_child_weight': sp_randint(1, 10),
+        "use_label_encoder": [False],
+        "eval_metric": ["merror", "mlogloss"]
     }
     MLP_hparams_dist = {
         'learning_rate_init': expon(loc=0.0001, scale=0.1),

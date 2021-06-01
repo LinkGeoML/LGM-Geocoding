@@ -161,21 +161,21 @@ def create_train_features(df, in_path, out_path, features=None):
     ])
     args = prepare_feats_args(df, required_args, in_path)
     Xs = []
-    cols = []
-    nonScaledXmin = []
-    nonScaledXmax = []
+    # cols = []
+    # nonScaledXmin = []
+    # nonScaledXmax = []
     for f in included_features:
         X = getattr(feats, features_getter_map[f])(*[args[arg] for arg in features_getter_args_map[f]])
-        cols.extend(get_feature_col_names(f, X.shape[-1]))
-        nonScaledXmin.append(np.amin(X, axis=0))
-        nonScaledXmax.append(np.amax(X, axis=0))
         if f in Config.normalized_features:
             X, scaler = normalize_features(X)
             pickle.dump(scaler, open(os.path.join(out_path, 'pickled_objects', f'{f}_scaler.pkl'), 'wb'))
         np.save(out_path + f'/features/{f}_train.npy', X)
         Xs.append(X)
+        # cols.extend(get_feature_col_names(f, X.shape[-1]))
+        # nonScaledXmin.append(np.amin(X, axis=0))
+        # nonScaledXmax.append(np.amax(X, axis=0))
     X = np.hstack(Xs)
-    print('Before normalization: ', list(zip(cols, np.hstack(nonScaledXmin), np.hstack(nonScaledXmax))))
+    # print('Before normalization: ', list(zip(cols, np.hstack(nonScaledXmin), np.hstack(nonScaledXmax))))
     return X
 
 
